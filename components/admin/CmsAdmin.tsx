@@ -4,10 +4,7 @@ import React, { Suspense } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-
-const Dashboard = React.lazy(
-  () => import("@/components/admin/cms/dashboard/dashboard"),
-);
+import Dashboard from "./cms/dashboard/dashboard";
 
 const TAB_MENUS = [
   {
@@ -47,15 +44,10 @@ const CmsAdmin = () => {
           ))}
         </TabsList>
         <TabsContent value="dashboard" className="space-y-4">
-          <Suspense fallback={<div>Loading...</div>}>
-            <Dashboard />
-          </Suspense>
+          <Dashboard />
         </TabsContent>
         <TabsContent value="visitors" className="space-y-4">
-          <Suspense fallback={<div>Loading...</div>}>
-            <div>Table</div>
-            {/* <AgGridTable /> */}
-          </Suspense>
+          <div>Table</div>
         </TabsContent>
       </Tabs>
     </div>
