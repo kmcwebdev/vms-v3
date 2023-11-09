@@ -19,14 +19,7 @@ const MostVisitedSites = () => {
       {
         label: "Visitors",
         data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(255, 159, 64)",
-          "rgb(255, 205, 86)",
-          "rgb(75, 192, 192)",
-          "rgb(54, 162, 235)",
-          "rgb(153, 102, 255)",
-        ],
+        backgroundColor: ["#f97315"],
         borderRadius: 6,
         barThickness: 45,
         maxBarThickness: 55,
