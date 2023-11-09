@@ -1,10 +1,10 @@
 import React from "react";
-import CmsAdmin from "@/components/admin/CmsAdmin";
+import Admin from "@/components/admin";
 
 const page = () => {
   return (
     <div>
-      <CmsAdmin />
+      <Admin />
     </div>
   );
 };

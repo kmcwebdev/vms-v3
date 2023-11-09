@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Dashboard from "./cms/dashboard/dashboard";
+import Visitors from "./cms/visitors/Visitors";
 
 const TAB_MENUS = [
   {
@@ -24,7 +25,7 @@ const TAB_MENUS = [
   },
 ];
 
-const CmsAdmin = () => {
+const Admin = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -53,11 +54,11 @@ const CmsAdmin = () => {
           <Dashboard />
         </TabsContent>
         <TabsContent value="visitors" className="space-y-4">
-          <div>Table</div>
+          <Visitors />
         </TabsContent>
       </Tabs>
     </div>
   );
 };
 
-export default CmsAdmin;
+export default Admin;
