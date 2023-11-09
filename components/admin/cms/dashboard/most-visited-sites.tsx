@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import BarChart from "@/components/global/BarChart";
+import BarChart from "@/components/global/bar-chart";
 import type { ChartData } from "chart.js";
 
 const MostVisitedSites = () => {

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Dashboard from "./cms/dashboard/dashboard";
-import Visitors from "./cms/visitors/Visitors";
+import Visitors from "./cms/visitors/visitor";
 
 const TAB_MENUS = [
   {
