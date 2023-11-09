@@ -32,6 +32,7 @@ export async function GET(req: Request) {
       and site_id in $3 -- sites
       group by formatted_date
       order by formatted_date;
+  
     `;
 
     return NextResponse.json(
