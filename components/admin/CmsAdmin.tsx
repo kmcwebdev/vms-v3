@@ -38,7 +38,13 @@ const CmsAdmin = () => {
       >
         <TabsList>
           {TAB_MENUS.map((tab) => (
-            <TabsTrigger key={tab.name} value={tab.name}>
+            <TabsTrigger
+              key={tab.name}
+              value={tab.name}
+              onClick={() =>
+                router.replace(`${window.location.pathname}?tab=${tab.name}`)
+              }
+            >
               {tab.label}
             </TabsTrigger>
           ))}

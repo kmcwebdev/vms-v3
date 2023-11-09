@@ -35,7 +35,7 @@ const MostVisitedSites = () => {
   };
 
   return (
-    <Card className="w-3/5">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Most visited sites</CardTitle>
       </CardHeader>
