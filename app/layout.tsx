@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ReactQueryProvider>
-        <body className={fontSans.className}>
+        <body className={cn("flex min-h-screen flex-col", fontSans.className)}>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
           <Analytics />
