@@ -1,4 +1,13 @@
 await import("./lib/env.mjs");
 
 /** @type {import('next').NextConfig} */
-export default nextConfig = {};
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+  },
+};
+
+export default nextConfig;
