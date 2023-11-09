@@ -68,7 +68,7 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+              Columns <ChevronDown className="w-4 h-4 ml-2" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -120,7 +120,7 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className=" text-sm">
+                    <TableCell key={cell.id} className="text-sm ">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
