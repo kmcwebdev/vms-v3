@@ -12,27 +12,27 @@ const MainNav = ({
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
-      <Image src="/kmc-logo.ico" width={40} height={40} alt="Logo" />
+      <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
       <Link
-        href="/examples/dashboard"
+        href="/cms"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Overview
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/cms/visitors"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Visitors
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/cms/area-sites"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Area Sites
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/cms/manage-users"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Manage Users
