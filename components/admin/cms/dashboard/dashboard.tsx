@@ -4,8 +4,8 @@ import MostVisitedSites from "./most-visited-sites";
 
 const Dashboard = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="flex w-full gap-x-4">
+      {/* <h1>Dashboard</h1> */}
       <RecentVisitors />
       <MostVisitedSites />
     </div>

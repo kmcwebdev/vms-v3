@@ -30,6 +30,7 @@ export async function GET(req: Request) {
       and extract(year from visit_time) = $2 -- Year 2023
       group by formatted_date
       order by formatted_date;
+  
     `;
 
     return NextResponse.json(
