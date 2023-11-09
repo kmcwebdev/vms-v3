@@ -27,7 +27,7 @@ const MostVisitedSites = () => {
           "rgb(54, 162, 235)",
           "rgb(153, 102, 255)",
         ],
-        borderRadius: 4,
+        borderRadius: 6,
         barThickness: 45,
         maxBarThickness: 55,
       },
