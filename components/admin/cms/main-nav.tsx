@@ -15,7 +15,7 @@ const MainNav = ({
         href="/examples/dashboard"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
-        Dashboard
+        Overview
       </Link>
       <Link
         href="/examples/dashboard"
@@ -33,7 +33,7 @@ const MainNav = ({
         href="/examples/dashboard"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        User Management
+        Manage Users
       </Link>
     </nav>
   );
