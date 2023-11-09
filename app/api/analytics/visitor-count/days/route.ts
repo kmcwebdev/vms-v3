@@ -8,6 +8,7 @@ const querySchema = z.object({
     z.number().min(1).max(12).default(1),
   ),
   year: z.preprocess((input) => Number(input), z.number().min(1)),
+  site_ids: z.array(z.string().uuid()).min(1),
 });
 
 export async function GET(req: Request) {
@@ -23,25 +24,27 @@ export async function GET(req: Request) {
       });
     }
 
-    const count_by_days_in_month_query = `
+    const visitor_count_by_day_in_month_query = `
       select to_char(date_trunc('day', visit_time), 'Month DD, YYYY') as formatted_date, count(*) as visitor_count
       from visitor_logs
-      where extract(month from visit_time) = $1 -- October
-      and extract(year from visit_time) = $2 -- Year 2023
+      where extract(month from visit_time) = $1 -- Month in number
+      and extract(year from visit_time) = $2 -- Year
+      and site_id in $3 -- sites
       group by formatted_date
       order by formatted_date;
   
     `;
 
     return NextResponse.json(
-      await sql.query(count_by_days_in_month_query, [
+      await sql.query(visitor_count_by_day_in_month_query, [
         queryParams.data.month_in_number,
         queryParams.data.year,
+        queryParams.data.site_ids,
       ]),
     );
   } catch (error: any) {
     return NextResponse.json(
-      { message: error.message },
+      { status: 500, message: error.message },
       { status: 500, statusText: "Internal server error" },
     );
   }
