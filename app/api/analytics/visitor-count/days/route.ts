@@ -24,6 +24,8 @@ export async function GET(req: Request) {
       });
     }
 
+    const { month_in_number, year, site_ids } = queryParams.data;
+
     const visitor_count_by_day_in_month_query = `
       select to_char(date_trunc('day', visit_time), 'Month DD, YYYY') as formatted_date, count(*) as visitor_count
       from visitor_logs
@@ -32,14 +34,13 @@ export async function GET(req: Request) {
       and site_id in $3 -- sites
       group by formatted_date
       order by formatted_date;
-  
     `;
 
     return NextResponse.json(
       await sql.query(visitor_count_by_day_in_month_query, [
-        queryParams.data.month_in_number,
-        queryParams.data.year,
-        queryParams.data.site_ids,
+        month_in_number,
+        year,
+        site_ids,
       ]),
     );
   } catch (error: any) {
