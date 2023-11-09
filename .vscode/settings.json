@@ -1,14 +1,15 @@
 {
-	"cSpell.words": [
-		"clsx",
-		"hookform",
-		"lucide",
-		"nextjs",
-		"propelauth",
-		"tailwindcss",
-		"tanstack",
-		"uidotdev",
-		"usehooks",
-		"zustand"
-	]
+  "cSpell.words": [
+    "clsx",
+    "hookform",
+    "initcap",
+    "lucide",
+    "nextjs",
+    "propelauth",
+    "tailwindcss",
+    "tanstack",
+    "uidotdev",
+    "usehooks",
+    "zustand"
+  ]
 }
