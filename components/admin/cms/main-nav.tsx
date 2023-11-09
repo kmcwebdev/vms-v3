@@ -1,16 +1,18 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const MainNav = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
   return (
-    <nav
+    <div
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
+      <Image src="/kmc-logo.ico" width={40} height={40} alt="Logo" />
       <Link
         href="/examples/dashboard"
         className="text-sm font-medium transition-colors hover:text-primary"
@@ -35,7 +37,7 @@ const MainNav = ({
       >
         Manage Users
       </Link>
-    </nav>
+    </div>
   );
 };
 
