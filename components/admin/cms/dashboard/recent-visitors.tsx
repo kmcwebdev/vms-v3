@@ -1,24 +1,8 @@
 "use client";
 
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import DataTable from "@/components/global/DataTable";
 const recentVisitors = [
   {
     id: 1,
@@ -105,7 +89,9 @@ const RecentVisitors = () => {
       <CardHeader>
         <CardTitle>Recent Visitors</CardTitle>
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent>
+        <DataTable />
+      </CardContent>
     </Card>
   );
 };

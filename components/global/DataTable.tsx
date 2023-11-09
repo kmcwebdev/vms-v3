@@ -1,6 +1,7 @@
 "use client";
 
-import * as React from "react";
+// import * as React from "react";
+import { useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -164,14 +165,11 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ];
 
-export function DataTableDemo() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+const DataTable = () => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -306,4 +304,6 @@ export function DataTableDemo() {
       </div>
     </div>
   );
-}
+};
+
+export default DataTable;
