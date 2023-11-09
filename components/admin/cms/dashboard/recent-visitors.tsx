@@ -85,7 +85,7 @@ const tableHeaders = [
 
 const RecentVisitors = () => {
   return (
-    <Card className="w-full shadow-sm">
+    <Card className="w-2/5 shadow-sm">
       <CardHeader>
         <CardTitle>Recent Visitors</CardTitle>
       </CardHeader>
