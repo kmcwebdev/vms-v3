@@ -17,7 +17,39 @@ import {
   type IRecentVisitors,
 } from "../dashboard/recent-visitors";
 import { cn } from "@/lib/utils";
-import { LogOut, User2 } from "lucide-react";
+import { LogOut } from "lucide-react";
+import Combobox from "@/components/global/combo-box";
+
+const sites = [
+  {
+    value: "armstrong-corporate-center",
+    label: "Armstrong Corporate Center",
+  },
+  {
+    value: "uptown-place-tower-2",
+    label: "UpTown Place Tower 2",
+  },
+  {
+    value: "v-corporate-center",
+    label: "V Corporate Center",
+  },
+  {
+    value: "frabelle-corporate-plaza",
+    label: "Frabelle Corporate Plaza",
+  },
+  {
+    value: "picadilly-inc",
+    label: "Picadilly Inc.",
+  },
+  {
+    value: "four-neo",
+    label: "Four Neo",
+  },
+  {
+    value: "arthaland-century-pacific-tower",
+    label: "Arthaland Century Pacific Tower",
+  },
+];
 
 const Visitors = () => {
   return (
@@ -25,22 +57,11 @@ const Visitors = () => {
       <CardHeader>
         <CardTitle className="flex w-full justify-between text-2xl">
           Visitors list
-          <Select>
-            <SelectTrigger className="w-[250px]">
-              <SelectValue placeholder="Select site" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="apple">
-                  Armstrong Corporate Center
-                </SelectItem>
-                <SelectItem value="banana">Picadilly Inc.</SelectItem>
-                <SelectItem value="blueberry">Uptown Place Tower 2</SelectItem>
-                <SelectItem value="grapes">Four/Neo</SelectItem>
-                <SelectItem value="pineapple">SM Aura</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <Combobox
+            data={sites}
+            placeholder="Site"
+            onSelect={(e) => console.log(e)}
+          />
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -92,7 +113,15 @@ const VisitorCard = ({
               </p>
             </div>
           </div>
-          <div className="w-fit rounded-full bg-gray-100 p-2 shadow-sm transition ease-in-out hover:cursor-pointer hover:bg-primary hover:text-white">
+          <div
+            className={cn(
+              isLoggedOut
+                ? "opacity-40 hover:cursor-not-allowed"
+                : "hover:cursor-pointer hover:bg-primary hover:text-white",
+              "text-sm font-medium",
+              "w-fit rounded-full bg-gray-100 p-2 shadow-sm transition ease-in-out ",
+            )}
+          >
             <LogOut size={12} />
           </div>
         </div>
