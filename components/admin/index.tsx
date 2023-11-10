@@ -1,26 +1,23 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Dashboard from "./cms/dashboard/dashboard";
-import Visitors from "./cms/visitors/Visitors";
+import MostVisitedSites from "./cms/dashboard/most-visited-sites";
+
+// import Visitors from "./cms/visitors/visitor";
 
 const TAB_MENUS = [
   {
-    name: "dashboard",
-    label: "Dashboard",
+    name: "recent-visitors",
+    label: "Recent Visitors",
     // component: React.lazy(() => import("@/components/admin/Overview")),
   },
   {
-    name: "visitors",
-    label: "Visitors",
-    // component: React.lazy(() => import("@/components/admin/AgGridTable")),
-  },
-  {
-    name: "area-sites",
-    label: "Area Sites",
+    name: "most-visited-sites",
+    label: "Most Visited Sites",
     // component: React.lazy(() => import("@/components/admin/AgGridTable")),
   },
 ];
@@ -34,7 +31,7 @@ const Admin = () => {
   return (
     <div>
       <Tabs
-        defaultValue={activeTab ? activeTab : "dashboard"}
+        defaultValue={activeTab ? activeTab : "recent-visitors"}
         className="space-y-4"
       >
         <TabsList>
@@ -50,11 +47,11 @@ const Admin = () => {
             </TabsTrigger>
           ))}
         </TabsList>
-        <TabsContent value="dashboard" className="space-y-4">
+        <TabsContent value="recent-visitors" className="space-y-4">
           <Dashboard />
         </TabsContent>
-        <TabsContent value="visitors" className="space-y-4">
-          <Visitors />
+        <TabsContent value="most-visited-sites" className="space-y-4">
+          <MostVisitedSites />
         </TabsContent>
       </Tabs>
     </div>
