@@ -47,7 +47,7 @@ const Combobox = ({ placeholder, data, onSelect, name }: IComboboxProps) => {
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[200px] justify-between"
+              className="w-fit justify-between"
             >
               {value
                 ? data.find((e) => e.value === value)?.label
@@ -57,9 +57,9 @@ const Combobox = ({ placeholder, data, onSelect, name }: IComboboxProps) => {
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0">
+          <PopoverContent className="w-fit p-0">
             <Command ref={ref}>
-              <CommandInput placeholder="Search framework..." />
+              <CommandInput placeholder="Search here" />
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandGroup>
                 {data.map((e) => (
