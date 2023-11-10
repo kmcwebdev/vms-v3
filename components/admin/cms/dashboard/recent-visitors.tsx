@@ -6,7 +6,7 @@ import DataTable from "@/components/global/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 
-interface IRecentVisitors {
+export interface IRecentVisitors {
   id: number;
   timeout: string;
   name: string;
@@ -16,9 +16,10 @@ interface IRecentVisitors {
   personToVisit: string;
   dateVisited: string;
   timeVisited: string;
+  isLoggedOut?: boolean;
 }
 
-const data: IRecentVisitors[] = [
+export const visitorData: IRecentVisitors[] = [
   {
     id: 1,
     timeout: "12:46 PM November 8, 2023",
@@ -29,6 +30,7 @@ const data: IRecentVisitors[] = [
     personToVisit: "Joshuas Migule",
     dateVisited: "November 8, 2023",
     timeVisited: "8:13 AM",
+    isLoggedOut: false,
   },
   {
     id: 2,
@@ -40,17 +42,19 @@ const data: IRecentVisitors[] = [
     personToVisit: "John Doe",
     dateVisited: "November 9, 2023",
     timeVisited: "9:00 AM",
+    isLoggedOut: false,
   },
   {
     id: 3,
     timeout: "1:30 PM November 9, 2023",
-    name: "Jane Doe",
+    name: "John Dont",
     siteVisited: "Doe Corporate Center",
     reasonToVisit: "Business Meeting",
     companyToVisit: "Doe Inc.",
     personToVisit: "John Doe",
     dateVisited: "November 9, 2023",
     timeVisited: "9:00 AM",
+    isLoggedOut: false,
   },
   {
     id: 4,
@@ -62,6 +66,7 @@ const data: IRecentVisitors[] = [
     personToVisit: "John Doe",
     dateVisited: "November 9, 2023",
     timeVisited: "9:00 AM",
+    isLoggedOut: false,
   },
   {
     id: 5,
@@ -73,6 +78,7 @@ const data: IRecentVisitors[] = [
     personToVisit: "John Doe",
     dateVisited: "November 9, 2023",
     timeVisited: "9:00 AM",
+    isLoggedOut: true,
   },
   {
     id: 6,
@@ -84,6 +90,7 @@ const data: IRecentVisitors[] = [
     personToVisit: "John Doe",
     dateVisited: "November 9, 2023",
     timeVisited: "9:00 AM",
+    isLoggedOut: true,
   },
 ];
 
@@ -158,11 +165,8 @@ export const columns: ColumnDef<IRecentVisitors>[] = [
 const RecentVisitors = () => {
   return (
     <Card className="w-full shadow-sm">
-      {/* <CardHeader>
-        <CardTitle>Recent Visitors</CardTitle>
-      </CardHeader> */}
       <CardContent>
-        <DataTable data={data} columns={columns} />
+        <DataTable data={visitorData} columns={columns} />
       </CardContent>
     </Card>
   );
