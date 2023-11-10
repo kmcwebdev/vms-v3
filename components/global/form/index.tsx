@@ -1,5 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider } from "react-hook-form";
+import Combobox from "./combo-box";
 
 interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   children?: React.ReactNode;
@@ -26,4 +27,6 @@ const Form: React.FC<FormProps> = ({
   );
 };
 
-export default Object.assign(Form, {});
+export default Object.assign(Form, {
+  Combobox,
+});

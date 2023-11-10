@@ -3,14 +3,6 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
   visitorData,
@@ -18,7 +10,9 @@ import {
 } from "../dashboard/recent-visitors";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
-import Combobox from "@/components/global/combo-box";
+import Form from "@/components/global/form";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 
 const sites = [
   {
@@ -52,16 +46,35 @@ const sites = [
 ];
 
 const Visitors = () => {
+  const visitorFiltersForm = useForm();
+
+  const handleFilterSubmit = () => {
+    console.log("submit", visitorFiltersForm.getValues());
+  };
+
   return (
     <Card className="shadow">
       <CardHeader>
         <CardTitle className="flex w-full justify-between text-2xl">
           Visitors list
-          <Combobox
+          <Form
+            name="visitor-filters"
+            useFormReturn={visitorFiltersForm}
+            onSubmit={handleFilterSubmit}
+          >
+            <Form.Combobox
+              name="sites"
+              data={sites}
+              placeholder="Site"
+              onSelect={(e) => console.log(e)}
+            />
+          </Form>
+          {/* <Combobox
+            name="sites"
             data={sites}
             placeholder="Site"
             onSelect={(e) => console.log(e)}
-          />
+          /> */}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
