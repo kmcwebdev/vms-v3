@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const sites = [
   {
@@ -49,6 +49,7 @@ const Visitors = () => {
   const visitorFiltersForm = useForm();
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleFilterSubmit = () => {
     console.log("submit", visitorFiltersForm.getValues());
@@ -69,9 +70,7 @@ const Visitors = () => {
               name="sites"
               data={sites}
               placeholder="Site"
-              onSelect={(e) =>
-                router.push(`${window.location.pathname}?site=${e}`)
-              }
+              onSelect={(e) => router.push(`${pathname}?site=${e}`)}
             />
             <Form.Combobox
               name="status"
@@ -86,7 +85,7 @@ const Visitors = () => {
                 },
               ]}
               placeholder="Status"
-              onSelect={(e) => console.log(e)}
+              onSelect={(e) => router.push(`${pathname}?status=${e}`)}
             />
           </Form>
         </CardTitle>
