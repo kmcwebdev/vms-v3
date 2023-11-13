@@ -2,61 +2,156 @@
 
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import {
+  visitorData,
+  type IRecentVisitors,
+} from "../dashboard/recent-visitors";
+import { cn } from "@/lib/utils";
+import { LogOut } from "lucide-react";
+import Form from "@/components/global/form";
+import { useForm } from "react-hook-form";
+import { useRouter, usePathname } from "next/navigation";
+
+const sites = [
+  {
+    value: "armstrong-corporate-center",
+    label: "Armstrong Corporate Center",
+  },
+  {
+    value: "uptown-place-tower-2",
+    label: "UpTown Place Tower 2",
+  },
+  {
+    value: "v-corporate-center",
+    label: "V Corporate Center",
+  },
+  {
+    value: "frabelle-corporate-plaza",
+    label: "Frabelle Corporate Plaza",
+  },
+  {
+    value: "picadilly-inc",
+    label: "Picadilly Inc.",
+  },
+  {
+    value: "four-neo",
+    label: "Four Neo",
+  },
+  {
+    value: "arthaland-century-pacific-tower",
+    label: "Arthaland Century Pacific Tower",
+  },
+];
 
 const Visitors = () => {
+  const visitorFiltersForm = useForm();
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleFilterSubmit = () => {
+    console.log("submit", visitorFiltersForm.getValues());
+  };
+
   return (
     <Card className="shadow">
       <CardHeader>
-        <CardTitle className="flex w-full justify-end">
-          <Select>
-            <SelectTrigger className="w-[250px]">
-              <SelectValue placeholder="Select site" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="apple">
-                  Armstrong Corporate Center
-                </SelectItem>
-                <SelectItem value="banana">Picadilly Inc.</SelectItem>
-                <SelectItem value="blueberry">Uptown Place Tower 2</SelectItem>
-                <SelectItem value="grapes">Four/Neo</SelectItem>
-                <SelectItem value="pineapple">SM Aura</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+        <CardTitle className="flex w-full justify-between text-2xl">
+          Visitors list
+          <Form
+            name="visitor-filters"
+            useFormReturn={visitorFiltersForm}
+            onSubmit={handleFilterSubmit}
+            className="space-x-2"
+          >
+            <Form.Combobox
+              name="sites"
+              data={sites}
+              placeholder="Site"
+              onSelect={(e) => router.push(`${pathname}?site=${e}`)}
+            />
+            <Form.Combobox
+              name="status"
+              data={[
+                {
+                  value: "logged-in",
+                  label: "Logged in",
+                },
+                {
+                  value: "logged-out",
+                  label: "Logged out",
+                },
+              ]}
+              placeholder="Status"
+              onSelect={(e) => router.push(`${pathname}?status=${e}`)}
+            />
+          </Form>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex items-center">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="/avatars/03.png" alt="Avatar" />
-            <AvatarFallback>IN</AvatarFallback>
-          </Avatar>
-          <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-            <p className="text-sm text-muted-foreground">
-              isabella.nguyen@email.com
-            </p>
-          </div>
-          <div className="ml-auto font-medium">
-            <Badge>12:46 PM Nov. 8, 2023</Badge>
-          </div>
-        </div>
-        <Separator className="mt-4" />
+      <CardContent className="space-y-4">
+        {visitorData.map((visitor) => (
+          <VisitorCard key={visitor.id} {...visitor} />
+        ))}
       </CardContent>
     </Card>
   );
 };
 
 export default Visitors;
+
+const VisitorCard = ({
+  id,
+  timeout,
+  name,
+  siteVisited,
+  reasonToVisit,
+  companyToVisit,
+  personToVisit,
+  dateVisited,
+  timeVisited,
+  isLoggedOut,
+}: IRecentVisitors) => {
+  return (
+    <Card className="shadow-none">
+      <CardHeader>
+        <Badge
+          className={cn("w-fit")}
+          variant={isLoggedOut ? "secondary" : "default"}
+        >
+          {isLoggedOut ? "Logged out" : `${dateVisited} ${timeVisited}`}
+        </Badge>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center justify-between">
+          <div className="group flex items-center hover:cursor-pointer">
+            <Avatar className="h-9 w-9">
+              <AvatarImage src="/avatars/03.png" alt="Avatar" />
+              <AvatarFallback>IN</AvatarFallback>
+            </Avatar>
+            <div className="ml-4 space-y-1">
+              <p className="text-sm font-medium leading-none  group-hover:underline">
+                {name}
+              </p>
+              <p className="text-sm text-muted-foreground group-hover:underline">
+                isabella.nguyen@email.com
+              </p>
+            </div>
+          </div>
+          <div
+            className={cn(
+              isLoggedOut
+                ? "opacity-40 hover:cursor-not-allowed"
+                : "hover:cursor-pointer hover:bg-primary hover:text-white",
+              "text-sm font-medium",
+              "w-fit rounded-full bg-gray-100 p-2 shadow-sm transition ease-in-out ",
+            )}
+          >
+            <LogOut size={12} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
