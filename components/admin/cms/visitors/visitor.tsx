@@ -25,6 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const sites = [
   {
@@ -76,8 +77,9 @@ const Visitors = () => {
             name="visitor-filters"
             useFormReturn={visitorFiltersForm}
             onSubmit={handleFilterSubmit}
-            className="space-x-2"
+            className="flex gap-x-2"
           >
+            <Form.Input name="search" type="text" placeholder="Search here" />
             <Form.Combobox
               name="sites"
               data={sites}
