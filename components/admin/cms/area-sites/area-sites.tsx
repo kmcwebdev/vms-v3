@@ -37,7 +37,7 @@ const sites = [
 
 const AreaSites = () => {
   return (
-    <Card className=" shadow">
+    <Card>
       <CardHeader>
         <CardTitle className="text-2xl">KMC sites</CardTitle>
       </CardHeader>
@@ -47,10 +47,10 @@ const AreaSites = () => {
             sites.map((e) => (
               <Card
                 key={e.value}
-                className="group shadow-sm transition ease-in-out hover:cursor-pointer hover:border-orange-400"
+                className="transition ease-in-out shadow-sm group hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
-                  <div className="h-64 w-full rounded-md bg-gray-100" />
+                  <div className="w-full h-64 bg-gray-100 rounded-md" />
                 </CardHeader>
                 <CardContent className="px-3 pt-0">
                   <div className="flex justify-between text-sm">

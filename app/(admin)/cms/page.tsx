@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const page = () => {
   return (
-    <Card className="shadow-sm">
+    <Card>
       <CardHeader>
         <CardTitle className="text-2xl">Dashboard</CardTitle>
       </CardHeader>
