@@ -152,7 +152,7 @@ export const visitorData: IRecentVisitors[] = [
 
 const RecentVisitors = () => {
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-none">
       <CardHeader>
         <CardTitle>Recent Visitors</CardTitle>
         <CardDescription>Top five recent visitor</CardDescription>
@@ -177,7 +177,7 @@ const VisitorCard = ({
   return (
     <>
       <div className="flex items-center justify-between">
-        <div className="flex items-center group hover:cursor-pointer">
+        <div className="group flex items-center hover:cursor-pointer">
           <Avatar className="h-9 w-9">
             <AvatarImage src="/avatars/03.png" alt="Avatar" />
             <AvatarFallback>IN</AvatarFallback>
