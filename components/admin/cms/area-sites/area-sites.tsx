@@ -55,12 +55,10 @@ const AreaSites = () => {
                 <CardContent className="px-3 pt-0">
                   <div className="flex justify-between text-sm">
                     <h2>{e.label}</h2>
-                    <span className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2">
                       <Users size={14} className="text-muted-foreground" />
-                      <p className="text-primary">
-                        {Math.floor(Math.random() * (20 - 10 + 1)) + 10}
-                      </p>
-                    </span>
+                      <p className="text-primary">63</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
