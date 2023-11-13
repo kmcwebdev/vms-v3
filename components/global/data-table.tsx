@@ -56,7 +56,7 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center pb-4">
         <Input
           placeholder="Search by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}

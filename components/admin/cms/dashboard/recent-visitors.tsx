@@ -165,6 +165,9 @@ export const columns: ColumnDef<IRecentVisitors>[] = [
 const RecentVisitors = () => {
   return (
     <Card className="w-full shadow-sm">
+      <CardHeader>
+        <CardTitle>Recent Visitors</CardTitle>
+      </CardHeader>
       <CardContent>
         <DataTable data={visitorData} columns={columns} />
       </CardContent>

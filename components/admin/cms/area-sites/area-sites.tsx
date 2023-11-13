@@ -37,7 +37,7 @@ const sites = [
 
 const AreaSites = () => {
   return (
-    <Card className="shadow">
+    <Card className=" shadow">
       <CardHeader>
         <CardTitle className="text-2xl">KMC sites</CardTitle>
       </CardHeader>
@@ -45,7 +45,10 @@ const AreaSites = () => {
         <div className="grid grid-cols-3 gap-4">
           {sites &&
             sites.map((e) => (
-              <Card key={e.value} className="shadow-sm">
+              <Card
+                key={e.value}
+                className="group shadow-sm transition ease-in-out hover:cursor-pointer hover:border-orange-400"
+              >
                 <CardHeader className="p-3">
                   <div className="h-64 w-full rounded-md bg-gray-100" />
                 </CardHeader>

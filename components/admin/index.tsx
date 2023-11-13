@@ -11,8 +11,8 @@ import MostVisitedSites from "./cms/dashboard/most-visited-sites";
 
 const TAB_MENUS = [
   {
-    name: "recent-visitors",
-    label: "Recent Visitors",
+    name: "overview",
+    label: "Overview",
     // component: React.lazy(() => import("@/components/admin/Overview")),
   },
   {
@@ -31,7 +31,7 @@ const Admin = () => {
   return (
     <div>
       <Tabs
-        defaultValue={activeTab ? activeTab : "recent-visitors"}
+        defaultValue={activeTab ? activeTab : "overview"}
         className="space-y-4"
       >
         <TabsList>
@@ -47,7 +47,7 @@ const Admin = () => {
             </TabsTrigger>
           ))}
         </TabsList>
-        <TabsContent value="recent-visitors" className="space-y-4">
+        <TabsContent value="overview" className="space-y-4">
           <Dashboard />
         </TabsContent>
         <TabsContent value="most-visited-sites" className="space-y-4">
