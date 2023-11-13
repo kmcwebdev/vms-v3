@@ -23,7 +23,7 @@ const Overview = () => {
   return (
     <div className="grid grid-cols-3 grid-rows-1 gap-x-4">
       {DUMMY_OVERVIEW.map((e) => (
-        <Card key={e.title}>
+        <Card key={e.title} className="">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{e.title}</CardTitle>
             <div className="text-gray-400">{e.icon}</div>

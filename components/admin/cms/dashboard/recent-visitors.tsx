@@ -152,7 +152,7 @@ export const visitorData: IRecentVisitors[] = [
 
 const RecentVisitors = () => {
   return (
-    <Card className="w-full shadow-sm">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Recent Visitors</CardTitle>
         <CardDescription>Top five recent visitor</CardDescription>
