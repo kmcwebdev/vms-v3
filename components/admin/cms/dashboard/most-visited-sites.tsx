@@ -4,14 +4,7 @@ import BarChart from "@/components/global/bar-chart";
 import type { ChartData } from "chart.js";
 
 const MostVisitedSites = () => {
-  const sites = [
-    "Armstrong Corporate Center",
-    "V Corporate Center",
-    "One Griffinstone",
-    "Cyber Sigma",
-    "SM Aura Office Tower",
-    "UpTown Place Tower 2",
-  ];
+  const sites = ["Armstrong", "VCorp", "OG", "Sigma", "SM Aura ", "UPT"];
 
   const mostVisitedSitesGraphData = {
     labels: sites,
@@ -28,12 +21,13 @@ const MostVisitedSites = () => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className=" w-full">
       <CardHeader>
         <CardTitle>Most visited sites</CardTitle>
       </CardHeader>
       <CardContent>
         <BarChart
+          height="200"
           data={mostVisitedSitesGraphData as ChartData<"bar">}
           options={{
             scales: {
