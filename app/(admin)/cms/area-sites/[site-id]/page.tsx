@@ -1,5 +1,5 @@
 import React from "react";
-import SiteDetails from "@/components/admin/cms/area-sites/site-details";
+import SiteDetails from "@/components/admin/cms/area-sites/details/site-details";
 
 const page = () => {
   return (
