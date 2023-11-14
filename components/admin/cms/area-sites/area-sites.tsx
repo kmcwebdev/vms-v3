@@ -77,7 +77,7 @@ const AreaSites = () => {
                 <CardHeader className="p-3">
                   <div className="h-64 w-full rounded-md bg-gray-100" />
                 </CardHeader>
-                <CardContent className="px-3 pt-0">
+                <CardContent className="px-3 pb-3 pt-0">
                   <div className="flex justify-between text-sm">
                     <h2>{e.label}</h2>
                     <div className="flex items-center gap-x-2">
