@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   visitorData,
   type IRecentVisitors,
-} from "../dashboard/recent-visitors";
+} from "../overview/dashboard/recent-visitors";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import Form from "@/components/global/form";
