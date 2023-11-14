@@ -3,6 +3,8 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
+import Form from "@/components/global/form";
+import { useForm } from "react-hook-form";
 
 const sites = [
   {
@@ -36,10 +38,29 @@ const sites = [
 ];
 
 const AreaSites = () => {
+  const searchSiteForm = useForm();
+
+  const handleSubmit = () => {
+    console.log("submit");
+  };
+
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="text-2xl">KMC sites</CardTitle>
+        <CardTitle className="flex justify-between text-2xl">
+          KMC sites
+          <Form
+            name="searchSiteForm"
+            useFormReturn={searchSiteForm}
+            onSubmit={handleSubmit}
+          >
+            <Form.Input
+              name="siteName"
+              type="text"
+              placeholder="Search site "
+            />
+          </Form>
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-4">

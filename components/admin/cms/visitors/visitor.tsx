@@ -79,7 +79,11 @@ const Visitors = () => {
             onSubmit={handleFilterSubmit}
             className="flex gap-x-2"
           >
-            <Form.Input name="search" type="text" placeholder="Search here" />
+            <Form.Input
+              name="search"
+              type="text"
+              placeholder="Search visitor"
+            />
             <Form.Combobox
               name="sites"
               data={sites}
