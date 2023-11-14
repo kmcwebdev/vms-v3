@@ -173,6 +173,7 @@ const VisitorCard = ({
   dateVisited,
   email,
   siteVisited,
+  timeout,
 }: IRecentVisitors) => {
   return (
     <>
@@ -187,11 +188,11 @@ const VisitorCard = ({
               {name}
             </p>
             <p className="text-sm text-muted-foreground group-hover:underline">
-              {email}
+              {siteVisited}
             </p>
           </div>
         </div>
-        <p className="text-sm font-medium text-gray-700 ">{siteVisited}</p>
+        <p className="text-sm font-medium text-gray-700 ">{timeout}</p>
       </div>
     </>
   );

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   visitorData,
   type IRecentVisitors,
-} from "../dashboard/recent-visitors";
+} from "../overview/dashboard/recent-visitors";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import Form from "@/components/global/form";
@@ -79,7 +79,11 @@ const Visitors = () => {
             onSubmit={handleFilterSubmit}
             className="flex gap-x-2"
           >
-            <Form.Input name="search" type="text" placeholder="Search here" />
+            <Form.Input
+              name="search"
+              type="text"
+              placeholder="Search visitor"
+            />
             <Form.Combobox
               name="sites"
               data={sites}

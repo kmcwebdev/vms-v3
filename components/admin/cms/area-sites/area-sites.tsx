@@ -3,6 +3,9 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
+import Form from "@/components/global/form";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 const sites = [
   {
@@ -36,10 +39,31 @@ const sites = [
 ];
 
 const AreaSites = () => {
+  const router = useRouter();
+
+  const searchSiteForm = useForm();
+
+  const handleSubmit = () => {
+    console.log("submit");
+  };
+
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="text-2xl">KMC sites</CardTitle>
+        <CardTitle className="flex justify-between text-2xl">
+          KMC sites
+          <Form
+            name="searchSiteForm"
+            useFormReturn={searchSiteForm}
+            onSubmit={handleSubmit}
+          >
+            <Form.Input
+              name="siteName"
+              type="text"
+              placeholder="Search site "
+            />
+          </Form>
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-4">
@@ -47,12 +71,13 @@ const AreaSites = () => {
             sites.map((e) => (
               <Card
                 key={e.value}
+                onClick={() => router.push(`/cms/area-sites/${e.value}`)}
                 className="group shadow-none transition ease-in-out hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
                   <div className="h-64 w-full rounded-md bg-gray-100" />
                 </CardHeader>
-                <CardContent className="px-3 pt-0">
+                <CardContent className="px-3 pb-3 pt-0">
                   <div className="flex justify-between text-sm">
                     <h2>{e.label}</h2>
                     <div className="flex items-center gap-x-2">

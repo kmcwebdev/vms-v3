@@ -1,5 +1,4 @@
 import { Input as InputComponent } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useFormContext, Controller } from "react-hook-form";
 
 interface IInputProps {
@@ -18,16 +17,6 @@ const Input = ({ name, type, placeholder }: IInputProps) => {
       placeholder={placeholder}
       {...register(name)}
     />
-    // <Controller
-    //   name={name}
-    //   control={control}
-    //   render={({field})=>(
-    //     <div className="grid w-full max-w-sm items-center gap-1.5">
-    //     <Label htmlFor="email">Email</Label>
-    //     <InputComponent type="email" id="email" placeholder="Email" />
-    //   </div>
-    //   )}
-    // />
   );
 };
 

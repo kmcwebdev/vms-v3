@@ -1,7 +1,12 @@
 import React from "react";
+import SiteDetails from "@/components/admin/cms/area-sites/details/site-details";
 
-const SiteDetails = () => {
-  return <div>SiteDetails</div>;
+const page = () => {
+  return (
+    <div>
+      <SiteDetails />
+    </div>
+  );
 };
 
-export default SiteDetails;
+export default page;
