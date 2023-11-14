@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 const sites = [
   {
@@ -38,6 +39,8 @@ const sites = [
 ];
 
 const AreaSites = () => {
+  const router = useRouter();
+
   const searchSiteForm = useForm();
 
   const handleSubmit = () => {
@@ -68,6 +71,7 @@ const AreaSites = () => {
             sites.map((e) => (
               <Card
                 key={e.value}
+                onClick={() => router.push(`/cms/area-sites/${e.value}`)}
                 className="group shadow-none transition ease-in-out hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
