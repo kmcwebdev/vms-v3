@@ -8,7 +8,6 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <MainNav className="mb-8" />
         <UserNav />
       </nav>
-
       {children}
     </main>
   );
