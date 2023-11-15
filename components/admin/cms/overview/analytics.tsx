@@ -72,9 +72,9 @@ const Analytics = () => {
     <>
       <div className="mt-4 grid grid-cols-3">
         <DataCard
-          title="Total visitors"
-          description="Visitor count on all sites"
-          value="1,405"
+          title="Current visitors"
+          description="Visitor count by month of December (2023)"
+          value="200+"
           icon={<Users2 />}
         />
       </div>
