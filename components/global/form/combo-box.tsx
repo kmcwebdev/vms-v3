@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Data = {
   value: string;
@@ -57,32 +58,35 @@ const Combobox = ({ placeholder, data, onSelect, name }: IComboboxProps) => {
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-fit p-0">
+
+          <PopoverContent className=" w-fit p-0">
             <Command ref={ref}>
               <CommandInput placeholder="Search here" />
               <CommandEmpty>No framework found.</CommandEmpty>
-              <CommandGroup>
-                {data.map((e) => (
-                  <CommandItem
-                    key={e.value}
-                    value={e.value}
-                    onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : currentValue);
-                      setOpen(false);
-                      onSelect && onSelect(e.value);
-                      setFormValue(name, e.value);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        value === e.value ? "opacity-100" : "opacity-0",
-                      )}
-                    />
-                    {e.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              <ScrollArea className="h-fit max-h-60 overflow-y-auto">
+                <CommandGroup>
+                  {data.map((e) => (
+                    <CommandItem
+                      key={e.value}
+                      value={e.value}
+                      onSelect={(currentValue) => {
+                        setValue(currentValue === value ? "" : currentValue);
+                        setOpen(false);
+                        onSelect && onSelect(e.value);
+                        setFormValue(name, e.value);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          value === e.value ? "opacity-100" : "opacity-0",
+                        )}
+                      />
+                      {e.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </ScrollArea>
             </Command>
           </PopoverContent>
         </Popover>
