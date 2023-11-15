@@ -1,18 +1,8 @@
 import React from "react";
 import Admin from "@/components/admin";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const page = () => {
-  return (
-    <Card className="shadow-none">
-      <CardHeader>
-        <CardTitle className="text-2xl">Dashboard</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Admin />
-      </CardContent>
-    </Card>
-  );
+  return <Admin />;
 };
 
 export default page;

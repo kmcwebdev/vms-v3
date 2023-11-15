@@ -29,7 +29,7 @@ const MainNav = ({
             pathName === "/cms" && "text-black",
           )}
         >
-          Overview
+          Dashboard
         </Link>
         <Link
           href="/cms/visitors"
