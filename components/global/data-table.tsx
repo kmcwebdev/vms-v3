@@ -93,13 +93,17 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
         </DropdownMenu> */}
       </div>
       <div className="rounded border">
-        <Table className="border-collapse">
+        <Table className="w-full border-collapse overflow-x-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="p-4"
+                      style={{ minWidth: "150px" }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -120,7 +124,11 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-sm ">
+                    <TableCell
+                      key={cell.id}
+                      className="p-4 text-sm"
+                      style={{ minWidth: "150px" }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
