@@ -5,6 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { type IRecentVisitors, visitorData } from "./dashboard/recent-visitors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import DateRangePicker from "@/components/global/date-range-picker";
 
 const Reports = () => {
   const columns: ColumnDef<IRecentVisitors>[] = [
@@ -72,9 +73,9 @@ const Reports = () => {
   return (
     <Card className=" shadow-none">
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <h1>Visitor</h1>
-          <Button>Export</Button>
+        <CardTitle className="flex w-full justify-end gap-x-2">
+          <DateRangePicker />
+          <Button variant="outline">Export</Button>
         </CardTitle>
       </CardHeader>
       <CardContent>
