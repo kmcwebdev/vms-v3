@@ -11,14 +11,32 @@ const Admin = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const tab =
-    (searchParams.get("tab") || "").charAt(0).toUpperCase() +
-    (searchParams.get("tab") || "").slice(1);
+
+  let title;
+  const tab = searchParams.get("tab");
+
+  switch (tab) {
+    case "overview":
+      title = "Overview";
+      break;
+    case "analytics":
+      title = "Analytics";
+      break;
+    case "reports":
+      title = "Reports";
+      break;
+    case "notifications":
+      title = "Notifications";
+      break;
+    default:
+      title = "Default";
+      break;
+  }
 
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">{tab}</CardTitle>
+        <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue={searchParams.get("tab") || "dashboard"}>
