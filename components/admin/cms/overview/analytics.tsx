@@ -6,54 +6,56 @@ import BarChart from "@/components/global/bar-chart";
 import type { ChartData } from "chart.js";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
-import { createSearchParams } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-const KMC_SITES = [
-  "VCorp",
-  "Armstrong",
-  "Frabelle",
-  "One Ayala",
-  "Picadilly",
-  "Cyber Sigma",
-  "SM Aura",
-  "UpTown",
-  "Four/Neo",
-  "Arthaland",
-  "Gamma",
-  "RBC T1",
-  "Jollibee Tower",
-  "Zeta",
-  "SM North",
-  "Rockwell Sheridan",
-  "Podium West",
-  "Aeropark",
-  "OG",
-  "Axis Tower",
-  "Skyrise 4A",
-  "Skyrise 4B",
-  "HM Tower",
-  "Lexmark",
-  "Five Ecom",
+const KMC_SITES_OBJECTS = [
+  { label: "VCorp", value: "vcorp" },
+  { value: "armstrong", label: "Armstrong" },
+  { value: "frabelle", label: "Frabelle" },
+  { value: "one-ayala", label: "One Ayala" },
+  { value: "picadilly", label: "Picadilly" },
+  { value: "cyber-sigma", label: "Cyber Sigma" },
+  { value: "sm-aura", label: "SM Aura" },
+  { value: "uptown", label: "UpTown" },
+  { value: "four-neo", label: "Four/Neo" },
+  { value: "arthaland", label: "Arthaland" },
+  { value: "gamma", label: "Gamma" },
+  { value: "rbc", label: "RBC T1" },
+  { value: "jbt", label: "Jollibee Tower" },
+  { value: "zeta", label: "Zeta" },
+  { value: "sm-north", label: "SM North" },
+  { value: "rockwell", label: "Rockwell Sheridan" },
+  { value: "podium", label: "Podium West" },
+  { value: "aeropark", label: "Aeropark" },
+  { value: "og", label: "OG" },
+  { value: "axis", label: "Axis Tower" },
+  { value: "skyrise", label: "Skyrise 4A" },
+  { value: "skyrise-4b", label: "Skyrise 4B" },
+  { value: "hm-tower", label: "HM Tower" },
+  { value: "lexmark", label: "Lexmark" },
+  { value: "five-ecom", label: "Five Ecom" },
 ];
-
-const KMC_SITES_OBJECTS = KMC_SITES.map((site) => ({
-  value: site,
-  label: site,
-}));
 
 const Analytics = () => {
   const router = useRouter();
 
   const filterForm = useForm();
 
+  const randomNumbers = Array.from({ length: KMC_SITES_OBJECTS.length }, () =>
+    Math.floor(Math.random() * 100),
+  );
+
+  const backgroundColors = randomNumbers.map((_, index) =>
+    index % 2 === 0 ? "#f97315" : "#fb923c",
+  );
+
   const visitorAnalyticsGraphData = {
-    labels: KMC_SITES,
+    labels: KMC_SITES_OBJECTS.map((site) => site.label),
     datasets: [
       {
         label: "Visitors",
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: ["#f97315"],
+        data: randomNumbers,
+        backgroundColor: backgroundColors,
         borderRadius: 6,
         barThickness: 28,
         maxBarThickness: 40,
