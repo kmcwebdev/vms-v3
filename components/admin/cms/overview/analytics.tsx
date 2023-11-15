@@ -7,6 +7,7 @@ import type { ChartData } from "chart.js";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Users2 } from "lucide-react";
 
 const KMC_SITES_OBJECTS = [
   { label: "VCorp", value: "vcorp" },
@@ -68,69 +69,101 @@ const Analytics = () => {
   };
 
   return (
-    <Card className="mt-4 shadow-none">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <p>Visitors per site</p>
-          <Form
-            name="filter"
-            useFormReturn={filterForm}
-            onSubmit={onFilterSubmit}
-            className="flex items-center space-x-2"
-          >
-            <Form.Combobox
-              name="site"
-              placeholder="Site"
-              onSelect={(e) => {
-                const url = new URL(window.location.href);
-                url.searchParams.set("site", e);
-                router.replace(url.toString(), {
-                  scroll: false,
-                });
-              }}
-              data={KMC_SITES_OBJECTS}
-            />
-            <Form.Combobox
-              name="filter"
-              placeholder="Filter by"
-              onSelect={(e) => {
-                const url = new URL(window.location.href);
-                url.searchParams.set("filter", e);
-                router.replace(url.toString(), {
-                  scroll: false,
-                });
-              }}
-              data={[
-                { label: "Daily", value: "daily" },
-                { label: "Weekly", value: "weekly" },
-                { label: "Monthly", value: "monthly" },
-              ]}
-            />
-          </Form>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <BarChart
-          height="180"
-          data={visitorAnalyticsGraphData as ChartData<"bar">}
-          options={{
-            scales: {
-              x: {
-                grid: {
-                  display: false,
-                },
-              },
-              y: {
-                border: {
-                  dash: [4, 8],
-                },
-              },
-            },
-          }}
+    <>
+      <div className="mt-4 grid grid-cols-3">
+        <DataCard
+          title="Total visitors"
+          description="Visitor count on all sites"
+          value="1,405"
+          icon={<Users2 />}
         />
-      </CardContent>
-    </Card>
+      </div>
+      <Card className="mt-4 shadow-none">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <p>Visitors per site</p>
+            <Form
+              name="filter"
+              useFormReturn={filterForm}
+              onSubmit={onFilterSubmit}
+              className="flex items-center space-x-2"
+            >
+              <Form.Combobox
+                name="site"
+                placeholder="Site"
+                onSelect={(e) => {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("site", e);
+                  router.replace(url.toString(), {
+                    scroll: false,
+                  });
+                }}
+                data={KMC_SITES_OBJECTS}
+              />
+              <Form.Combobox
+                name="filter"
+                placeholder="Filter by"
+                onSelect={(e) => {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("filter", e);
+                  router.replace(url.toString(), {
+                    scroll: false,
+                  });
+                }}
+                data={[
+                  { label: "Daily", value: "daily" },
+                  { label: "Weekly", value: "weekly" },
+                  { label: "Monthly", value: "monthly" },
+                ]}
+              />
+            </Form>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <BarChart
+            height="180"
+            data={visitorAnalyticsGraphData as ChartData<"bar">}
+            options={{
+              scales: {
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                },
+                y: {
+                  border: {
+                    dash: [4, 8],
+                  },
+                },
+              },
+            }}
+          />
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
 export default Analytics;
+
+interface DataCardProps {
+  title: string;
+  icon: React.ReactNode;
+  value: string;
+  description: string;
+}
+
+const DataCard = ({ title, icon, value, description }: DataCardProps) => {
+  return (
+    <Card className="shadow-none">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <div className="text-gray-400">{icon}</div>
+      </CardHeader>
+      <CardContent>
+        <div className="truncate text-2xl font-bold">{value}</div>
+        <p className="text-xs text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
+  );
+};
