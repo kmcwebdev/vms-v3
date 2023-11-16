@@ -12,7 +12,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TabsContent } from "@radix-ui/react-tabs";
-import Overview from "./overview";
 import Clients from "./clients";
 import Visitors from "./visitors";
 import { Building2, User2 } from "lucide-react";
@@ -48,15 +47,12 @@ const SiteDetails = () => {
         <div>
           <ClientAndVisitorCount />
 
-          <Tabs defaultValue="overview">
+          <Tabs defaultValue="clients">
             <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="clients">Clients</TabsTrigger>
               <TabsTrigger value="visitors">Visitors</TabsTrigger>
             </TabsList>
-            <TabsContent value="overview">
-              <Overview />
-            </TabsContent>
+
             <TabsContent value="clients">
               <Clients />
             </TabsContent>
