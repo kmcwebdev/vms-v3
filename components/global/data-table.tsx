@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 
 interface DataTableProps<T> {
   data: T[];
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<T, any>[];
   hasSearch?: boolean;
 }
 
