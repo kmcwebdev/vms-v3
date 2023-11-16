@@ -10,6 +10,8 @@ interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   name: string;
 }
 
+//TODO: REMOVE THIS COMPONENT
+
 const Form: React.FC<FormProps> = ({
   children,
   className,

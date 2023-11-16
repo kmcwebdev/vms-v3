@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/ui/card";
 import BarChart from "@/components/global/bar-chart";
 import type { ChartData } from "chart.js";
 
@@ -24,6 +30,7 @@ const MostVisitedSites = () => {
     <Card className="w-full shadow-none">
       <CardHeader>
         <CardTitle>Most visited sites</CardTitle>
+        <CardDescription>Top five most visited</CardDescription>
       </CardHeader>
       <CardContent>
         <BarChart

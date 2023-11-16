@@ -2,20 +2,20 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User2, Building } from "lucide-react";
+import { Users2, Building } from "lucide-react";
 
 const DUMMY_OVERVIEW = [
   {
-    title: "Total Visitors",
+    title: "Total visitors",
     value: "1,405",
     description: "Total visitor on all sites",
-    icon: <User2 className="h-4 w-4" />,
+    icon: <Users2 />,
   },
   {
     title: "Most Visited site",
     value: "Armstrong Corporate Center",
     description: "117 visits",
-    icon: <Building className="h-4 w-4" />,
+    icon: <Building />,
   },
 ];
 

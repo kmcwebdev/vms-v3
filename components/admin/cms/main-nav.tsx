@@ -23,13 +23,13 @@ const MainNav = ({
       >
         <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
         <Link
-          href="/cms"
+          href="/cms?tab=overview"
           className={cn(
             "text-sm font-medium text-muted-foreground transition-colors  hover:text-primary",
             pathName === "/cms" && "text-black",
           )}
         >
-          Overview
+          Dashboard
         </Link>
         <Link
           href="/cms/visitors"

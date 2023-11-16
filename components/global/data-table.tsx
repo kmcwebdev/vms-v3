@@ -23,13 +23,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
+  hasSearch?: boolean;
 }
 
-const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
+const DataTable = <T extends {}>({
+  data,
+  columns,
+  hasSearch,
+}: DataTableProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -56,15 +62,17 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center pb-4">
-        <Input
-          placeholder="Search by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className={cn("flex items-center", hasSearch ? "pb-4" : "pb-0")}>
+        {hasSearch && (
+          <Input
+            placeholder="Search by name..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        )}
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -93,13 +101,17 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
         </DropdownMenu> */}
       </div>
       <div className="rounded border">
-        <Table className="border-collapse">
+        <Table className="w-full border-collapse overflow-x-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="p-4"
+                      style={{ minWidth: "150px" }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -120,7 +132,11 @@ const DataTable = <T extends {}>({ data, columns }: DataTableProps<T>) => {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-sm ">
+                    <TableCell
+                      key={cell.id}
+                      className="p-4 text-sm"
+                      style={{ minWidth: "150px" }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
