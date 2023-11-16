@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Trash2 } from "lucide-react";
+import { Trash2, PencilLine } from "lucide-react";
 
 interface Client {
   id: number;
@@ -116,6 +116,12 @@ const Clients = () => {
           </Badge>
         );
       },
+    }),
+    columns.display({
+      id: "actions",
+      cell: (props) => (
+        <PencilLine className="h-5 w-5 text-muted-foreground transition ease-in-out hover:cursor-pointer hover:text-primary" />
+      ),
     }),
   ];
 

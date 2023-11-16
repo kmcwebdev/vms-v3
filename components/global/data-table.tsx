@@ -120,7 +120,7 @@ const DataTable = <T extends {}>({
                     <TableHead
                       key={header.id}
                       className="px-4 py-2 text-sm font-medium text-gray-800"
-                      style={{ minWidth: "150px" }}
+                      style={{ minWidth: "100px" }}
                     >
                       {header.isPlaceholder
                         ? null
@@ -145,7 +145,7 @@ const DataTable = <T extends {}>({
                     <TableCell
                       key={cell.id}
                       className="p-4 text-sm"
-                      style={{ minWidth: "150px" }}
+                      style={{ minWidth: "80px" }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
