@@ -100,16 +100,16 @@ const DataTable = <T extends {}>({
           </DropdownMenuContent>
         </DropdownMenu> */}
       </div>
-      <div className="rounded border">
+      <div className="border-x-none rounded border-b border-t-accent-foreground">
         <Table className="w-full border-collapse overflow-x-auto">
-          <TableHeader>
+          <TableHeader className="rounded-md bg-neutral-50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="p-4"
+                      className="px-4 py-2 text-sm font-medium text-gray-800"
                       style={{ minWidth: "150px" }}
                     >
                       {header.isPlaceholder

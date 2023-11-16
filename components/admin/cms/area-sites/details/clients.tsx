@@ -88,7 +88,7 @@ const Clients = () => {
   return (
     <Card className="mt-3 pt-6 shadow-none">
       <CardContent>
-        <DataTable data={clients} columns={clientColumns} />
+        <DataTable data={clients} columns={clientColumns} hasSearch />
       </CardContent>
     </Card>
   );
