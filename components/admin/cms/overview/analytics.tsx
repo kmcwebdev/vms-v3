@@ -8,6 +8,7 @@ import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Users2 } from "lucide-react";
+import AreaChart from "@/components/global/area-chart";
 
 const KMC_SITES_OBJECTS = [
   { label: "VCorp", value: "vcorp" },
@@ -64,13 +65,55 @@ const Analytics = () => {
     ],
   };
 
+  const visitorPerWeekGraphData = {
+    labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        label: "Visitors per week",
+        data: [12, 19, 3, 5, 2, 3, 4],
+        tension: 0.4,
+      },
+    ],
+  };
+
   const onFilterSubmit = () => {
     console.log("sub");
   };
 
   return (
     <>
-      <div className="mt-4 grid grid-cols-3">
+      <div className="mt-4 grid grid-cols-3 grid-rows-2 space-x-4">
+        <Card className="col-span-2 row-span-2 shadow-none">
+          <CardContent>
+            <CardHeader className="px-0">
+              <CardTitle>Visitors this week</CardTitle>
+            </CardHeader>
+            <AreaChart
+              height="120"
+              data={visitorPerWeekGraphData as ChartData<"line">}
+              options={{
+                backgroundColor: "#f97315",
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+                scales: {
+                  x: {
+                    grid: {
+                      display: false,
+                    },
+                  },
+                  y: {
+                    border: {
+                      dash: [4, 8],
+                    },
+                  },
+                },
+              }}
+            />
+          </CardContent>
+        </Card>
         <DataCard
           title="Current visitors"
           description="Visitor count by month of December (2023)"
@@ -80,7 +123,7 @@ const Analytics = () => {
       </div>
       <Card className="mt-4 shadow-none">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className="flex items-center justify-between ">
             <p>Visitors per site</p>
             <Form
               name="filter"
