@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Reports from "./cms/overview/reports";
+import Notifications from "./cms/overview/notifications";
 
 const Admin = () => {
   const router = useRouter();
@@ -83,6 +84,9 @@ const Admin = () => {
           </TabsContent>
           <TabsContent value="reports">
             <Reports />
+          </TabsContent>
+          <TabsContent value="notifications">
+            <Notifications />
           </TabsContent>
         </Tabs>
       </CardContent>

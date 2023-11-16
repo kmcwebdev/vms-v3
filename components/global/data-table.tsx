@@ -24,10 +24,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface DataTableProps<T> {
   data: T[];
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<T, any>[];
   hasSearch?: boolean;
 }
 
@@ -100,17 +110,17 @@ const DataTable = <T extends {}>({
           </DropdownMenuContent>
         </DropdownMenu> */}
       </div>
-      <div className="rounded border">
+      <div className="border-x-none rounded border-b border-t-accent-foreground">
         <Table className="w-full border-collapse overflow-x-auto">
-          <TableHeader>
+          <TableHeader className="rounded-md bg-neutral-50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="p-4"
-                      style={{ minWidth: "150px" }}
+                      className="px-4 py-2 text-sm font-medium text-gray-800"
+                      style={{ minWidth: "100px" }}
                     >
                       {header.isPlaceholder
                         ? null
@@ -135,7 +145,7 @@ const DataTable = <T extends {}>({
                     <TableCell
                       key={cell.id}
                       className="p-4 text-sm"
-                      style={{ minWidth: "150px" }}
+                      style={{ minWidth: "80px" }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
