@@ -50,7 +50,7 @@ const AreaSites = () => {
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="flex justify-between text-2xl">
+        <CardTitle className="flex justify-between text-xl font-bold">
           KMC sites
           <Form
             name="searchSiteForm"

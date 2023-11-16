@@ -69,7 +69,7 @@ const Visitors = () => {
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="flex w-full justify-between text-2xl">
+        <CardTitle className="flex w-full justify-between text-xl font-bold">
           Visitors list
           <Form
             name="visitor-filters"
