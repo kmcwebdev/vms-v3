@@ -15,8 +15,12 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import Clients from "./clients";
 import Visitors from "./visitors";
 import { Building2, User2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SiteDetails = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   return (
     <Card className="shadow-none">
       <CardHeader>
@@ -47,10 +51,24 @@ const SiteDetails = () => {
         <div>
           <ClientAndVisitorCount />
 
-          <Tabs defaultValue="clients">
+          <Tabs defaultValue={searchParams.get("tab") || "clients"}>
             <TabsList>
-              <TabsTrigger value="clients">Clients</TabsTrigger>
-              <TabsTrigger value="visitors">Visitors</TabsTrigger>
+              <TabsTrigger
+                value="clients"
+                onClick={() =>
+                  router.push(`${window.location.pathname}?tab=client`)
+                }
+              >
+                Clients
+              </TabsTrigger>
+              <TabsTrigger
+                value="visitors"
+                onClick={() =>
+                  router.push(`${window.location.pathname}?tab=visitors`)
+                }
+              >
+                Visitors
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="clients">
