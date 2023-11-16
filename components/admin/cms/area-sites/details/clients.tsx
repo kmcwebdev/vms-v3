@@ -3,6 +3,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import DataTable from "@/components/global/data-table";
 import { Badge } from "@/components/ui/badge";
 import { createColumnHelper } from "@tanstack/react-table";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Trash2 } from "lucide-react";
 
 interface Client {
   id: number;
@@ -57,9 +66,34 @@ const Clients = () => {
     columns.accessor("name", {
       header: "Client name",
       cell: ({ row }) => (
-        <p className="hover:cursor-pointer hover:underline">
-          {row.getValue("name")}
-        </p>
+        <Dialog>
+          <DialogTrigger asChild>
+            <p className="hover:cursor-pointer hover:underline">
+              {row.getValue("name")}
+            </p>
+          </DialogTrigger>
+          <DialogContent className="p-4">
+            <DialogHeader>
+              <DialogTitle>{row.getValue("name")}</DialogTitle>
+              <DialogDescription>
+                List of client&apos;s point of contact
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-2">
+              <Card className="p-4 text-sm shadow-none">
+                <CardContent className="flex items-center justify-between p-0">
+                  <div>
+                    <p>Ryan Christsupher Rizo</p>
+                    <p className="text-sm text-muted-foreground ">
+                      ryanrizo@kmc.solutions
+                    </p>
+                  </div>
+                  <Trash2 className="h-5 w-5 text-muted-foreground transition ease-in-out hover:cursor-pointer hover:text-red-500" />
+                </CardContent>
+              </Card>
+            </div>
+          </DialogContent>
+        </Dialog>
       ),
     }),
     columns.accessor("pocCount", {
