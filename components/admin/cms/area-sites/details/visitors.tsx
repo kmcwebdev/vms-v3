@@ -9,6 +9,17 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Visitors = () => {
   const columnHelper = createColumnHelper<IRecentVisitors>();
@@ -17,7 +28,7 @@ const Visitors = () => {
     columnHelper.accessor("timeout", {
       header: "Time ",
       cell: (value) => (
-        <Badge className="font-normal">{value.getValue()}</Badge>
+        <Badge className=" font-normal">{value.getValue()}</Badge>
       ),
     }),
     columnHelper.accessor("name", {
@@ -39,16 +50,35 @@ const Visitors = () => {
     columnHelper.display({
       id: "action",
       cell: () => (
-        <div
-          className={cn(
-            // isLoggedOut
-            //   ? "opacity-40 hover:cursor-not-allowed"
-            //   : "hover:cursor-pointer hover:bg-primary hover:text-white",
-            "w-fit rounded-full bg-gray-100 p-2 text-sm font-medium shadow-sm transition ease-in-out hover:cursor-pointer hover:bg-primary hover:text-white ",
-          )}
-        >
-          <LogOut size={12} />
-        </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <div
+              className={cn(
+                "w-fit rounded-full bg-gray-100 p-2 text-sm font-medium shadow-sm transition ease-in-out hover:cursor-pointer hover:bg-primary hover:text-white ",
+              )}
+            >
+              <LogOut size={12} />
+            </div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure you want to log-out this visitor?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <ul>
+                  <li>Name: John Doe</li>
+                  <li>Site: Armstrong corporate center</li>
+                  <li>Reason of visit: Meeting</li>
+                </ul>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       ),
     }),
   ];
