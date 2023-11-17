@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
-
+import type {MostVisitedSite} from "@/types/site"
 
 const getMostVisitedSiteQuery = async () => {
     const URL = `api/analytics/most-visited`
 
     const response = await fetch(URL)
 
-    return (await response.json()) 
+    return (await response.json()) as MostVisitedSite
 }
 
 export const useGetMostVisitedSite = () => {
