@@ -56,7 +56,9 @@ const SiteDetails = () => {
               <TabsTrigger
                 value="clients"
                 onClick={() =>
-                  router.push(`${window.location.pathname}?tab=client`)
+                  router.push(`${window.location.pathname}?tab=client`, {
+                    scroll: false,
+                  })
                 }
               >
                 Clients
@@ -64,7 +66,9 @@ const SiteDetails = () => {
               <TabsTrigger
                 value="visitors"
                 onClick={() =>
-                  router.push(`${window.location.pathname}?tab=visitors`)
+                  router.push(`${window.location.pathname}?tab=visitors`, {
+                    scroll: false,
+                  })
                 }
               >
                 Visitors
