@@ -3,6 +3,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users2, Building } from "lucide-react";
+import { useGetTotalVisitorOnAllSites } from "@/hooks/useGetTotalVisitorOnAllSites";
 
 const DUMMY_OVERVIEW = [
   {
@@ -20,6 +21,10 @@ const DUMMY_OVERVIEW = [
 ];
 
 const Overview = () => {
+  const { data: totalVisitorData } = useGetTotalVisitorOnAllSites();
+
+  console.log(totalVisitorData);
+
   return (
     <div className="grid grid-cols-3 grid-rows-1 gap-x-4">
       {DUMMY_OVERVIEW.map((e) => (
