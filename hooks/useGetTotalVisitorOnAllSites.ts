@@ -1,10 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-
-type TotalVisitorOnAllSites = [
-    {
-        total_visitors: string
-    }
-]
+import type { TotalVisitorOnAllSites } from "@/types/visitor"
 
 const getTotalVisitorOnAllSitesQuery = async () => {
     const URL = `api/analytics/visitor-count/total-visitors`
