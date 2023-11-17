@@ -110,7 +110,7 @@ const DataTable = <T extends {}>({
           </DropdownMenuContent>
         </DropdownMenu> */}
       </div>
-      <div className="border-x-none rounded border-b border-t-accent-foreground">
+      <div className="border-x-none  border-b border-t-accent-foreground">
         <Table className="w-full border-collapse overflow-x-auto">
           <TableHeader className="rounded-md bg-neutral-50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -140,11 +140,12 @@ const DataTable = <T extends {}>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border-t border-neutral-100"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="p-4 text-sm"
+                      className="  p-4 text-sm"
                       style={{ minWidth: "80px" }}
                     >
                       {flexRender(
