@@ -6,31 +6,29 @@ import { Users2, Building } from "lucide-react";
 import { useGetTotalVisitorOnAllSites } from "@/hooks/useGetTotalVisitorOnAllSites";
 import { useGetMostVisitedSite } from "@/hooks/useGetMostVisitedSite";
 
-const DUMMY_OVERVIEW = [
-  {
-    title: "Total visitors",
-    value: "1,405",
-    description: "Total visitor on all sites",
-    icon: <Users2 />,
-  },
-  {
-    title: "Most Visited site",
-    value: "Armstrong Corporate Center",
-    description: "117 visits",
-    icon: <Building />,
-  },
-];
-
 const Overview = () => {
-  const { data: totalVisitorData } = useGetTotalVisitorOnAllSites();
+  const { data: totalVisitor } = useGetTotalVisitorOnAllSites();
 
   const { data: mostVisitedSite } = useGetMostVisitedSite();
 
-  console.log(mostVisitedSite);
+  const overview_data = [
+    {
+      title: "Total visitors",
+      value: totalVisitor ? totalVisitor?.total_visitors : 0,
+      description: "Total visitor on all sites",
+      icon: <Users2 />,
+    },
+    {
+      title: "Most Visited site",
+      value: mostVisitedSite ? mostVisitedSite?.site_name : "No data",
+      description: mostVisitedSite ? mostVisitedSite?.count : "No data",
+      icon: <Building />,
+    },
+  ];
 
   return (
     <div className="grid grid-cols-3 grid-rows-1 gap-x-4">
-      {DUMMY_OVERVIEW.map((e) => (
+      {overview_data.map((e) => (
         <Card key={e.title} className="shadow-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{e.title}</CardTitle>
