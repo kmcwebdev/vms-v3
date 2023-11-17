@@ -11,7 +11,9 @@ export async function GET() {
       order by visitor_count;
     `;
 
-    return NextResponse.json(await sql.query(visitor_count_by_site_query));
+    const result = await sql.query(visitor_count_by_site_query);
+
+    return NextResponse.json(result.rows);
   } catch (error: any) {
     return NextResponse.json(
       { status: 500, message: error.message },
