@@ -6,6 +6,7 @@ import { Users } from "lucide-react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useGetAllSites } from "@/hooks/useGetAllSites";
 
 const sites = [
   {
@@ -41,6 +42,10 @@ const sites = [
 const AreaSites = () => {
   const router = useRouter();
 
+  const { data: allSites, isLoading: isAllSitesLoading } = useGetAllSites();
+
+  console.log(allSites);
+
   const searchSiteForm = useForm();
 
   const handleSubmit = () => {
@@ -67,11 +72,13 @@ const AreaSites = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-4">
-          {sites &&
-            sites.map((e) => (
+          {!isAllSitesLoading &&
+            allSites &&
+            allSites.length > 0 &&
+            allSites.map((e) => (
               <Card
-                key={e.value}
-                onClick={() => router.push(`/cms/area-sites/${e.value}`)}
+                key={e.site_id}
+                onClick={() => router.push(`/cms/area-sites/${e.site_name}`)}
                 className="group shadow-none transition ease-in-out hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
@@ -79,7 +86,7 @@ const AreaSites = () => {
                 </CardHeader>
                 <CardContent className="px-3 pb-3 pt-0">
                   <div className="flex justify-between text-sm">
-                    <h2>{e.label}</h2>
+                    <h2>{e.site_name}</h2>
                     <div className="flex items-center gap-x-2">
                       <Users size={14} className="text-muted-foreground" />
                       <p className="text-primary">63</p>

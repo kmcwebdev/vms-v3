@@ -3,7 +3,7 @@ import { sql } from "@vercel/postgres";
 
 export async function GET () {
     try{
-        const all_sites_query = `SELECT * FROM sites;`
+        const all_sites_query = `SELECT site_id, site_name, site_banner, site_images, address FROM sites ORDER BY site_name`
 
         const result = await sql.query(all_sites_query);
 
