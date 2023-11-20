@@ -1,5 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import {z} from "zod";
 
@@ -29,7 +28,8 @@ export async function GET(request: Request, ) {
         order by site_name
     `;
 
-    const result = await sql.query(all_sites_query);
+    const result = await sql.query
+    (all_sites_query);
 
     return NextResponse.json(result.rows);
 
