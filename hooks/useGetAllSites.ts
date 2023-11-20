@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type {Site} from "@/types/site";
 
 type GetAllSitesQuery = {
-    filter?: string | undefined
+    filter?: string 
 }
 
 const getAllSitesQuery = async ({filter}:GetAllSitesQuery = {}) => {
@@ -24,7 +24,8 @@ export const useGetAllSites = ({
         isFetching,
         isError
     } = useQuery({
-        queryKey: ['all-sites'],
+
+        queryKey: ['all-sites', JSON.stringify(filter)],
         queryFn: () => getAllSitesQuery({
             filter
         })

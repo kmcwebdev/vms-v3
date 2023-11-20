@@ -5,51 +5,41 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAllSites } from "@/hooks/useGetAllSites";
-
-const sites = [
-  {
-    value: "armstrong-corporate-center",
-    label: "Armstrong Corporate Center",
-  },
-  {
-    value: "uptown-place-tower-2",
-    label: "UpTown Place Tower 2",
-  },
-  {
-    value: "v-corporate-center",
-    label: "V Corporate Center",
-  },
-  {
-    value: "frabelle-corporate-plaza",
-    label: "Frabelle Corporate Plaza",
-  },
-  {
-    value: "picadilly-inc",
-    label: "Picadilly Inc.",
-  },
-  {
-    value: "four-neo",
-    label: "Four Neo",
-  },
-  {
-    value: "arthaland-century-pacific-tower",
-    label: "Arthaland Century Pacific Tower",
-  },
-];
+import { createSearchParams } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AreaSites = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const { data: allSites, isLoading: isAllSitesLoading } = useGetAllSites();
+  const queryClient = useQueryClient();
 
-  console.log(allSites);
+  const {
+    data: allSites,
+    isLoading: isAllSitesLoading,
+    isFetching,
+  } = useGetAllSites({
+    filter: searchParams.get("filter")?.toString(),
+  });
+
+  console.log("sites is fetching", allSites);
 
   const searchSiteForm = useForm();
 
-  const handleSubmit = () => {
-    console.log("submit");
+  const handleSubmit = (data: { filter: string }) => {
+    const newSearchParams = createSearchParams(data);
+
+    queryClient.invalidateQueries({
+      queryKey: ["all-sites"],
+    });
+
+    if (newSearchParams) {
+      router.push(`${window.location.pathname}?${newSearchParams.toString()}`, {
+        scroll: false,
+      });
+    }
   };
 
   return (
@@ -62,11 +52,7 @@ const AreaSites = () => {
             useFormReturn={searchSiteForm}
             onSubmit={handleSubmit}
           >
-            <Form.Input
-              name="siteName"
-              type="text"
-              placeholder="Search site "
-            />
+            <Form.Input name="filter" type="text" placeholder="Search site " />
           </Form>
         </CardTitle>
       </CardHeader>
