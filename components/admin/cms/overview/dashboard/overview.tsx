@@ -27,6 +27,12 @@ const Overview = () => {
       description: mostVisitedSite ? mostVisitedSite?.count : "No data",
       icon: <Building />,
     },
+    {
+      title: "Least Visited site",
+      value: mostVisitedSite ? mostVisitedSite?.site_name : "No data",
+      description: mostVisitedSite ? mostVisitedSite?.count : "No data",
+      icon: <Building />,
+    },
   ];
 
   return (
