@@ -10,7 +10,7 @@ export async function GET(req: Request) {
 
   return new Response(csv, {
     headers: {
-      "content-disposition": `attachment; filename="data.csv"`,
+      "content-disposition": `attachment; filename="${Date.now()}.csv"`,
     },
   });
 }
