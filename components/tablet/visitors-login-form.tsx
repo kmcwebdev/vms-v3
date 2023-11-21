@@ -94,7 +94,11 @@ const VisitorsLoginForm = () => {
                 }
               }}
             >
-              {currentStepIndex === 1 && !hasImageTaken ? "Take photo" : "Next"}
+              {currentStepIndex === 1 && !hasImageTaken
+                ? "Take photo"
+                : isLastStep
+                ? "Submit"
+                : "Next"}
             </Button>
           </CardFooter>
         </Card>
@@ -111,7 +115,7 @@ interface IStepperProps {
 }
 
 const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
-  console.log(currentStepIndex);
+  console.log("stepper", currentStepIndex);
 
   return (
     <Card className="px-4 py-4 pt-0 shadow-none">
@@ -125,14 +129,29 @@ const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
               <Card key={e.key} className="w-full border-none p-2 shadow-none">
                 <CardHeader className="flex flex-row items-center gap-x-3 p-0">
                   <div className="relative flex h-6 w-7 items-center justify-center rounded-full border text-xs">
-                    {/* <p className="m-auto">1</p> */}
-                    <Check className="mx-auto h-3 w-3" />
+                    {/*  */}
+
+                    {isStepCompleted ? (
+                      <Check className="mx-auto h-3 w-3" />
+                    ) : (
+                      <p className="m-auto">{index + 1}</p>
+                    )}
                   </div>
 
-                  <Progress value={100} className=" h-1" />
+                  <Progress
+                    value={isStepCompleted ? 100 : 0}
+                    className=" h-1"
+                  />
                 </CardHeader>
                 <CardContent className="mt-2 px-0 py-2 text-sm">
-                  <p className="leading-none">{e.key}</p>
+                  <p
+                    className={cn(
+                      isStepCurrent ? "text-primary" : " text-neutral-400",
+                      "leading-none",
+                    )}
+                  >
+                    {e.key}
+                  </p>
                 </CardContent>
               </Card>
             );
