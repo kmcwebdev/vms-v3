@@ -53,7 +53,7 @@ const VisitorsLoginForm = () => {
     if (currentStepIndex > 0) {
       back();
     } else {
-      // void router.push('/sales/clients')
+      // void router.push()
     }
   };
 
@@ -61,7 +61,7 @@ const VisitorsLoginForm = () => {
     if (!isLastStep) {
       next();
     }
-    console.log("submitted", data);
+    console.log("submitted", visitorsForm.getValues());
   };
 
   return (
@@ -128,13 +128,16 @@ const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
             return (
               <Card key={e.key} className="w-full border-none p-2 shadow-none">
                 <CardHeader className="flex flex-row items-center gap-x-3 p-0">
-                  <div className="relative flex h-6 w-7 items-center justify-center rounded-full border text-xs">
-                    {/*  */}
-
+                  <div
+                    className={cn(
+                      isStepCompleted && "border-primary",
+                      "relative flex h-6 w-7 items-center justify-center rounded-full border text-xs",
+                    )}
+                  >
                     {isStepCompleted ? (
-                      <Check className="mx-auto h-3 w-3" />
+                      <Check className="mx-auto h-3 w-3 text-primary" />
                     ) : (
-                      <p className="m-auto">{index + 1}</p>
+                      <p className="m-auto ">{index + 1}</p>
                     )}
                   </div>
 
@@ -146,7 +149,9 @@ const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
                 <CardContent className="mt-2 px-0 py-2 text-sm">
                   <p
                     className={cn(
-                      isStepCurrent ? "text-primary" : " text-neutral-400",
+                      isStepCurrent
+                        ? "font-semibold text-primary"
+                        : " text-neutral-400",
                       "leading-none",
                     )}
                   >
