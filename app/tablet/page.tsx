@@ -1,11 +1,11 @@
 import React from "react";
-import Stepper from "@/components/tablet/stepper";
+import VisitorsLoginForm from "@/components/tablet/visitors-login-form";
 
 const page = () => {
   return (
-    <div>
-      <Stepper />
-    </div>
+    <>
+      <VisitorsLoginForm />
+    </>
   );
 };
 

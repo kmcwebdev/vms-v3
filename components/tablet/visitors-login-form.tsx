@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Check } from "lucide-react";
+import { useMultistepForm } from "@/hooks/useMultiStepForm";
 
 interface ISteps {
   id: number;
@@ -26,7 +29,9 @@ const Steps: ISteps[] = [
   },
 ];
 
-const Stepper = () => {
+const VisitorsLoginForm = () => {
+  const {} = useMultistepForm;
+
   return (
     <Card className="px-4 py-4 pt-0 shadow-none">
       <CardContent className="p-0">
@@ -52,4 +57,4 @@ const Stepper = () => {
   );
 };
 
-export default Stepper;
+export default VisitorsLoginForm;
