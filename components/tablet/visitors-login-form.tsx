@@ -15,15 +15,27 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 
 const VisitorsLoginForm = () => {
-  const { step, steps, currentStepIndex } = useMultistepForm([
-    <FillUpForm key="Fill up form" />,
-    <SnapshotForm key="Take a snapshot" />,
-    <ReviewDetails key="Review details" />,
-  ]);
+  const { step, steps, currentStepIndex, next, isLastStep, back } =
+    useMultistepForm([
+      <FillUpForm key="Fill up form" />,
+      <SnapshotForm key="Take a snapshot" />,
+      <ReviewDetails key="Review details" />,
+    ]);
 
   const visitorsForm = useForm();
 
+  const handleOnCancelOrBack = () => {
+    if (currentStepIndex > 0) {
+      back();
+    } else {
+      // void router.push('/sales/clients')
+    }
+  };
+
   const onFormSubmit = (data: any) => {
+    if (!isLastStep) {
+      next();
+    }
     console.log("submitted", data);
   };
 
@@ -42,6 +54,7 @@ const VisitorsLoginForm = () => {
               type="button"
               className="w-full shadow-none"
               variant="outline"
+              onClick={handleOnCancelOrBack}
             >
               Cancel
             </Button>
@@ -89,21 +102,6 @@ const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
               </Card>
             );
           })}
-
-          {/* {Steps.map((e) => (
-            <Card key={e.id} className="w-full border-none p-2 shadow-none">
-              <CardHeader className="flex flex-row items-center gap-x-3 p-0">
-                <div className="relative flex h-6 w-7 items-center justify-center rounded-full border text-xs">
-                  <Check className="mx-auto h-3 w-3" />
-                </div>
-
-                <Progress value={100} className=" h-1" />
-              </CardHeader>
-              <CardContent className="mt-2 px-0 py-2 text-sm">
-                <p className="leading-none">{e.field}</p>
-              </CardContent>
-            </Card>
-          ))} */}
         </div>
       </CardContent>
     </Card>
