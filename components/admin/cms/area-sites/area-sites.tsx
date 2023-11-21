@@ -8,32 +8,19 @@ import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAllSites } from "@/hooks/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
 
 const AreaSites = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const queryClient = useQueryClient();
-
-  const {
-    data: allSites,
-    isLoading: isAllSitesLoading,
-    isFetching,
-  } = useGetAllSites({
+  const { data: allSites, isLoading: isAllSitesLoading } = useGetAllSites({
     filter: searchParams.get("filter")?.toString(),
   });
-
-  console.log("sites is fetching", allSites);
 
   const searchSiteForm = useForm();
 
   const handleSubmit = (data: { filter: string }) => {
     const newSearchParams = createSearchParams(data);
-
-    queryClient.invalidateQueries({
-      queryKey: ["all-sites"],
-    });
 
     if (newSearchParams) {
       router.push(`${window.location.pathname}?${newSearchParams.toString()}`, {
@@ -41,6 +28,10 @@ const AreaSites = () => {
       });
     }
   };
+
+  if (isAllSitesLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Card className="shadow-none">
@@ -58,10 +49,9 @@ const AreaSites = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-4">
-          {!isAllSitesLoading &&
-            allSites &&
+          {allSites &&
             allSites.length > 0 &&
-            allSites.map((e) => (
+            allSites?.map((e) => (
               <Card
                 key={e.site_id}
                 onClick={() => router.push(`/cms/area-sites/${e.site_name}`)}
