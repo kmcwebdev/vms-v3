@@ -8,14 +8,22 @@ import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAllSites } from "@/hooks/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
+import { Site } from "@/types/site";
 
-const AreaSites = () => {
+interface AreaSitesProps {
+  sites: Site[];
+}
+
+const AreaSites: React.FC<AreaSitesProps> = ({ sites }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { data: allSites, isLoading: isAllSitesLoading } = useGetAllSites({
-    filter: searchParams.get("filter")?.toString(),
-  });
+  const { data: allSites, isLoading: isAllSitesLoading } = useGetAllSites(
+    {
+      filter: searchParams.get("filter")?.toString(),
+    },
+    sites,
+  );
 
   const searchSiteForm = useForm();
 
