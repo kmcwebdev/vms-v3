@@ -22,8 +22,6 @@ const SnapshotForm = ({
 }: ISnapshotForm) => {
   const [count, setCount] = useState<string | number>();
 
-  console.log("count", count);
-
   const camera = useRef<{ takePhoto: () => string } | null>(null);
   const [image, setImage] = useState<string | null>(null);
 
