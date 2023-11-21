@@ -3,10 +3,41 @@ import { Card, CardContent } from "@/components/ui/card";
 import Form from "@/components/global/form";
 import { Input } from "@/components/ui/input";
 
+const reasonToVisit = [
+  {
+    label: "Company event",
+    value: "company-event",
+  },
+  {
+    label: "Company visit",
+    value: "company-visit",
+  },
+  {
+    label: "Delivery",
+    value: "delivery",
+  },
+  {
+    label: "Event Organizer",
+    value: "event-organizer",
+  },
+  {
+    label: "Interview",
+    value: "interview",
+  },
+  {
+    label: "Meeting",
+    value: "meeting",
+  },
+  {
+    label: "Repair Service",
+    value: "repair-service",
+  },
+];
+
 const FillUpForm = () => {
   return (
     <Card className="border-none shadow-none">
-      <CardContent className="p-0">
+      <CardContent className="space-y-6 p-0">
         <div className="space-y-1">
           <label htmlFor="lastName" className=" text-sm">
             Last name
@@ -50,6 +81,25 @@ const FillUpForm = () => {
               value: "kmc solutions",
             },
           ]}
+        />
+
+        <Form.Select
+          name="personToVisit"
+          label="Person to visit"
+          placeholder="Select the person you want to visit"
+          data={[
+            {
+              label: "Cannot find name",
+              value: "cannot-find",
+            },
+          ]}
+        />
+
+        <Form.Select
+          name="reasonToVisit"
+          label="Reason to visit"
+          placeholder="Select a reason you're visiting the site"
+          data={reasonToVisit}
         />
       </CardContent>
     </Card>

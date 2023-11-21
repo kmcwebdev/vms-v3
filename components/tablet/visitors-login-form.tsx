@@ -35,7 +35,7 @@ const VisitorsLoginForm = () => {
         useFormReturn={visitorsForm}
         onSubmit={onFormSubmit}
       >
-        <Card className="pt-6 shadow-none">
+        <Card className="mt-4 pt-6 shadow-none">
           <CardContent>{step}</CardContent>
           <CardFooter className="flex gap-x-2">
             <Button
