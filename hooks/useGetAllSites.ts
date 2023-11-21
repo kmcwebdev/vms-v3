@@ -1,40 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
-import type {Site} from "@/types/site";
+import type { Site } from "@/types/site";
 
 type GetAllSitesQuery = {
-    filter?: string 
-}
+  filter?: string;
+};
 
-const getAllSitesQuery = async ({filter}:GetAllSitesQuery = {}) => {
-
-    const params = new URLSearchParams({
-        filter: filter ? filter : ''
-    });
-  const URL = `/api/area-sites/all${filter ? `${'?' + params.toString()}` : ''}`;
+const getAllSitesQuery = async ({ filter }: GetAllSitesQuery = {}) => {
+  const params = new URLSearchParams({
+    filter: filter ? filter : "",
+  });
+  const URL = `/api/area-sites/all${
+    filter ? `${"?" + params.toString()}` : ""
+  }`;
   const response = await fetch(URL);
   return (await response.json()) as Site[];
 };
 
-export const useGetAllSites = ({
-    filter 
-}: GetAllSitesQuery = {}) => {
-    const {
-        data: dataArray,
-        isLoading,
-        isFetching,
-        isError
-    } = useQuery({
+export const useGetAllSites = ({ filter }: GetAllSitesQuery = {}) => {
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["all-sites", JSON.stringify(filter)],
+    queryFn: () =>
+      getAllSitesQuery({
+        filter,
+      }),
+  });
 
-        queryKey: ['all-sites', JSON.stringify(filter)],
-        queryFn: () => getAllSitesQuery({
-            filter
-        })
-    });
-    const data = dataArray ? dataArray : null;
-    return {
-        data,
-        isLoading,
-        isFetching,
-        isError
-    };
-}
+  return {
+    data,
+    isLoading,
+    isFetching,
+    isError,
+  };
+};
