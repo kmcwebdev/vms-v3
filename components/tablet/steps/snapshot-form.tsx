@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Camera } from "react-camera-pro";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { count } from "console";
+import { useFormContext } from "react-hook-form";
 
 type CameraErrorMessage = {
   noCameraAccessible?: string;
@@ -22,6 +21,8 @@ const SnapshotForm = ({
 }: ISnapshotForm) => {
   const [count, setCount] = useState<string | number>();
 
+  const { setValue, getValues } = useFormContext();
+
   const camera = useRef<{ takePhoto: () => string } | null>(null);
   const [image, setImage] = useState<string | null>(null);
 
@@ -34,6 +35,8 @@ const SnapshotForm = ({
       "It is not possible to switch camera to different one because there is only one video device accessible.",
     canvas: "Canvas is not supported.",
   };
+
+  console.log("snap", getValues());
 
   const startCountdown = () => {
     let count = 3;
@@ -57,12 +60,15 @@ const SnapshotForm = ({
     if (takePhotoTrigger) {
       startCountdown();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [takePhotoTrigger]);
 
   useEffect(() => {
     if (image) {
       setHasImageTaken(true);
+      setValue("snapShot.image", image);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image, setHasImageTaken]);
 
   return (

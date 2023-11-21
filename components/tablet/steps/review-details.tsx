@@ -8,7 +8,7 @@ const ReviewDetails = () => {
 
   const { email } = getValues();
 
-  console.log("review", email);
+  console.log("review", getValues());
 
   return (
     <Card className="shadow-none">

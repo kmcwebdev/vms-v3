@@ -9,7 +9,9 @@ const fillUpFormSchema = z.object({
     reasonToVisit: z.string()
 })
 
-const snapShotSchema = z.string()
+const snapShotSchema = z.object({
+    image: z.string()
+})
 
 export const visitorSchema = z.object({
    fillUpForm: fillUpFormSchema,
