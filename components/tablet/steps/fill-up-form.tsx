@@ -43,7 +43,7 @@ const FillUpForm = () => {
             Last name
           </label>
           <Form.Input
-            name="lastName"
+            name="fillUpForm.lastName"
             placeholder="Type your last name here"
             type="text"
           />
@@ -54,7 +54,7 @@ const FillUpForm = () => {
             First name
           </label>
           <Form.Input
-            name="firstName"
+            name="fillUpForm.firstName"
             placeholder="Type your last name here"
             type="text"
           />
@@ -65,14 +65,14 @@ const FillUpForm = () => {
             Email Address
           </label>
           <Form.Input
-            name="email"
+            name="fillUpForm.email"
             placeholder="Type your last name here"
             type="text"
           />
         </div>
 
         <Form.Select
-          name="companyToVisit"
+          name="fillUpForm.companyToVisit"
           label="Company to visit"
           placeholder="Select the company you want to visit"
           data={[
@@ -84,7 +84,7 @@ const FillUpForm = () => {
         />
 
         <Form.Select
-          name="personToVisit"
+          name="fillUpForm.personToVisit"
           label="Person to visit"
           placeholder="Select the person you want to visit"
           data={[
@@ -96,7 +96,7 @@ const FillUpForm = () => {
         />
 
         <Form.Select
-          name="reasonToVisit"
+          name="fillUpForm.reasonToVisit"
           label="Reason to visit"
           placeholder="Select a reason you're visiting the site"
           data={reasonToVisit}

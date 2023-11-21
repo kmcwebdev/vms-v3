@@ -13,6 +13,15 @@ import { cn } from "@/lib/utils";
 import Form from "../global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
+import { Visitor } from "@/types/visitor";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { visitorSchema } from "@/schema/visitor";
+
+const STEP_INDEX = {
+  "Fill up form": 0,
+  "Take a snapshot": 1,
+  "Review details": 2,
+};
 
 const VisitorsLoginForm = () => {
   const [isTakePhotoTriggered, setIsTakePhotoTriggered] = useState(false);
@@ -29,7 +38,16 @@ const VisitorsLoginForm = () => {
       <ReviewDetails key="Review details" />,
     ]);
 
-  const visitorsForm = useForm();
+  const visitorsForm = useForm<Visitor>({
+    resolver: zodResolver(
+      visitorSchema.pick({
+        fillUpForm:
+          currentStepIndex === STEP_INDEX["Fill up form"] ? true : undefined,
+        snapShot:
+          currentStepIndex === STEP_INDEX["Take a snapshot"] ? true : undefined,
+      }),
+    ),
+  });
 
   const handleOnCancelOrBack = () => {
     if (currentStepIndex > 0) {
