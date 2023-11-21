@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardFooter } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Check } from "lucide-react";
@@ -15,10 +15,17 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 
 const VisitorsLoginForm = () => {
+  const [isTakePhotoTriggered, setIsTakePhotoTriggered] = useState(false);
+  const [hasImageTaken, setHasImageTaken] = useState(false);
+
   const { step, steps, currentStepIndex, next, isLastStep, back } =
     useMultistepForm([
       <FillUpForm key="Fill up form" />,
-      <SnapshotForm key="Take a snapshot" />,
+      <SnapshotForm
+        key="Take a snapshot"
+        takePhotoTrigger={isTakePhotoTriggered}
+        setHasImageTaken={(e) => setHasImageTaken(e)}
+      />,
       <ReviewDetails key="Review details" />,
     ]);
 
@@ -58,8 +65,18 @@ const VisitorsLoginForm = () => {
             >
               Cancel
             </Button>
-            <Button type="submit" className="w-full">
-              Next
+            <Button
+              type={
+                currentStepIndex === 1 && !hasImageTaken ? "button" : "submit"
+              }
+              className="w-full"
+              onClick={() => {
+                if (currentStepIndex === 1) {
+                  setIsTakePhotoTriggered(true);
+                }
+              }}
+            >
+              {currentStepIndex === 1 && !hasImageTaken ? "Take photo" : "Next"}
             </Button>
           </CardFooter>
         </Card>
