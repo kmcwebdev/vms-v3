@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users2, Building } from "lucide-react";
 import { useGetTotalVisitorOnAllSites } from "@/hooks/useGetTotalVisitorOnAllSites";
 import { useGetMostVisitedSite } from "@/hooks/useGetMostVisitedSite";
+import { useGetLeastVisitedSite } from "@/hooks/useGetLeastVisitedSite";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Overview = () => {
@@ -13,6 +14,9 @@ const Overview = () => {
 
   const { data: mostVisitedSite, isLoading: isMostVisitedSiteLoading } =
     useGetMostVisitedSite();
+
+  const { data: leastVisitedSite, isLoading: isLeastVisitedSiteLoading } =
+    useGetLeastVisitedSite();
 
   const overview_data = [
     {
@@ -27,12 +31,19 @@ const Overview = () => {
       description: mostVisitedSite ? mostVisitedSite?.count : "No data",
       icon: <Building />,
     },
+    {
+      title: "Least Visited site",
+      value: leastVisitedSite ? leastVisitedSite?.site_name : "No data",
+      description: leastVisitedSite ? leastVisitedSite?.count : "No data",
+      icon: <Building />,
+    },
   ];
 
   return (
     <div className="grid grid-cols-3 grid-rows-1 gap-x-4">
       {isTotalVisitorLoading || isMostVisitedSiteLoading ? (
         <>
+          <OverviewCardSkeleton />
           <OverviewCardSkeleton />
           <OverviewCardSkeleton />
         </>

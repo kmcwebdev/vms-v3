@@ -1,21 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import type {Site} from "@/types/site";
 
-const getAllSitesQuery = async () => {
-  const URL = `/api/area-sites/all`;
+type GetAllSitesQuery = {
+    filter?: string 
+}
+
+const getAllSitesQuery = async ({filter}:GetAllSitesQuery = {}) => {
+
+    const params = new URLSearchParams({
+        filter: filter ? filter : ''
+    });
+  const URL = `/api/area-sites/all${filter ? `${'?' + params.toString()}` : ''}`;
   const response = await fetch(URL);
   return (await response.json()) as Site[];
 };
 
-export const useGetAllSites = () => {
+export const useGetAllSites = ({
+    filter 
+}: GetAllSitesQuery = {}) => {
     const {
         data: dataArray,
         isLoading,
         isFetching,
         isError
     } = useQuery({
-        queryKey: ['all-sites'],
-        queryFn: () => getAllSitesQuery()
+
+        queryKey: ['all-sites', JSON.stringify(filter)],
+        queryFn: () => getAllSitesQuery({
+            filter
+        })
     });
     const data = dataArray ? dataArray : null;
     return {
