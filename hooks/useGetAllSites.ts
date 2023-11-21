@@ -24,7 +24,6 @@ export const useGetAllSites = ({
         isFetching,
         isError
     } = useQuery({
-
         queryKey: ['all-sites', JSON.stringify(filter)],
         queryFn: () => getAllSitesQuery({
             filter
