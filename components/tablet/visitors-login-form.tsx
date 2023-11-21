@@ -1,46 +1,99 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Check } from "lucide-react";
 import { useMultistepForm } from "@/hooks/useMultiStepForm";
-
-interface ISteps {
-  id: number;
-  label: string;
-  field: string;
-}
-const Steps: ISteps[] = [
-  {
-    id: 1,
-    label: "STEP 1",
-    field: "Fill up form",
-  },
-  {
-    id: 2,
-    label: "STEP 2",
-    field: "Take a snapshot",
-  },
-  {
-    id: 1,
-    label: "STEP 3",
-    field: "Review details",
-  },
-];
+import FillUpForm from "./steps/fill-up-form";
+import SnapshotForm from "./steps/snapshot-form";
+import ReviewDetails from "./steps/review-details";
+import type { ReactElement } from "react";
+import { cn } from "@/lib/utils";
+import Form from "../global/form";
+import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
 
 const VisitorsLoginForm = () => {
-  const {} = useMultistepForm;
+  const { step, steps, currentStepIndex } = useMultistepForm([
+    <FillUpForm key="Fill up form" />,
+    <SnapshotForm key="Take a snapshot" />,
+    <ReviewDetails key="Review details" />,
+  ]);
+
+  const visitorsForm = useForm();
+
+  const onFormSubmit = (data: any) => {
+    console.log("submitted", data);
+  };
+
+  return (
+    <>
+      <Stepper step={steps} currentStepIndex={currentStepIndex} />
+      <Form
+        name="visitors-form"
+        useFormReturn={visitorsForm}
+        onSubmit={onFormSubmit}
+      >
+        <Card className="pt-6 shadow-none">
+          <CardContent>{step}</CardContent>
+          <CardFooter className="flex gap-x-2">
+            <Button
+              type="button"
+              className="w-full shadow-none"
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            <Button type="submit" className="w-full">
+              Next
+            </Button>
+          </CardFooter>
+        </Card>
+      </Form>
+    </>
+  );
+};
+
+export default VisitorsLoginForm;
+
+interface IStepperProps {
+  step: ReactElement[];
+  currentStepIndex: number;
+}
+
+const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
+  console.log(currentStepIndex);
 
   return (
     <Card className="px-4 py-4 pt-0 shadow-none">
       <CardContent className="p-0">
         <div className="mt-4 flex w-full justify-evenly">
-          {Steps.map((e) => (
+          {step.map((e, index) => {
+            const isStepCurrent = currentStepIndex === index;
+            const isStepCompleted = currentStepIndex > index;
+
+            return (
+              <Card key={e.key} className="w-full border-none p-2 shadow-none">
+                <CardHeader className="flex flex-row items-center gap-x-3 p-0">
+                  <div className="relative flex h-6 w-7 items-center justify-center rounded-full border text-xs">
+                    {/* <p className="m-auto">1</p> */}
+                    <Check className="mx-auto h-3 w-3" />
+                  </div>
+
+                  <Progress value={100} className=" h-1" />
+                </CardHeader>
+                <CardContent className="mt-2 px-0 py-2 text-sm">
+                  <p className="leading-none">{e.key}</p>
+                </CardContent>
+              </Card>
+            );
+          })}
+
+          {/* {Steps.map((e) => (
             <Card key={e.id} className="w-full border-none p-2 shadow-none">
               <CardHeader className="flex flex-row items-center gap-x-3 p-0">
                 <div className="relative flex h-6 w-7 items-center justify-center rounded-full border text-xs">
-                  {/* <p className="m-auto">1</p> */}
                   <Check className="mx-auto h-3 w-3" />
                 </div>
 
@@ -50,11 +103,9 @@ const VisitorsLoginForm = () => {
                 <p className="leading-none">{e.field}</p>
               </CardContent>
             </Card>
-          ))}
+          ))} */}
         </div>
       </CardContent>
     </Card>
   );
 };
-
-export default VisitorsLoginForm;

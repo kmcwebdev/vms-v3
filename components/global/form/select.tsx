@@ -12,9 +12,15 @@ import { useFormContext, Controller } from "react-hook-form";
 
 interface ISelectProps {
   name: string;
+  label?: string;
+  placeholder?: string;
+  data: {
+    label: string;
+    value: string;
+  }[];
 }
 
-const Select = ({ name }: ISelectProps) => {
+const Select = ({ name, label, placeholder, data }: ISelectProps) => {
   const { control } = useFormContext();
 
   return (
@@ -22,21 +28,34 @@ const Select = ({ name }: ISelectProps) => {
       control={control}
       name={name}
       render={({ field: { onChange, value } }) => (
-        <SelectComponent onValueChange={onChange} defaultValue={value}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a fruit" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Fruits</SelectLabel>
-              <SelectItem value="apple">Apple</SelectItem>
-              <SelectItem value="banana">Banana</SelectItem>
-              <SelectItem value="blueberry">Blueberry</SelectItem>
-              <SelectItem value="grapes">Grapes</SelectItem>
-              <SelectItem value="pineapple">Pineapple</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </SelectComponent>
+        <div>
+          {label && (
+            <label htmlFor={name} className="text-sm">
+              {label}
+            </label>
+          )}
+
+          <SelectComponent onValueChange={onChange} defaultValue={value}>
+            <SelectTrigger className="w-full ">
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {data.map((e) => (
+                  <SelectItem key={e.value} value={e.value}>
+                    {e.label}
+                  </SelectItem>
+                ))}
+                {/* <SelectLabel>Fruits</SelectLabel> */}
+                {/* <SelectItem value="apple">Apple</SelectItem>
+                <SelectItem value="banana">Banana</SelectItem>
+                <SelectItem value="blueberry">Blueberry</SelectItem>
+                <SelectItem value="grapes">Grapes</SelectItem>
+                <SelectItem value="pineapple">Pineapple</SelectItem> */}
+              </SelectGroup>
+            </SelectContent>
+          </SelectComponent>
+        </div>
       )}
     />
   );
