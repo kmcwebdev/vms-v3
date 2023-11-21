@@ -1,25 +1,25 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
-import {z} from "zod";
+import { z } from "zod";
 
 const querySchema = z.object({
   filter: z.string().optional(),
 });
 
-export async function GET(request: Request, ) {
+export async function GET(request: Request) {
   try {
-    const {searchParams} = new URL(request.url);
+    const { searchParams } = new URL(request.url);
 
     const queryParams = querySchema.safeParse(Object.fromEntries(searchParams));
 
     if (queryParams.success === false) {
-        return new Response(queryParams.error.message, {
-          status: 400,
-          statusText: "Bad request",
-        });
-      }
+      return new Response(queryParams.error.message, {
+        status: 400,
+        statusText: "Bad request",
+      });
+    }
 
-    const {filter} = queryParams.data;
+    const { filter } = queryParams.data;
 
     const all_sites_query = `
         select site_id, site_name, site_banner, site_images, address 
@@ -28,11 +28,9 @@ export async function GET(request: Request, ) {
         order by site_name
     `;
 
-    const result = await sql.query
-    (all_sites_query);
+    const result = await sql.query(all_sites_query);
 
     return NextResponse.json(result.rows);
-
   } catch (error: any) {
     return NextResponse.json(
       {
