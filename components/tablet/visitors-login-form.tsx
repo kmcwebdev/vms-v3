@@ -16,6 +16,8 @@ import Image from "next/image";
 import Stepper from "./stepper";
 import TimeDateDisplay from "./time-date-display";
 import { Separator } from "../ui/separator";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const STEP_INDEX = {
   "Fill up form": 0,
@@ -27,7 +29,9 @@ const VisitorsLoginForm = () => {
   const [isTakePhotoTriggered, setIsTakePhotoTriggered] = useState(false);
   const [hasImageTaken, setHasImageTaken] = useState(false);
 
-  const { step, steps, currentStepIndex, next, isLastStep, back } =
+  const { toast } = useToast();
+
+  const { step, steps, currentStepIndex, next, isLastStep, back, goTo } =
     useMultistepForm([
       <FillUpForm key="Fill up form" />,
       <SnapshotForm
@@ -61,7 +65,15 @@ const VisitorsLoginForm = () => {
     if (!isLastStep) {
       next();
     }
-    console.log("submitted", visitorsForm.getValues());
+    if (isLastStep) {
+      console.log("submitted", visitorsForm.getValues());
+      toast({
+        title: "Success!",
+        description: "Your info has been submitted, thank you.",
+      });
+      visitorsForm.reset();
+      goTo(0);
+    }
   };
 
   return (
