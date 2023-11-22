@@ -30,7 +30,10 @@ const Select = ({ name, label, placeholder, data }: ISelectProps) => {
       render={({ field: { onChange, value } }) => (
         <div>
           {label && (
-            <label htmlFor={name} className="text-sm">
+            <label
+              htmlFor={name}
+              className="text-sm font-medium text-neutral-700"
+            >
               {label}
             </label>
           )}

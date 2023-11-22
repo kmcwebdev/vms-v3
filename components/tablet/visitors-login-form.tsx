@@ -16,6 +16,8 @@ import { Button } from "../ui/button";
 import { Visitor } from "@/types/visitor";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { visitorSchema } from "@/schema/visitor";
+import Image from "next/image";
+import Stepper from "./stepper";
 
 const STEP_INDEX = {
   "Fill up form": 0,
@@ -66,6 +68,7 @@ const VisitorsLoginForm = () => {
 
   return (
     <>
+      <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
       <Stepper step={steps} currentStepIndex={currentStepIndex} />
       <Form
         name="visitors-form"
@@ -108,61 +111,3 @@ const VisitorsLoginForm = () => {
 };
 
 export default VisitorsLoginForm;
-
-interface IStepperProps {
-  step: ReactElement[];
-  currentStepIndex: number;
-}
-
-const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
-  console.log("stepper", currentStepIndex);
-
-  return (
-    <Card className="px-4 py-4 pt-0 shadow-none">
-      <CardContent className="p-0">
-        <div className="mt-4 flex w-full justify-evenly">
-          {step.map((e, index) => {
-            const isStepCurrent = currentStepIndex === index;
-            const isStepCompleted = currentStepIndex > index;
-
-            return (
-              <Card key={e.key} className="w-full border-none p-2 shadow-none">
-                <CardHeader className="flex flex-row items-center gap-x-3 p-0">
-                  <div
-                    className={cn(
-                      isStepCompleted && "border-primary",
-                      "relative flex h-6 w-7 items-center justify-center rounded-full border text-xs",
-                    )}
-                  >
-                    {isStepCompleted ? (
-                      <Check className="mx-auto h-3 w-3 text-primary" />
-                    ) : (
-                      <p className="m-auto ">{index + 1}</p>
-                    )}
-                  </div>
-
-                  <Progress
-                    value={isStepCompleted ? 100 : 0}
-                    className=" h-1"
-                  />
-                </CardHeader>
-                <CardContent className="mt-2 px-0 py-2 text-sm">
-                  <p
-                    className={cn(
-                      isStepCurrent
-                        ? "font-semibold text-primary"
-                        : " text-neutral-400",
-                      "leading-none",
-                    )}
-                  >
-                    {e.key}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};

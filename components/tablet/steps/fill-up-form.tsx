@@ -39,7 +39,10 @@ const FillUpForm = () => {
     <Card className="border-none shadow-none">
       <CardContent className="space-y-6 p-0">
         <div className="space-y-1">
-          <label htmlFor="lastName" className=" text-sm">
+          <label
+            htmlFor="lastName"
+            className=" text-sm font-medium text-neutral-700"
+          >
             Last name
           </label>
           <Form.Input
@@ -50,7 +53,10 @@ const FillUpForm = () => {
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="firstName" className=" text-sm">
+          <label
+            htmlFor="firstName"
+            className=" text-sm font-medium text-neutral-700"
+          >
             First name
           </label>
           <Form.Input
@@ -61,7 +67,10 @@ const FillUpForm = () => {
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="email" className=" text-sm">
+          <label
+            htmlFor="email"
+            className=" text-sm font-medium text-neutral-700"
+          >
             Email Address
           </label>
           <Form.Input
