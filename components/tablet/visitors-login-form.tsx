@@ -75,7 +75,7 @@ const VisitorsLoginForm = () => {
 
       <div className="mb-3">
         <h1 className="text-sm text-primary">Armstrong Corporate Center</h1>
-        <h2 className="text-4xl font-bold leading-none text-[#101622]">
+        <h2 className="text-3xl font-bold leading-none text-[#101622]">
           Visitors Login
         </h2>
       </div>

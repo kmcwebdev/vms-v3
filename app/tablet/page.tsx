@@ -1,12 +1,6 @@
 import React from "react";
-import VisitorsLoginForm from "@/components/tablet/visitors-login-form";
-
 const page = () => {
-  return (
-    <>
-      <VisitorsLoginForm />
-    </>
-  );
+  return <>Welcome</>;
 };
 
 export default page;
