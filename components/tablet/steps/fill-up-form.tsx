@@ -80,7 +80,21 @@ const FillUpForm = () => {
           />
         </div>
 
-        <Form.Select
+        <div className="space-y-1">
+          <label
+            htmlFor="email"
+            className=" text-sm font-medium text-neutral-700"
+          >
+            Company to visit
+          </label>
+          <Form.Input
+            name="fillUpForm.companyToVisit"
+            placeholder="Type the company you want to visit"
+            type="text"
+          />
+        </div>
+
+        {/* <Form.Select
           name="fillUpForm.companyToVisit"
           label="Company to visit"
           placeholder="Select the company you want to visit"
@@ -90,9 +104,23 @@ const FillUpForm = () => {
               value: "kmc solutions",
             },
           ]}
-        />
+        /> */}
 
-        <Form.Select
+        <div className="space-y-1">
+          <label
+            htmlFor="email"
+            className=" text-sm font-medium text-neutral-700"
+          >
+            Person to visit
+          </label>
+          <Form.Input
+            name="fillUpForm.personToVisit"
+            placeholder="Type the person you want to visit"
+            type="text"
+          />
+        </div>
+
+        {/* <Form.Select
           name="fillUpForm.personToVisit"
           label="Person to visit"
           placeholder="Select the person you want to visit"
@@ -102,7 +130,7 @@ const FillUpForm = () => {
               value: "cannot-find",
             },
           ]}
-        />
+        /> */}
 
         <Form.Select
           name="fillUpForm.reasonToVisit"
