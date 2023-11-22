@@ -10,9 +10,7 @@ const getAllSitesQuery = async ({ filter }: GetAllSitesQuery = {}) => {
     filter: filter ? filter : "",
   });
 
-  const URL = `/api/area-sites/all${
-    filter ? `${"?" + params.toString()}` : ""
-  }`;
+  const URL = `/api/sites/all${filter ? `${"?" + params.toString()}` : ""}`;
 
   const response = await fetch(URL);
 
@@ -39,4 +37,3 @@ export const useGetAllSites = (
     isError,
   };
 };
-
