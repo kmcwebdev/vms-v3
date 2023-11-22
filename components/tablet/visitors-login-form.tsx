@@ -2,14 +2,10 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardFooter } from "../ui/card";
-import { Progress } from "../ui/progress";
-import { Check } from "lucide-react";
 import { useMultistepForm } from "@/hooks/useMultiStepForm";
 import FillUpForm from "./steps/fill-up-form";
 import SnapshotForm from "./steps/snapshot-form";
 import ReviewDetails from "./steps/review-details";
-import type { ReactElement } from "react";
-import { cn } from "@/lib/utils";
 import Form from "../global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
@@ -18,6 +14,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { visitorSchema } from "@/schema/visitor";
 import Image from "next/image";
 import Stepper from "./stepper";
+import TimeDateDisplay from "./time-date-display";
+import { Separator } from "../ui/separator";
 
 const STEP_INDEX = {
   "Fill up form": 0,
@@ -68,7 +66,22 @@ const VisitorsLoginForm = () => {
 
   return (
     <>
-      <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
+      <nav className="mb-6 ">
+        <div className="flex items-center justify-between">
+          <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
+          <TimeDateDisplay />
+        </div>
+      </nav>
+
+      <div className="mb-3">
+        <h1 className="text-sm text-primary">Armstrong Corporate Center</h1>
+        <h2 className="text-4xl font-bold leading-none text-[#101622]">
+          Visitors Login
+        </h2>
+      </div>
+
+      <Separator className="mb-6" />
+
       <Stepper step={steps} currentStepIndex={currentStepIndex} />
       <Form
         name="visitors-form"
@@ -77,7 +90,7 @@ const VisitorsLoginForm = () => {
       >
         <Card className="mt-4 pt-6 shadow-none">
           <CardContent>{step}</CardContent>
-          <CardFooter className="flex gap-x-2">
+          <CardFooter className="mt-4 flex gap-x-2">
             <Button
               type="button"
               className="w-full shadow-none"
