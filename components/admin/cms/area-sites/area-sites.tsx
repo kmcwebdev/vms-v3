@@ -42,7 +42,7 @@ const AreaSites: React.FC<AreaSitesProps> = ({ sites }) => {
   }
 
   return (
-    <Card className="shadow-none">
+    <Card className=" shadow-none">
       <CardHeader>
         <CardTitle className="flex justify-between text-xl font-bold">
           KMC sites

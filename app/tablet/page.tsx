@@ -1,10 +1,10 @@
 import React from "react";
-import VisitorsLoginForm from "@/components/tablet/visitors-login-form";
+import WelcomePage from "@/components/tablet/welcome-page";
 
 const page = () => {
   return (
     <>
-      <VisitorsLoginForm />
+      <WelcomePage />
     </>
   );
 };

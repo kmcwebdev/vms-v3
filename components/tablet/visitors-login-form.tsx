@@ -2,20 +2,22 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardFooter } from "../ui/card";
-import { Progress } from "../ui/progress";
-import { Check } from "lucide-react";
 import { useMultistepForm } from "@/hooks/useMultiStepForm";
 import FillUpForm from "./steps/fill-up-form";
 import SnapshotForm from "./steps/snapshot-form";
 import ReviewDetails from "./steps/review-details";
-import type { ReactElement } from "react";
-import { cn } from "@/lib/utils";
 import Form from "../global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Visitor } from "@/types/visitor";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { visitorSchema } from "@/schema/visitor";
+import Image from "next/image";
+import Stepper from "./stepper";
+import TimeDateDisplay from "./time-date-display";
+import { Separator } from "../ui/separator";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const STEP_INDEX = {
   "Fill up form": 0,
@@ -27,7 +29,9 @@ const VisitorsLoginForm = () => {
   const [isTakePhotoTriggered, setIsTakePhotoTriggered] = useState(false);
   const [hasImageTaken, setHasImageTaken] = useState(false);
 
-  const { step, steps, currentStepIndex, next, isLastStep, back } =
+  const { toast } = useToast();
+
+  const { step, steps, currentStepIndex, next, isLastStep, back, goTo } =
     useMultistepForm([
       <FillUpForm key="Fill up form" />,
       <SnapshotForm
@@ -61,11 +65,35 @@ const VisitorsLoginForm = () => {
     if (!isLastStep) {
       next();
     }
-    console.log("submitted", visitorsForm.getValues());
+    if (isLastStep) {
+      console.log("submitted", visitorsForm.getValues());
+      toast({
+        title: "Success!",
+        description: "Your info has been submitted, thank you.",
+      });
+      visitorsForm.reset();
+      goTo(0);
+    }
   };
 
   return (
     <>
+      <nav className="mb-6 ">
+        <div className="flex items-center justify-between">
+          <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
+          <TimeDateDisplay />
+        </div>
+      </nav>
+
+      <div className="mb-3">
+        <h1 className="text-sm text-primary">Armstrong Corporate Center</h1>
+        <h2 className="text-3xl font-bold leading-none text-[#101622]">
+          Visitors Login
+        </h2>
+      </div>
+
+      <Separator className="mb-6" />
+
       <Stepper step={steps} currentStepIndex={currentStepIndex} />
       <Form
         name="visitors-form"
@@ -74,7 +102,7 @@ const VisitorsLoginForm = () => {
       >
         <Card className="mt-4 pt-6 shadow-none">
           <CardContent>{step}</CardContent>
-          <CardFooter className="flex gap-x-2">
+          <CardFooter className="mt-4 flex gap-x-2">
             <Button
               type="button"
               className="w-full shadow-none"
@@ -108,61 +136,3 @@ const VisitorsLoginForm = () => {
 };
 
 export default VisitorsLoginForm;
-
-interface IStepperProps {
-  step: ReactElement[];
-  currentStepIndex: number;
-}
-
-const Stepper = ({ step, currentStepIndex }: IStepperProps) => {
-  console.log("stepper", currentStepIndex);
-
-  return (
-    <Card className="px-4 py-4 pt-0 shadow-none">
-      <CardContent className="p-0">
-        <div className="mt-4 flex w-full justify-evenly">
-          {step.map((e, index) => {
-            const isStepCurrent = currentStepIndex === index;
-            const isStepCompleted = currentStepIndex > index;
-
-            return (
-              <Card key={e.key} className="w-full border-none p-2 shadow-none">
-                <CardHeader className="flex flex-row items-center gap-x-3 p-0">
-                  <div
-                    className={cn(
-                      isStepCompleted && "border-primary",
-                      "relative flex h-6 w-7 items-center justify-center rounded-full border text-xs",
-                    )}
-                  >
-                    {isStepCompleted ? (
-                      <Check className="mx-auto h-3 w-3 text-primary" />
-                    ) : (
-                      <p className="m-auto ">{index + 1}</p>
-                    )}
-                  </div>
-
-                  <Progress
-                    value={isStepCompleted ? 100 : 0}
-                    className=" h-1"
-                  />
-                </CardHeader>
-                <CardContent className="mt-2 px-0 py-2 text-sm">
-                  <p
-                    className={cn(
-                      isStepCurrent
-                        ? "font-semibold text-primary"
-                        : " text-neutral-400",
-                      "leading-none",
-                    )}
-                  >
-                    {e.key}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};

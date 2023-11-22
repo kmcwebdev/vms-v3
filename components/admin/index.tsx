@@ -8,8 +8,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Reports from "./cms/overview/reports";
 import Notifications from "./cms/overview/notifications";
+import { Site } from "@/types/site";
 
-const Admin = () => {
+interface IAdminProps {
+  site: Site[];
+}
+
+const Admin = ({ site }: IAdminProps) => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -83,7 +88,7 @@ const Admin = () => {
             <Analytics />
           </TabsContent>
           <TabsContent value="reports">
-            <Reports />
+            <Reports site={site} />
           </TabsContent>
           <TabsContent value="notifications">
             <Notifications />

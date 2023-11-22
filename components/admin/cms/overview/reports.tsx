@@ -15,8 +15,36 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Form from "@/components/global/form";
+import { useForm } from "react-hook-form";
+import type { Site } from "@/types/site";
+import { useGetAllSites } from "@/hooks/useGetAllSites";
+import { useSearchParams } from "next/navigation";
 
-const Reports = () => {
+interface IReportProps {
+  site: Site[];
+}
+
+const Reports = ({ site }: IReportProps) => {
+  const exportForm = useForm();
+
+  const searchParams = useSearchParams();
+
+  const { data: allSites, isLoading: isAllSitesLoading } = useGetAllSites(
+    {
+      filter: searchParams.get("filter")?.toString(),
+    },
+    site,
+  );
+
+  const allSiteData =
+    !isAllSitesLoading && allSites
+      ? allSites.map((e) => ({
+          value: e.site_id,
+          label: e.site_name,
+        }))
+      : [];
+
   const columns: ColumnDef<IRecentVisitors>[] = [
     {
       accessorKey: "timeout",
@@ -83,6 +111,17 @@ const Reports = () => {
     <Card className=" shadow-none">
       <CardHeader>
         <CardTitle className="flex w-full justify-end gap-x-2">
+          <Form
+            name="site"
+            useFormReturn={exportForm}
+            onSubmit={() => console.log("submitted export")}
+          >
+            <Form.Combobox
+              name="site"
+              data={allSiteData}
+              placeholder="Select site"
+            />
+          </Form>
           <DateRangePicker />
           <Dialog>
             <DialogTrigger asChild>

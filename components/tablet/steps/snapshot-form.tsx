@@ -36,8 +36,6 @@ const SnapshotForm = ({
     canvas: "Canvas is not supported.",
   };
 
-  console.log("snap", getValues());
-
   const startCountdown = () => {
     let count = 3;
 
