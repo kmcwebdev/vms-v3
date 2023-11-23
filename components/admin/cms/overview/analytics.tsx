@@ -10,13 +10,31 @@ import { useRouter } from "next/navigation";
 import { Users2 } from "lucide-react";
 import VisitorCount from "./charts/visitor-count";
 import { useGetVisitorsPerSiteCount } from "@/hooks/visitors/useGetVisitorsPerSiteCount";
+import { useSearchParams } from "next/navigation";
 
 const Analytics = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const { data: visitorsPerSiteCountData } = useGetVisitorsPerSiteCount();
+  const yearFilter = searchParams.has("year")
+    ? searchParams.get("year")
+    : "2023";
+
+  const { data: visitorsPerSiteCountData } = useGetVisitorsPerSiteCount(
+    yearFilter || "2023",
+  );
 
   const filterForm = useForm();
+
+  const yearsArray = Array.from(
+    { length: new Date().getFullYear() - 2010 + 1 },
+    (_, index) => 2010 + index,
+  );
+
+  const yearsDataForCombobox = yearsArray.map((e) => ({
+    label: e.toString(),
+    value: e.toString(),
+  }));
 
   const visitorPerSiteCount =
     visitorsPerSiteCountData &&
@@ -64,16 +82,16 @@ const Analytics = () => {
               className="flex items-center space-x-2"
             >
               <Form.Combobox
-                name="site"
-                placeholder="Site"
+                name="year"
+                placeholder="Year"
                 onSelect={(e) => {
                   const url = new URL(window.location.href);
-                  url.searchParams.set("site", e);
+                  url.searchParams.set("year", e);
                   router.replace(url.toString(), {
                     scroll: false,
                   });
                 }}
-                data={[]}
+                data={yearsDataForCombobox || []}
                 // data={KMC_SITES_OBJECTS}
               />
             </Form>
