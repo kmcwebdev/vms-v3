@@ -76,22 +76,6 @@ const Analytics = () => {
                 data={[]}
                 // data={KMC_SITES_OBJECTS}
               />
-              <Form.Combobox
-                name="filter"
-                placeholder="Filter by"
-                onSelect={(e) => {
-                  const url = new URL(window.location.href);
-                  url.searchParams.set("filter", e);
-                  router.replace(url.toString(), {
-                    scroll: false,
-                  });
-                }}
-                data={[
-                  { label: "Daily", value: "daily" },
-                  { label: "Weekly", value: "week" },
-                  { label: "Monthly", value: "month" },
-                ]}
-              />
             </Form>
           </CardTitle>
         </CardHeader>
