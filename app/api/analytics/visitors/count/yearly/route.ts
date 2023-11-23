@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { z } from "zod";
 
-const querySchema = z.object({
-  year: z.preprocess((input) => Number(input), z.number().min(1)),
-  site_ids: z.array(z.string().uuid()).min(1),
+export const querySchema = z.object({
+  year: z
+    .preprocess((input) => Number(input), z.number().min(2000))
+    .optional()
+    .default(new Date().getFullYear()),
+  site_ids: z
+    .preprocess(
+      (input) => String(input).split(/\s*,\s*/),
+      z.array(z.string().uuid()),
+    )
+    .optional(),
 });
-
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -20,7 +27,13 @@ export async function GET(req: Request) {
       });
     }
 
-    const { year, site_ids } = queryParams.data;
+    let { year, site_ids } = queryParams.data;
+
+    if (!site_ids) {
+      site_ids = (await sql.query("select site_id from sites")).rows.map(
+        (data) => data.site_id,
+      );
+    }
 
     const visitor_count_by_year_group_by_month_query = `
       -- visitor count group by month in a year with default result of 0 (line chart)
@@ -44,7 +57,9 @@ export async function GET(req: Request) {
           visitor_logs
         where
           extract(year from visit_time) = $1 -- year
-          and site_id in $2 -- sites
+          and site_id in (${site_ids
+            .map((element) => `'${element}'`)
+            .join(",")}) -- sites
         group by
           date_trunc('month', visit_time) -- Truncate the visit_time column
       ) as counts on dates.month = counts.month
@@ -53,10 +68,7 @@ export async function GET(req: Request) {
     `;
 
     return NextResponse.json(
-      await sql.query(visitor_count_by_year_group_by_month_query, [
-        year,
-        site_ids,
-      ]),
+      await sql.query(visitor_count_by_year_group_by_month_query, [year]),
     );
   } catch (error: any) {
     return NextResponse.json(
