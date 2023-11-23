@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect } from "react";
 
 type Data = {
   value: string;
@@ -29,13 +30,24 @@ interface IComboboxProps {
   data: Data[];
   onSelect?: (e: string) => void;
   name: string;
+  defaultValue?: string;
 }
 
-const Combobox = ({ placeholder, data, onSelect, name }: IComboboxProps) => {
+const Combobox = ({
+  placeholder,
+  data,
+  onSelect,
+  name,
+  defaultValue,
+}: IComboboxProps) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
   const { control, setValue: setFormValue } = useFormContext();
+
+  useEffect(() => {
+    setValue(defaultValue || "");
+  }, []);
 
   return (
     <Controller

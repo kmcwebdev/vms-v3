@@ -27,8 +27,8 @@ const Analytics = () => {
   const filterForm = useForm();
 
   const yearsArray = Array.from(
-    { length: new Date().getFullYear() - 2010 + 1 },
-    (_, index) => 2010 + index,
+    { length: new Date().getFullYear() - 2022 + 1 },
+    (_, index) => 2022 + index,
   );
 
   const yearsDataForCombobox = yearsArray.map((e) => ({
@@ -83,7 +83,8 @@ const Analytics = () => {
             >
               <Form.Combobox
                 name="year"
-                placeholder="Year"
+                // placeholder="Year"
+                defaultValue="2023"
                 onSelect={(e) => {
                   const url = new URL(window.location.href);
                   url.searchParams.set("year", e);
