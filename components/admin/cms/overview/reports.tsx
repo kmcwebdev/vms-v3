@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "@/components/global/data-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -20,13 +20,60 @@ import { useForm } from "react-hook-form";
 import type { Site } from "@/types/site";
 import { useGetAllSites } from "@/hooks/useGetAllSites";
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface IReportProps {
   site: Site[];
 }
 
 const Reports = ({ site }: IReportProps) => {
+  const [enable, setEnable] = useState(false);
+
   const exportForm = useForm();
+
+  // const { data, error, isLoading, isError } = useQuery("fetchCSV", async () => {
+  //   const response = await axios.get("/api/visitors/export-csv", {
+  //     responseType: "blob",
+  //   });
+  //   return response.data;
+  // });
+
+  // const queryInfo = useQuery({
+  //   queryKey: ["export-visitor"],
+  //   queryFn: async () => {
+  //     const response = await axios.get("/api/visitors/export-csv", {
+  //       responseType: "blob",
+  //     });
+  //     return response.data;
+  //   },
+  //   enabled: enable,
+  // });
+
+  const downloadCSV = async () => {
+    try {
+      const response = await axios.get("/api/visitors/export-csv", {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      // Extract filename from Content-Disposition header
+      const contentDisposition = response.headers["content-disposition"];
+
+      let filename = "file.csv"; // Default filename
+
+      console.log(contentDisposition);
+
+      link.setAttribute("download", contentDisposition);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
 
   const searchParams = useSearchParams();
 
@@ -136,7 +183,7 @@ const Reports = ({ site }: IReportProps) => {
               </DialogHeader>
               <DialogFooter>
                 <Button variant="secondary">Cancel</Button>
-                <Button>Export</Button>
+                <Button onClick={downloadCSV}>Export</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
