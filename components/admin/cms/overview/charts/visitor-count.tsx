@@ -1,8 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ChartData } from "chart.js";
 import AreaChart from "@/components/global/area-chart";
+import { useGetVisitorCounts } from "@/hooks/visitors/useGetVisitorCounts";
 
 const VisitorCount = () => {
+  const {} = useGetVisitorCounts("daily", {
+    site_ids: "f127db90-9830-4d5e-a862-614beea6e389",
+  });
+
   const visitorPerWeekGraphData = {
     labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
     datasets: [

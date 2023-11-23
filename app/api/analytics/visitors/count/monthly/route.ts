@@ -2,12 +2,18 @@ import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { z } from "zod";
 
-const querySchema = z.object({
-  month_in_number: z.preprocess(
-    (input) => Number(input),
-    z.number().min(1).max(12).default(1),
-  ),
-  year: z.preprocess((input) => Number(input), z.number().min(1)),
+export const querySchema = z.object({
+  month_in_number: z
+    .preprocess(
+      (input) => Number(input ? input : "1"),
+      z.number().min(1).max(12),
+    )
+    .optional()
+    .default(1),
+  year: z
+    .preprocess((input) => Number(input), z.number().min(2000))
+    .optional()
+    .default(new Date().getFullYear()),
   site_ids: z.preprocess(
     (input) => String(input).split(","),
     z.array(z.string().uuid()).min(1),
