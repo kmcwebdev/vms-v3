@@ -20,7 +20,6 @@ import { useForm } from "react-hook-form";
 import type { Site } from "@/types/site";
 import { useGetAllSites } from "@/hooks/useGetAllSites";
 import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 interface IReportProps {
@@ -32,24 +31,6 @@ const Reports = ({ site }: IReportProps) => {
 
   const exportForm = useForm();
 
-  // const { data, error, isLoading, isError } = useQuery("fetchCSV", async () => {
-  //   const response = await axios.get("/api/visitors/export-csv", {
-  //     responseType: "blob",
-  //   });
-  //   return response.data;
-  // });
-
-  // const queryInfo = useQuery({
-  //   queryKey: ["export-visitor"],
-  //   queryFn: async () => {
-  //     const response = await axios.get("/api/visitors/export-csv", {
-  //       responseType: "blob",
-  //     });
-  //     return response.data;
-  //   },
-  //   enabled: enable,
-  // });
-
   const downloadCSV = async () => {
     try {
       const response = await axios.get("/api/visitors/export-csv", {
@@ -60,10 +41,7 @@ const Reports = ({ site }: IReportProps) => {
       const link = document.createElement("a");
       link.href = url;
 
-      // Extract filename from Content-Disposition header
       const contentDisposition = response.headers["content-disposition"];
-
-      let filename = "file.csv"; // Default filename
 
       console.log(contentDisposition);
 
@@ -107,42 +85,52 @@ const Reports = ({ site }: IReportProps) => {
       header: "Name",
 
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
+        <div className="w-fit truncate  capitalize">{row.getValue("name")}</div>
       ),
     },
     {
       accessorKey: "siteVisited",
       header: "Site",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("siteVisited")}</div>
+        <div className="w-fit truncate capitalize ">
+          {row.getValue("siteVisited")}
+        </div>
       ),
     },
     {
       accessorKey: "reasonToVisit",
       header: "Reason",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("reasonToVisit")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("reasonToVisit")}
+        </div>
       ),
     },
     {
       accessorKey: "companyToVisit",
       header: "Company ",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("companyToVisit")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("companyToVisit")}
+        </div>
       ),
     },
     {
       accessorKey: "personToVisit",
       header: "Person visited ",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("personToVisit")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("personToVisit")}
+        </div>
       ),
     },
     {
       accessorKey: "dateVisited",
       header: "Date ",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("dateVisited")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("dateVisited")}
+        </div>
       ),
     },
     {
