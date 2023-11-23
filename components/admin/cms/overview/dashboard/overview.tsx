@@ -3,9 +3,9 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users2, Building } from "lucide-react";
-import { useGetTotalVisitorOnAllSites } from "@/hooks/useGetTotalVisitorOnAllSites";
-import { useGetMostVisitedSite } from "@/hooks/useGetMostVisitedSite";
-import { useGetLeastVisitedSite } from "@/hooks/useGetLeastVisitedSite";
+import { useGetTotalVisitorOnAllSites } from "@/hooks/visitors/useGetTotalVisitorOnAllSites";
+import { useGetMostVisitedSite } from "@/hooks/sites/useGetMostVisitedSite";
+import { useGetLeastVisitedSite } from "@/hooks/sites/useGetLeastVisitedSite";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Overview = () => {

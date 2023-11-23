@@ -22,7 +22,10 @@ export async function GET() {
       limit 5;
     `;
 
-    return NextResponse.json(await sql.query(top_five_recent_visitor_query));
+    const result = await sql.query(top_five_recent_visitor_query);
+
+    return NextResponse.json(result.rows);
+
   } catch (error: any) {
     return NextResponse.json(
       { status: 500, message: error.message },

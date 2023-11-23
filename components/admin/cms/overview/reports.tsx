@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "@/components/global/data-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -18,15 +18,40 @@ import {
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import type { Site } from "@/types/site";
-import { useGetAllSites } from "@/hooks/useGetAllSites";
+import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { useSearchParams } from "next/navigation";
+import axios from "axios";
 
 interface IReportProps {
   site: Site[];
 }
 
 const Reports = ({ site }: IReportProps) => {
+  const [enable, setEnable] = useState(false);
+
   const exportForm = useForm();
+
+  const downloadCSV = async () => {
+    try {
+      const response = await axios.get("/api/visitors/export-csv", {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      const contentDisposition = response.headers["content-disposition"];
+
+      console.log(contentDisposition);
+
+      link.setAttribute("download", contentDisposition);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
 
   const searchParams = useSearchParams();
 
@@ -60,42 +85,52 @@ const Reports = ({ site }: IReportProps) => {
       header: "Name",
 
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
+        <div className="w-fit truncate  capitalize">{row.getValue("name")}</div>
       ),
     },
     {
       accessorKey: "siteVisited",
       header: "Site",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("siteVisited")}</div>
+        <div className="w-fit truncate capitalize ">
+          {row.getValue("siteVisited")}
+        </div>
       ),
     },
     {
       accessorKey: "reasonToVisit",
       header: "Reason",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("reasonToVisit")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("reasonToVisit")}
+        </div>
       ),
     },
     {
       accessorKey: "companyToVisit",
       header: "Company ",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("companyToVisit")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("companyToVisit")}
+        </div>
       ),
     },
     {
       accessorKey: "personToVisit",
       header: "Person visited ",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("personToVisit")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("personToVisit")}
+        </div>
       ),
     },
     {
       accessorKey: "dateVisited",
       header: "Date ",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("dateVisited")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("dateVisited")}
+        </div>
       ),
     },
     {
@@ -136,7 +171,7 @@ const Reports = ({ site }: IReportProps) => {
               </DialogHeader>
               <DialogFooter>
                 <Button variant="secondary">Cancel</Button>
-                <Button>Export</Button>
+                <Button onClick={downloadCSV}>Export</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>

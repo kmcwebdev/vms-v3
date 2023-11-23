@@ -9,90 +9,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-
-export interface IRecentVisitors {
-  id: number;
-  timeout: string;
-  name: string;
-  email: string;
-  siteVisited: string;
-  reasonToVisit: string;
-  companyToVisit: string;
-  personToVisit: string;
-  dateVisited: string;
-  timeVisited: string;
-  isLoggedOut?: boolean;
-}
-
-export const visitorData: IRecentVisitors[] = [
-  {
-    id: 1,
-    timeout: "12:46 PM November 8, 2023",
-    name: "Ryan Raichu",
-    email: "ryan_raichu@gmail.com",
-    siteVisited: "Armstrong Corporate Center",
-    reasonToVisit: "Company Visit",
-    companyToVisit: "KMC Solutions",
-    personToVisit: "Joshuas Migule",
-    dateVisited: "November 8, 2023",
-    timeVisited: "8:13 AM",
-    isLoggedOut: false,
-  },
-  {
-    id: 2,
-    timeout: "1:30 PM November 9, 2023",
-    name: "Jane Doe",
-    email: "janedoe@kmc.solutions",
-    siteVisited: "Uptown Place Tower 2",
-    reasonToVisit: "Business Meeting",
-    companyToVisit: "Doe Inc.",
-    personToVisit: "John Doe",
-    dateVisited: "November 9, 2023",
-    timeVisited: "9:00 AM",
-    isLoggedOut: false,
-  },
-  {
-    id: 3,
-    timeout: "1:30 PM November 9, 2023",
-    name: "John Dont",
-    email: "john@yahoo.com",
-    siteVisited: "Four/Neo",
-    reasonToVisit: "Business Meeting",
-    companyToVisit: "Doe Inc.",
-    personToVisit: "John Doe",
-    dateVisited: "November 9, 2023",
-    timeVisited: "9:00 AM",
-    isLoggedOut: false,
-  },
-  {
-    id: 4,
-    timeout: "1:30 PM November 9, 2023",
-    name: "Jomar Pol",
-    email: "jomarPoole@rocketmanil.com",
-    siteVisited: "Arthaland Century Pacific Tower",
-    reasonToVisit: "Business Meeting",
-    companyToVisit: "Doe Inc.",
-    personToVisit: "John Doe",
-    dateVisited: "November 9, 2023",
-    timeVisited: "9:00 AM",
-    isLoggedOut: false,
-  },
-  {
-    id: 5,
-    timeout: "1:30 PM November 9, 2023",
-    name: "Jane Doe",
-    email: "jane_doe_123@yopmail.com",
-    siteVisited: "Doe Corporate Center",
-    reasonToVisit: "Business Meeting",
-    companyToVisit: "Doe Inc.",
-    personToVisit: "John Doe",
-    dateVisited: "November 9, 2023",
-    timeVisited: "9:00 AM",
-    isLoggedOut: true,
-  },
-];
+import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
+import type { RecentVisitors } from "@/types/global/visitor";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const RecentVisitors = () => {
+  const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
+    useGetRecentVisitors();
+
+  console.log(recentVisitorsData);
+
   return (
     <Card className="w-full shadow-none">
       <CardHeader>
@@ -100,9 +26,19 @@ const RecentVisitors = () => {
         <CardDescription>Top five recent visitor</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-y-8">
-        {visitorData.map((visitor) => (
-          <VisitorCard key={visitor.id} {...visitor} />
-        ))}
+        {recentVisitorsData ? (
+          recentVisitorsData.map((visitor) => (
+            <VisitorCard key={visitor.visitor_id} {...visitor} />
+          ))
+        ) : (
+          <>
+            <VisitorCardSkeletonLoader />
+            <VisitorCardSkeletonLoader />
+            <VisitorCardSkeletonLoader />
+            <VisitorCardSkeletonLoader />
+            <VisitorCardSkeletonLoader />
+          </>
+        )}
       </CardContent>
     </Card>
   );
@@ -111,12 +47,13 @@ const RecentVisitors = () => {
 export default RecentVisitors;
 
 const VisitorCard = ({
-  name,
-  dateVisited,
-  email,
-  siteVisited,
-  timeout,
-}: IRecentVisitors) => {
+  first_name,
+  last_name,
+  site_name,
+  image_url,
+  visitor_id,
+  created_at,
+}: RecentVisitors) => {
   return (
     <>
       <div className="flex items-center justify-between">
@@ -127,15 +64,23 @@ const VisitorCard = ({
           </Avatar>
           <div className="ml-4 space-y-1">
             <p className="text-sm font-medium leading-none group-hover:underline">
-              {name}
+              {`${first_name} ${last_name}`}
             </p>
             <p className="text-sm text-muted-foreground group-hover:underline">
-              {siteVisited}
+              {site_name}
             </p>
           </div>
         </div>
-        <p className="text-sm font-medium text-gray-700 ">{timeout}</p>
+        <p className="text-sm font-medium text-gray-700 ">{created_at}</p>
       </div>
     </>
+  );
+};
+
+const VisitorCardSkeletonLoader = () => {
+  return (
+    <Skeleton className="bg-neutral-100">
+      <div className="h-10 w-8 rounded-full " />
+    </Skeleton>
   );
 };
