@@ -5,15 +5,14 @@ import z from 'zod'
 const querySchema = z.object({
   pageSize: z.preprocess(
     (input) => Number(input ? input : "1"),
-    z.number().min(1).max(12),
+    z.number().min(1),
   )
   .optional(),
   pageNumber: z.preprocess(
     (input) => Number(input ? input : "1"),
-    z.number().min(1).max(12),
+    z.number().min(1),
   )
   .optional(),
-
 })
 
 export async function GET(req: Request) {
@@ -34,7 +33,7 @@ export async function GET(req: Request) {
 
 
 const offset = (pageNumber - 1) * pageSize;
-const get_visitors_query = `SELECT * FROM visitors ORDER BY visitor_id LIMIT ${pageSize} OFFSET ${offset}`;
+const get_visitors_query = `select * from visitors order by visitor_id limit ${pageSize} offset ${offset}`;
 
     const result = await sql.query(get_visitors_query);
 

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { RecentVisitors } from "@/types/global/visitor";
 import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
+import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
 
 const sites = [
   {
@@ -57,6 +58,11 @@ const sites = [
 const Visitors = () => {
   const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
     useGetRecentVisitors();
+
+  const { data: visitorsData } = useGetVisitors({
+    pageNumber: 1,
+    pageSize: 1,
+  });
 
   const visitorFiltersForm = useForm();
 
