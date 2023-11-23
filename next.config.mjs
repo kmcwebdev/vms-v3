@@ -8,15 +8,7 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/cms?tab=overview',
-        permanent: true,
-      },
-    ]
-  },
+ 
 };
 
 export default nextConfig;
