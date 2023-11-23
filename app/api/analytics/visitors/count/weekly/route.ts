@@ -8,7 +8,10 @@ const querySchema = z.object({
     z.number().min(1).max(12).default(1),
   ),
   year: z.preprocess((input) => Number(input), z.number().min(1)),
-  site_ids: z.array(z.string().uuid()).min(1),
+  site_ids: z.preprocess(
+    (input) => String(input).split(","),
+    z.array(z.string().uuid()).min(1),
+  ),
 });
 
 export async function GET(req: Request) {

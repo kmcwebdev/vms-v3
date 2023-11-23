@@ -10,7 +10,10 @@ export const querySchema = z.object({
   year: z
     .preprocess((input) => Number(input), z.number().min(2000))
     .default(new Date().getFullYear()),
-  site_ids: z.array(z.string().uuid()).min(1),
+  site_ids: z.preprocess(
+    (input) => String(input).split(","),
+    z.array(z.string().uuid()).min(1),
+  ),
 });
 
 export async function GET(req: Request) {
