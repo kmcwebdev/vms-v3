@@ -10,9 +10,9 @@ const getAllSitesQuery = async ({ filter }: GetAllSitesQuery = {}) => {
     filter: filter ? filter : "",
   });
 
-  const URL = `/api/sites/all${filter ? `${"?" + params.toString()}` : ""}`;
+  const url = `/api/sites/all${filter ? `${"?" + params.toString()}` : ""}`;
 
-  const response = await fetch(URL);
+  const response = await fetch(url);
 
   return (await response.json()) as Site[];
 };
