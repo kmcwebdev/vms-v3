@@ -46,14 +46,16 @@ export async function GET(req: Request) {
       order by formatted_date;
     `;
 
-    return NextResponse.json(
-      await sql.query(visitor_count_by_day_in_month_query, [
-        month_in_number,
-        year,
-        site_ids,
-      ]),
-    );
+    const result = await sql.query(visitor_count_by_day_in_month_query, [
+      month_in_number,
+      year,
+      site_ids,
+    ]);
+
+    return NextResponse.json(result.rows);
   } catch (error: any) {
+    console.log(error);
+
     return NextResponse.json(
       { status: 500, message: error.message },
       { status: 500, statusText: "Internal server error" },
