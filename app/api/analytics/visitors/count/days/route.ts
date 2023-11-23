@@ -27,6 +27,7 @@ export async function GET(req: Request) {
     const { month_in_number, year, site_ids } = queryParams.data;
 
     const visitor_count_by_day_in_month_query = `
+      -- visitor count by day and year (line chart)
       select to_char(date_trunc('day', visit_time), 'Month DD, YYYY') as formatted_date, count(*) as visitor_count
       from visitor_logs
       where extract(month from visit_time) = $1 -- Month in number
