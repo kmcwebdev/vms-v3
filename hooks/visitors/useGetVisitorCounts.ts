@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
 interface QueryParams {
-  month_in_number: string;
-  year: string;
+  month_in_number?: string;
+  year?: string;
   site_ids: string;
 }
 
@@ -10,7 +10,7 @@ type DateTrunc = "daily" | "weekly" | "monthly";
 
 const getVisitorCount = async (
   dateTrunc: DateTrunc,
-  filter?: { month_in_number: string; year: string; site_ids: string },
+  filter?: { month_in_number?: string; year?: string; site_ids: string },
 ) => {
   const params = new URLSearchParams(filter);
 
