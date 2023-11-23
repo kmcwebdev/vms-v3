@@ -47,17 +47,13 @@ const Analytics = () => {
     Math.floor(Math.random() * 100),
   );
 
-  const backgroundColors = randomNumbers.map((_, index) =>
-    index % 2 === 0 ? "#f97315" : "#fb923c",
-  );
-
   const visitorAnalyticsGraphData = {
     labels: KMC_SITES_OBJECTS.map((site) => site.label),
     datasets: [
       {
         label: "Visitors",
         data: randomNumbers,
-        backgroundColor: backgroundColors,
+        backgroundColor: "#f97315",
         borderRadius: 6,
         barThickness: 28,
         maxBarThickness: 40,
