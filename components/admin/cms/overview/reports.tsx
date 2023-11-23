@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import DataTable from "@/components/global/data-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ColumnDef } from "@tanstack/react-table";
-import { type IRecentVisitors, visitorData } from "./dashboard/recent-visitors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import DateRangePicker from "@/components/global/date-range-picker";
@@ -21,13 +20,16 @@ import type { Site } from "@/types/site";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
+import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
+import type { RecentVisitors } from "@/types/global/visitor";
 
 interface IReportProps {
   site: Site[];
 }
 
 const Reports = ({ site }: IReportProps) => {
-  const [enable, setEnable] = useState(false);
+  const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
+    useGetRecentVisitors();
 
   const exportForm = useForm();
 
@@ -42,8 +44,6 @@ const Reports = ({ site }: IReportProps) => {
       link.href = url;
 
       const contentDisposition = response.headers["content-disposition"];
-
-      console.log(contentDisposition);
 
       link.setAttribute("download", contentDisposition);
       document.body.appendChild(link);
@@ -70,74 +70,42 @@ const Reports = ({ site }: IReportProps) => {
         }))
       : [];
 
-  const columns: ColumnDef<IRecentVisitors>[] = [
+  const columns: ColumnDef<RecentVisitors>[] = [
     {
-      accessorKey: "timeout",
-      header: "Time out",
+      accessorKey: "created_at",
+      header: "Time",
       cell: ({ row }) => (
         <Badge className="truncate text-xs capitalize">
-          {row.getValue("timeout")}
+          {row.getValue("created_at")}
         </Badge>
       ),
     },
     {
-      accessorKey: "name",
-      header: "Name",
+      accessorKey: "first_name",
+      header: "First name",
 
       cell: ({ row }) => (
-        <div className="w-fit truncate  capitalize">{row.getValue("name")}</div>
+        <div className="w-fit truncate  capitalize">
+          {row.getValue("first_name")}
+        </div>
       ),
     },
     {
-      accessorKey: "siteVisited",
-      header: "Site",
+      accessorKey: "last_name",
+      header: "Last name",
       cell: ({ row }) => (
         <div className="w-fit truncate capitalize ">
-          {row.getValue("siteVisited")}
+          {row.getValue("last_name")}
         </div>
       ),
     },
     {
-      accessorKey: "reasonToVisit",
-      header: "Reason",
+      accessorKey: "site_name",
+      header: "Site visited",
       cell: ({ row }) => (
         <div className="w-fit truncate  capitalize">
-          {row.getValue("reasonToVisit")}
+          {row.getValue("site_name")}
         </div>
-      ),
-    },
-    {
-      accessorKey: "companyToVisit",
-      header: "Company ",
-      cell: ({ row }) => (
-        <div className="w-fit truncate  capitalize">
-          {row.getValue("companyToVisit")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "personToVisit",
-      header: "Person visited ",
-      cell: ({ row }) => (
-        <div className="w-fit truncate  capitalize">
-          {row.getValue("personToVisit")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "dateVisited",
-      header: "Date ",
-      cell: ({ row }) => (
-        <div className="w-fit truncate  capitalize">
-          {row.getValue("dateVisited")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "timeVisited",
-      header: "Time ",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("timeVisited")}</div>
       ),
     },
   ];
@@ -178,7 +146,7 @@ const Reports = ({ site }: IReportProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <DataTable data={visitorData} columns={columns} />
+        <DataTable data={recentVisitorsData ?? []} columns={columns} />
       </CardContent>
     </Card>
   );
