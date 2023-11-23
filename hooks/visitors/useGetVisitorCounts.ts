@@ -6,7 +6,7 @@ interface QueryParams {
   site_ids: string;
 }
 
-type DateTrunc = "dayly" | "weekly" | "monthly";
+type DateTrunc = "daily" | "weekly" | "monthly";
 
 const getVisitorCount = async (
   dateTrunc: DateTrunc,
@@ -33,7 +33,6 @@ export const useGetVisitorCounts = (
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: [dateTrunc, JSON.stringify(filter)],
     queryFn: () => getVisitorCount(dateTrunc, filter),
-    enabled: !!dateTrunc,
   });
 
   return {
