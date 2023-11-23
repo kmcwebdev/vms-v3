@@ -67,9 +67,11 @@ export async function GET(req: Request) {
         extract(month from dates.month);
     `;
 
-    return NextResponse.json(
-      await sql.query(visitor_count_by_year_group_by_month_query, [year]),
-    );
+    const result = await sql.query(visitor_count_by_year_group_by_month_query, [
+      year,
+    ]);
+
+    return NextResponse.json(result.rows);
   } catch (error: any) {
     return NextResponse.json(
       { status: 500, message: error.message },
