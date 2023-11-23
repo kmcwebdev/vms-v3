@@ -9,50 +9,29 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Users2 } from "lucide-react";
 import VisitorCount from "./charts/visitor-count";
-
-const KMC_SITES_OBJECTS = [
-  { label: "VCorp", value: "vcorp" },
-  { value: "armstrong", label: "Armstrong" },
-  { value: "frabelle", label: "Frabelle" },
-  { value: "one-ayala", label: "One Ayala" },
-  { value: "picadilly", label: "Picadilly" },
-  { value: "cyber-sigma", label: "Cyber Sigma" },
-  { value: "sm-aura", label: "SM Aura" },
-  { value: "uptown", label: "UpTown" },
-  { value: "four-neo", label: "Four/Neo" },
-  { value: "arthaland", label: "Arthaland" },
-  { value: "gamma", label: "Gamma" },
-  { value: "rbc", label: "RBC T1" },
-  { value: "jbt", label: "Jollibee Tower" },
-  { value: "zeta", label: "Zeta" },
-  { value: "sm-north", label: "SM North" },
-  { value: "rockwell", label: "Rockwell Sheridan" },
-  { value: "podium", label: "Podium West" },
-  { value: "aeropark", label: "Aeropark" },
-  { value: "og", label: "OG" },
-  { value: "axis", label: "Axis Tower" },
-  { value: "skyrise", label: "Skyrise 4A" },
-  { value: "skyrise-4b", label: "Skyrise 4B" },
-  { value: "hm-tower", label: "HM Tower" },
-  { value: "lexmark", label: "Lexmark" },
-  { value: "five-ecom", label: "Five Ecom" },
-];
+import { useGetVisitorsPerSiteCount } from "@/hooks/visitors/useGetVisitorsPerSiteCount";
 
 const Analytics = () => {
   const router = useRouter();
 
+  const { data: visitorsPerSiteCountData } = useGetVisitorsPerSiteCount();
+
   const filterForm = useForm();
 
-  const randomNumbers = Array.from({ length: KMC_SITES_OBJECTS.length }, () =>
-    Math.floor(Math.random() * 100),
-  );
+  const visitorPerSiteCount =
+    visitorsPerSiteCountData &&
+    visitorsPerSiteCountData.map((item) => parseInt(item.visitor_count));
+
+  const visitorPerSiteCountLabel =
+    visitorsPerSiteCountData &&
+    visitorsPerSiteCountData.map((item) => item.site_name);
 
   const visitorAnalyticsGraphData = {
-    labels: KMC_SITES_OBJECTS.map((site) => site.label),
+    labels: visitorPerSiteCountLabel,
     datasets: [
       {
         label: "Visitors",
-        data: randomNumbers,
+        data: visitorPerSiteCount,
         backgroundColor: "#f97315",
         borderRadius: 6,
         barThickness: 28,
@@ -94,7 +73,8 @@ const Analytics = () => {
                     scroll: false,
                   });
                 }}
-                data={KMC_SITES_OBJECTS}
+                data={[]}
+                // data={KMC_SITES_OBJECTS}
               />
               <Form.Combobox
                 name="filter"
