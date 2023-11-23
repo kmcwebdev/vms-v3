@@ -5,9 +5,9 @@ import { sql } from "@vercel/postgres";
 export async function GET(req: Request) {
   try{
 
-    const site_query = `select site_id, site_name from sites`
+    const visitor_query = `select first_name, last_name from visitors where site_id  = '922c71be-f78b-4593-8186-de9c2f4f7680' limit 10`
 
-    const result = await sql.query(site_query)
+    const result = await sql.query(visitor_query)
   
     const csv = parse(result.rows);
   
