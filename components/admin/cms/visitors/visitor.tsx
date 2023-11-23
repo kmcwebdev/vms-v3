@@ -20,9 +20,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { RecentVisitors } from "@/types/global/visitor";
+import type { Visitor } from "@/types/global/visitor";
 import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
 import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
+import { formatDate } from "@/lib/utils";
 
 const sites = [
   {
@@ -56,13 +57,11 @@ const sites = [
 ];
 
 const Visitors = () => {
-  const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
-    useGetRecentVisitors();
-
-  const { data: visitorsData } = useGetVisitors({
-    pageNumber: 1,
-    pageSize: 1,
-  });
+  const { data: visitorsData, isLoading: visitorsDataIsLoading } =
+    useGetVisitors({
+      pageNumber: 1,
+      pageSize: 10,
+    });
 
   const visitorFiltersForm = useForm();
 
@@ -114,9 +113,9 @@ const Visitors = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {!recentVisitorsDataIsLoading &&
-          recentVisitorsData &&
-          recentVisitorsData.map((visitor) => (
+        {!visitorsDataIsLoading &&
+          visitorsData &&
+          visitorsData.map((visitor) => (
             <VisitorCard key={visitor.visitor_id} {...visitor} />
           ))}
       </CardContent>
@@ -133,7 +132,7 @@ const VisitorCard = ({
   last_name,
   site_name,
   visitor_id,
-}: RecentVisitors) => {
+}: Visitor) => {
   return (
     <Card className="shadow-none">
       <CardHeader>
@@ -142,7 +141,7 @@ const VisitorCard = ({
           // variant={isLoggedOut ? "secondary" : "default"}
         >
           {/* {isLoggedOut ? "Logged out" : `${dateVisited} ${timeVisited}`} */}
-          {created_at}
+          {formatDate(created_at)}
         </Badge>
       </CardHeader>
       <CardContent>

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import type { Visitor } from "@/types/global/visitor";
 
 type QueryParams = {
     pageSize: number,
@@ -18,7 +19,7 @@ const getVisitorsQuery = async ({pageNumber,
 
     const result = await fetch(url)
 
-    return await (result.json())
+    return await (result.json()) as Visitor[]
 }
 
 export const useGetVisitors = ({
