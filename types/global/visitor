@@ -1,0 +1,17 @@
+type Visitor  = {
+  visitor_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string | null;
+  image_url: string | null;
+  person_to_visit: string;
+  company_to_visit: string;
+  site_id: string;
+  reason_of_visit_id: string;
+  created_at: Date;
+}
+
+export type {
+    Visitor
+}
