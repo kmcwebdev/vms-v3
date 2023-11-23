@@ -8,16 +8,26 @@ import {
 } from "@/components/ui/card";
 import BarChart from "@/components/global/bar-chart";
 import type { ChartData } from "chart.js";
+import { useGetTopFiveMostVisitedSite } from "@/hooks/sites/useGetTopFiveMostVisitedSite";
 
 const MostVisitedSites = () => {
-  const sites = ["Armstrong", "VCorp", "OG", "Sigma", "SM Aura ", "UPT"];
+  const { data: topFiveMostVisitedSite } = useGetTopFiveMostVisitedSite();
+
+  const topFiveMostVisitedSitesData = {
+    label:
+      topFiveMostVisitedSite &&
+      topFiveMostVisitedSite.map((item) => item.site_name),
+    data:
+      topFiveMostVisitedSite &&
+      topFiveMostVisitedSite.map((item) => parseInt(item.visitor_count)),
+  };
 
   const mostVisitedSitesGraphData = {
-    labels: sites,
+    labels: topFiveMostVisitedSitesData.label,
     datasets: [
       {
         label: "Visitors",
-        data: [12, 19, 3, 5, 2, 3],
+        data: topFiveMostVisitedSitesData.data,
         backgroundColor: ["#f97315"],
         borderRadius: 6,
         barThickness: 45,
