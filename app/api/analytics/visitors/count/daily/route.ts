@@ -15,7 +15,7 @@ export const querySchema = z.object({
     .optional()
     .default(new Date().getFullYear()),
   site_ids: z.preprocess(
-    (input) => String(input).split(","),
+    (input) => String(input).split(/\s*,\s*/),
     z.array(z.string().uuid()).min(1),
   ),
 });
