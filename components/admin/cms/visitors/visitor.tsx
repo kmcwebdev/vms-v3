@@ -4,10 +4,6 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  visitorData,
-  type IRecentVisitors,
-} from "../overview/dashboard/recent-visitors";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import Form from "@/components/global/form";
@@ -24,6 +20,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import type { RecentVisitors } from "@/types/global/visitor";
+import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
 
 const sites = [
   {
@@ -57,6 +55,9 @@ const sites = [
 ];
 
 const Visitors = () => {
+  const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
+    useGetRecentVisitors();
+
   const visitorFiltersForm = useForm();
 
   const router = useRouter();
@@ -107,9 +108,11 @@ const Visitors = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {visitorData.map((visitor) => (
-          <VisitorCard key={visitor.id} {...visitor} />
-        ))}
+        {!recentVisitorsDataIsLoading &&
+          recentVisitorsData &&
+          recentVisitorsData.map((visitor) => (
+            <VisitorCard key={visitor.visitor_id} {...visitor} />
+          ))}
       </CardContent>
     </Card>
   );
@@ -118,25 +121,22 @@ const Visitors = () => {
 export default Visitors;
 
 const VisitorCard = ({
-  id,
-  timeout,
-  name,
-  siteVisited,
-  reasonToVisit,
-  companyToVisit,
-  personToVisit,
-  dateVisited,
-  timeVisited,
-  isLoggedOut,
-}: IRecentVisitors) => {
+  created_at,
+  first_name,
+  image_url,
+  last_name,
+  site_name,
+  visitor_id,
+}: RecentVisitors) => {
   return (
     <Card className="shadow-none">
       <CardHeader>
         <Badge
           className={cn("w-fit")}
-          variant={isLoggedOut ? "secondary" : "default"}
+          // variant={isLoggedOut ? "secondary" : "default"}
         >
-          {isLoggedOut ? "Logged out" : `${dateVisited} ${timeVisited}`}
+          {/* {isLoggedOut ? "Logged out" : `${dateVisited} ${timeVisited}`} */}
+          {created_at}
         </Badge>
       </CardHeader>
       <CardContent>
@@ -148,7 +148,7 @@ const VisitorCard = ({
             </Avatar>
             <div className="ml-4 space-y-1">
               <p className="text-sm font-medium leading-none group-hover:underline">
-                {name}
+                {`${first_name} ${last_name}`}
               </p>
               <p className="text-sm text-muted-foreground group-hover:underline">
                 isabella.nguyen@email.com
@@ -159,9 +159,9 @@ const VisitorCard = ({
             <AlertDialogTrigger asChild>
               <div
                 className={cn(
-                  isLoggedOut
-                    ? "opacity-40 hover:cursor-not-allowed"
-                    : "hover:cursor-pointer hover:bg-primary hover:text-white",
+                  // isLoggedOut
+                  //   ? "opacity-40 hover:cursor-not-allowed"
+                  //   : "hover:cursor-pointer hover:bg-primary hover:text-white",
                   "text-sm font-medium",
                   "w-fit rounded-full bg-gray-100 p-2 shadow-sm transition ease-in-out ",
                 )}
