@@ -10,7 +10,7 @@ const querySchema = z.object({
   site_ids: z
     .preprocess(
       (input) => String(input).split(/\s*,\s*/),
-      z.array(z.string().uuid()),
+      z.array(z.string().uuid()).min(1),
     )
     .optional(),
 });
