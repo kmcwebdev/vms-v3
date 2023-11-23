@@ -46,7 +46,7 @@ const Admin = ({ site }: IAdminProps) => {
         <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue={searchParams.get("tab") || "dashboard"}>
+        <Tabs defaultValue={searchParams.get("tab") || "overview"}>
           <TabsList>
             <TabsTrigger
               value="overview"
