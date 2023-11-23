@@ -1,5 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
+
+interface QueryParams {
+  month_in_number: string;
+  year: string;
+  site_ids: string;
+}
+
+type DateTrunc = "dayly" | "weekly" | "monthly";
+
 const getVisitorCount = async (
-  dateTrunc: "dayly" | "weekly" | "monthly",
+  dateTrunc: DateTrunc,
   filter: { month_in_number: string; year: string; site_ids: string },
 ) => {
   const params = new URLSearchParams(filter);
@@ -16,4 +26,20 @@ const getVisitorCount = async (
   };
 };
 
-export const useGetVisitorCounts = () => {};
+export const useGetVisitorCounts = (
+  dateTrunc: DateTrunc,
+  filter: QueryParams,
+) => {
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: [dateTrunc, JSON.stringify(filter)],
+    queryFn: () => getVisitorCount(dateTrunc, filter),
+    enabled: !!dateTrunc,
+  });
+
+  return {
+    data,
+    isLoading,
+    isFetching,
+    isError,
+  };
+};
