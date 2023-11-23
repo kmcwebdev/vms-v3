@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { z } from "zod";
 
-export const querySchema = z.object({
+const querySchema = z.object({
   year: z
     .preprocess((input) => Number(input), z.number().min(2000))
     .optional()
