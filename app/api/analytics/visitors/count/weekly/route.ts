@@ -41,7 +41,9 @@ export async function GET(req: Request) {
       from visitor_logs
       where extract(month from visit_time) = $1 -- Month in number
       and extract(year from visit_time) = $2 -- Year
-      and site_id in $3 -- sites
+      and site_id in (${site_ids
+        .map((element) => `'${element}'`)
+        .join(",")}) -- sites
       group by formatted_date
       order by formatted_date;
     `;
@@ -49,7 +51,6 @@ export async function GET(req: Request) {
     const result = await sql.query(visitor_count_by_week_in_month_query, [
       month_in_number,
       year,
-      site_ids,
     ]);
 
     return NextResponse.json(result.rows);
