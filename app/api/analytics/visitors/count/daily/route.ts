@@ -14,10 +14,12 @@ export const querySchema = z.object({
     .preprocess((input) => Number(input), z.number().min(2000))
     .optional()
     .default(new Date().getFullYear()),
-  site_ids: z.preprocess(
-    (input) => String(input).split(/\s*,\s*/),
-    z.array(z.string().uuid()).min(1),
-  ),
+  site_ids: z
+    .preprocess(
+      (input) => String(input).split(/\s*,\s*/),
+      z.array(z.string().uuid()),
+    )
+    .optional(),
 });
 
 export async function GET(req: Request) {
@@ -33,7 +35,13 @@ export async function GET(req: Request) {
       });
     }
 
-    const { month_in_number, year, site_ids } = queryParams.data;
+    let { month_in_number, year, site_ids } = queryParams.data;
+
+    if (!site_ids) {
+      site_ids = (await sql.query("select site_id from sites")).rows.map(
+        (data) => data.site_id,
+      );
+    }
 
     const visitor_count_by_day_in_month_query = `
       -- visitor count by day and year (line chart)

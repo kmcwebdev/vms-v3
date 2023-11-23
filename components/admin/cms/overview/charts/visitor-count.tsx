@@ -4,10 +4,7 @@ import AreaChart from "@/components/global/area-chart";
 import { useGetVisitorCounts } from "@/hooks/visitors/useGetVisitorCounts";
 
 const VisitorCount = () => {
-  const {} = useGetVisitorCounts("daily", {
-    site_ids:
-      "f127db90-9830-4d5e-a862-614beea6e389,b18a50f9-be1e-4bf5-a089-b40a3f641f6a",
-  });
+  const {} = useGetVisitorCounts("daily");
 
   const visitorPerWeekGraphData = {
     labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
