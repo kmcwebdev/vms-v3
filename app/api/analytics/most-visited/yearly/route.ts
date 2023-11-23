@@ -12,7 +12,7 @@ export async function GET() {
         group by site_id, date_trunc('year', visit_time)
       ) as subquery
       join sites as s on s.site_id = subquery.site_id
-      where rn = 1;
+      where s.is_active = true and rn = 1;
     `;
 
     const result = await sql.query(most_visited_site_on_yearly_basis_query);

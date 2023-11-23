@@ -7,6 +7,7 @@ export async function GET() {
       select s.site_name, count(*) as visitor_count
       from visitor_logs v
       join sites s on v.site_id = s.site_id
+      where s.is_active = true
       group by s.site_name
       order by visitor_count desc
       limit 5;
