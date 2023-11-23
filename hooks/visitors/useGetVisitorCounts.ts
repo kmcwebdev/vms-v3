@@ -23,7 +23,7 @@ const getVisitorCount = async (
   return (await response.json()) as {
     formatted_date: string;
     visitor_count: number;
-  };
+  }[];
 };
 
 export const useGetVisitorCounts = (
