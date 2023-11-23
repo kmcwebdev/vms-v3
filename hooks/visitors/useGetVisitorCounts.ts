@@ -10,7 +10,7 @@ type DateTrunc = "daily" | "weekly" | "monthly";
 
 const getVisitorCount = async (
   dateTrunc: DateTrunc,
-  filter: { month_in_number: string; year: string; site_ids: string },
+  filter?: { month_in_number: string; year: string; site_ids: string },
 ) => {
   const params = new URLSearchParams(filter);
 
@@ -28,7 +28,7 @@ const getVisitorCount = async (
 
 export const useGetVisitorCounts = (
   dateTrunc: DateTrunc,
-  filter: QueryParams,
+  filter?: QueryParams,
 ) => {
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: [dateTrunc, JSON.stringify(filter)],
