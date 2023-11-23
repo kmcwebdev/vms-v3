@@ -42,6 +42,7 @@ export async function GET(req: Request) {
       join sites s on v.site_id = s.site_id
       where
           extract(year from visit_time) = $1 -- year
+          and s.is_active = true
           and site_id in (${site_ids
             .map((element) => `'${element}'`)
             .join(",")}) -- sites
