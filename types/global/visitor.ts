@@ -8,10 +8,14 @@ type Visitor  = {
   person_to_visit: string;
   company_to_visit: string;
   site_id: string;
+  site_name: string;
   reason_of_visit_id: string;
-  created_at: Date;
+  created_at: string;
 }
 
+type RecentVisitors = Pick<Visitor, 'visitor_id' | 'first_name' | 'last_name' | 'image_url' | 'site_name' | 'created_at'>;
+
 export type {
-    Visitor
+    Visitor,
+    RecentVisitors
 }
