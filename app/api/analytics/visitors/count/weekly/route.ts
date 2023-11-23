@@ -9,7 +9,7 @@ export const querySchema = z.object({
       z.number().min(1).max(12),
     )
     .optional()
-    .default(1),
+    .default(new Date().getMonth()),
   year: z
     .preprocess((input) => Number(input), z.number().min(2000))
     .optional()
