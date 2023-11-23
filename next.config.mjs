@@ -12,7 +12,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/cms',
+        destination: '/cms?tab=overview',
         permanent: true,
       },
     ]
