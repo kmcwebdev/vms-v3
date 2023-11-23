@@ -77,46 +77,44 @@ const Analytics = () => {
   };
 
   return (
-    <>
-      <div className="mt-4 grid grid-cols-3 grid-rows-2 space-x-4">
-        <Card className="col-span-2 row-span-2 shadow-none">
-          <CardContent>
-            <CardHeader className="px-0">
-              <CardTitle>Visitors this week</CardTitle>
-            </CardHeader>
-            <AreaChart
-              height="120"
-              data={visitorPerWeekGraphData as ChartData<"line">}
-              options={{
-                backgroundColor: "#f97315",
-                plugins: {
-                  legend: {
+    <div className="space-y-2.5">
+      <DataCard
+        title="Current visitors"
+        description="Visitor count by month of December (2023)"
+        value="200+"
+        icon={<Users2 />}
+      />
+      <Card className="col-span-2 row-span-2 shadow-none">
+        <CardContent>
+          <CardHeader className="px-0">
+            <CardTitle>Visitors this week</CardTitle>
+          </CardHeader>
+          <AreaChart
+            height="120"
+            data={visitorPerWeekGraphData as ChartData<"line">}
+            options={{
+              backgroundColor: "#f97315",
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                x: {
+                  grid: {
                     display: false,
                   },
                 },
-                scales: {
-                  x: {
-                    grid: {
-                      display: false,
-                    },
-                  },
-                  y: {
-                    border: {
-                      dash: [4, 8],
-                    },
+                y: {
+                  border: {
+                    dash: [4, 8],
                   },
                 },
-              }}
-            />
-          </CardContent>
-        </Card>
-        <DataCard
-          title="Current visitors"
-          description="Visitor count by month of December (2023)"
-          value="200+"
-          icon={<Users2 />}
-        />
-      </div>
+              },
+            }}
+          />
+        </CardContent>
+      </Card>
       <Card className="mt-4 shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center justify-between ">
@@ -151,8 +149,8 @@ const Analytics = () => {
                 }}
                 data={[
                   { label: "Daily", value: "daily" },
-                  { label: "Weekly", value: "weekly" },
-                  { label: "Monthly", value: "monthly" },
+                  { label: "Weekly", value: "week" },
+                  { label: "Monthly", value: "month" },
                 ]}
               />
             </Form>
@@ -179,7 +177,7 @@ const Analytics = () => {
           />
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };
 
