@@ -6,7 +6,7 @@ import { Users } from "lucide-react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useGetAllSites } from "@/hooks/useGetAllSites";
+import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
 import { Site } from "@/types/site";
 
