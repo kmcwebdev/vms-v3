@@ -1,6 +1,6 @@
 const getVisitorCount = async (
   dateTrunc: "dayly" | "weekly" | "monthly",
-  filter: string,
+  filter: { month_in_number: string; year: string; site_ids: string },
 ) => {
   const params = new URLSearchParams(filter);
 
@@ -10,7 +10,10 @@ const getVisitorCount = async (
 
   const response = await fetch(url);
 
-  return await response.json();
+  return (await response.json()) as {
+    formatted_date: string;
+    visitor_count: number;
+  };
 };
 
 export const useGetVisitorCounts = () => {};
