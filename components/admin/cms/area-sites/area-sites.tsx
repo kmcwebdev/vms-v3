@@ -63,7 +63,7 @@ const AreaSites: React.FC<AreaSitesProps> = ({ sites }) => {
             allSites?.map((e) => (
               <Card
                 key={e.site_id}
-                onClick={() => router.push(`/cms/area-sites/${e.site_name}`)}
+                onClick={() => router.push(`/cms/area-sites/${e.site_id}`)}
                 className="group shadow-none transition ease-in-out hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
