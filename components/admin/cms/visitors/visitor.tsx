@@ -58,10 +58,7 @@ const sites = [
 
 const Visitors = () => {
   const { data: visitorsData, isLoading: visitorsDataIsLoading } =
-    useGetVisitors({
-      pageNumber: 1,
-      pageSize: 10,
-    });
+    useGetVisitors({});
 
   const visitorFiltersForm = useForm();
 
@@ -71,6 +68,8 @@ const Visitors = () => {
   const handleFilterSubmit = () => {
     console.log("submit", visitorFiltersForm.getValues());
   };
+
+  console.log(visitorsData);
 
   return (
     <Card className="shadow-none">
@@ -113,11 +112,11 @@ const Visitors = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {!visitorsDataIsLoading &&
+        {/* {!visitorsDataIsLoading &&
           visitorsData &&
-          visitorsData.map((visitor) => (
+          visitorsData?.map((visitor) => (
             <VisitorCard key={visitor.visitor_id} {...visitor} />
-          ))}
+          ))} */}
       </CardContent>
     </Card>
   );

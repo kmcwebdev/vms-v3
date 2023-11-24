@@ -13,6 +13,7 @@ const querySchema = z.object({
     z.number().min(1),
   )
   .optional(),
+  filter: z.string().min(1).optional()
 })
 
 export async function GET(req: Request) {
@@ -29,11 +30,17 @@ export async function GET(req: Request) {
       });
     }
 
-    let {pageNumber = 1, pageSize = 10} = queryParams.data
-
+    let {pageNumber = 1, pageSize = 10, filter} = queryParams.data
 
 const offset = (pageNumber - 1) * pageSize;
-const get_visitors_query = `select * from visitors order by visitor_id limit ${pageSize} offset ${offset}`;
+
+const get_visitors_query = 
+`select * from visitors v
+  order by visitor_id 
+  limit ${pageSize} 
+  offset ${offset}`;
+
+    // ${filter && `where tsv @@ to_tsquery('${filter}')`}
 
     const result = await sql.query(get_visitors_query);
 

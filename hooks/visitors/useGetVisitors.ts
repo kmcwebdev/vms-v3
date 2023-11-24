@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import type { Visitor } from "@/types/global/visitor";
+import axios from "axios";
 
 type QueryParams = {
-    pageSize: number,
-    pageNumber: number
+    pageSize?: number,
+    pageNumber?: number
 }
 
 const getVisitorsQuery = async ({pageNumber,
@@ -14,12 +15,15 @@ const getVisitorsQuery = async ({pageNumber,
             pageSize: pageSize ? pageSize.toString() : '10'
           });
 
-    const url = `/api/visitors${pageNumber 
-        ? `${"?" + params}`:""}`
+        const url = `/api/visitors?${params && params.toString()}`
 
-    const result = await fetch(url)
 
-    return await (result.json()) as Visitor[]
+
+
+
+    const result = await axios(url)
+
+    return (await result.data) as Visitor[]
 }
 
 export const useGetVisitors = ({
@@ -32,10 +36,11 @@ pageSize
         isFetching,
         isError
     } = useQuery({
-        queryKey: ['all-visitors', `pageNumber:${JSON.stringify(pageNumber)}` , `pageSize:${JSON.stringify(pageSize) }` ],
+        // queryKey: ['all-visitors-list', `pageNumber:${JSON.stringify(pageNumber)}` , `pageSize:${JSON.stringify(pageSize) }` ],
+        queryKey: ['all-visitors-list'],
         queryFn: () => getVisitorsQuery({
-            pageNumber: pageNumber,
-            pageSize: pageSize
+            pageNumber: pageNumber ? pageNumber : 1,
+            pageSize: pageSize ? pageSize : 10
         })
     })
 
