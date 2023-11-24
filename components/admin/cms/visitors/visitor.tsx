@@ -21,9 +21,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import type { Visitor } from "@/types/global/visitor";
-import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
 import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
 import { formatDate } from "@/lib/utils";
+import type { VisitorQueryParams } from "@/hooks/visitors/useGetVisitors";
+import { useSearchParams } from "next/navigation";
 
 const sites = [
   {
@@ -57,19 +58,25 @@ const sites = [
 ];
 
 const Visitors = () => {
-  const { data: visitorsData, isLoading: visitorsDataIsLoading } =
-    useGetVisitors({});
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const visitorFiltersForm = useForm();
 
-  const router = useRouter();
-  const pathname = usePathname();
+  const { data: visitorsData, isLoading: visitorsDataIsLoading } =
+    useGetVisitors({
+      filter: searchParams.get("filter")?.toString(),
+    });
 
-  const handleFilterSubmit = () => {
+  const handleFilterSubmit = (data: VisitorQueryParams) => {
     console.log("submit", visitorFiltersForm.getValues());
+    if (data) {
+      router.replace(`${window.location.pathname}?filter=${data.filter}`, {
+        scroll: false,
+      });
+    }
   };
-
-  console.log(visitorsData);
 
   return (
     <Card className="shadow-none">
@@ -83,7 +90,7 @@ const Visitors = () => {
             className="flex gap-x-2"
           >
             <Form.Input
-              name="search"
+              name="filter"
               type="text"
               placeholder="Search visitor"
             />
@@ -112,11 +119,11 @@ const Visitors = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* {!visitorsDataIsLoading &&
+        {!visitorsDataIsLoading &&
           visitorsData &&
           visitorsData?.map((visitor) => (
             <VisitorCard key={visitor.visitor_id} {...visitor} />
-          ))} */}
+          ))}
       </CardContent>
     </Card>
   );
