@@ -2,7 +2,13 @@
 
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
@@ -25,6 +31,7 @@ import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
 import { formatDate } from "@/lib/utils";
 import type { VisitorQueryParams } from "@/hooks/visitors/useGetVisitors";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const sites = [
   {
@@ -64,10 +71,16 @@ const Visitors = () => {
 
   const visitorFiltersForm = useForm();
 
-  const { data: visitorsData, isLoading: visitorsDataIsLoading } =
-    useGetVisitors({
-      filter: searchParams.get("filter")?.toString(),
-    });
+  const { data: visitors, isLoading: visitorsDataIsLoading } = useGetVisitors({
+    pageNumber:
+      parseInt(
+        (searchParams.has("pageNumber") &&
+          searchParams.get("pageNumber")?.toString()) ||
+          "1",
+      ) || 1,
+    pageSize: 10,
+    filter: searchParams.get("filter")?.toString(),
+  });
 
   const handleFilterSubmit = (data: VisitorQueryParams) => {
     console.log("submit", visitorFiltersForm.getValues());
@@ -76,6 +89,44 @@ const Visitors = () => {
         scroll: false,
       });
     }
+  };
+
+  const handleNextPage = () => {
+    const currentPageNumber = searchParams.has("pageNumber")
+      ? parseInt(searchParams.get("pageNumber") as string)
+      : 1;
+    const nextPageNumber = currentPageNumber + 1;
+
+    const totalPages = visitors?.totalPages;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    if (currentPageNumber !== totalPages) {
+      newSearchParams.set("pageNumber", nextPageNumber.toString());
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
+  };
+
+  const handlePreviousPage = () => {
+    const currentPageNumber = searchParams.has("pageNumber")
+      ? parseInt(searchParams.get("pageNumber") as string)
+      : 1;
+    const previousPageNumber =
+      currentPageNumber > 1 ? currentPageNumber - 1 : 1;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+    newSearchParams.set("pageNumber", previousPageNumber.toString());
+    router.replace(
+      `${window.location.pathname}?${newSearchParams.toString()}`,
+      {
+        scroll: false,
+      },
+    );
   };
 
   return (
@@ -120,11 +171,25 @@ const Visitors = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         {!visitorsDataIsLoading &&
-          visitorsData &&
-          visitorsData?.map((visitor) => (
+          visitors?.data &&
+          visitors?.data?.map((visitor) => (
             <VisitorCard key={visitor.visitor_id} {...visitor} />
           ))}
       </CardContent>
+      <CardFooter className="flex justify-between ">
+        <p className="text-xs text-neutral-500">
+          Page {searchParams.get("pageNumber")?.toString() || "1"} of{" "}
+          {visitors?.totalPages.toString()}
+        </p>
+        <div className="space-x-2">
+          <Button variant="outline" onClick={handlePreviousPage}>
+            Back
+          </Button>
+          <Button variant="outline" onClick={handleNextPage}>
+            Next
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 };

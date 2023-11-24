@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { QueryResult, sql } from "@vercel/postgres";
 import z from 'zod'
 
 const querySchema = z.object({
@@ -15,6 +15,10 @@ const querySchema = z.object({
   .optional(),
   filter: z.string().min(1).optional()
 })
+
+interface CountResult {
+  count: number;
+}
 
 export async function GET(req: Request) {
   try {
@@ -32,23 +36,30 @@ export async function GET(req: Request) {
 
     let {pageNumber = 1, pageSize = 10, filter} = queryParams.data
 
-const offset = (pageNumber - 1) * pageSize;
-
-let get_visitors_query = 
-`select * from visitors v`;
-
-if (filter) {
-  get_visitors_query += ` where tsv @@ to_tsquery('${filter}')`;
-}
-
-get_visitors_query += `
-  order by visitor_id 
-  limit ${pageSize} 
-  offset ${offset}`;
-
+    const offset = (pageNumber - 1) * pageSize;
+    
+    let get_visitors_query = 
+    `select * from visitors v`;
+    
+    let count_query = `select count(*) from visitors v`;
+    
+    if (filter) {
+      get_visitors_query += ` where tsv @@ to_tsquery('${filter}')`;
+      count_query += ` where tsv @@ to_tsquery('${filter}')`;
+    }
+    
+    get_visitors_query += `
+      order by visitor_id 
+      limit ${pageSize} 
+      offset ${offset}`;
+    
     const result = await sql.query(get_visitors_query);
-
-    return NextResponse.json(result.rows);
+    const countResult: QueryResult<{ count: number }> = await sql.query(count_query);
+    
+    const totalRecords = countResult.rows[0].count;
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    
+    return NextResponse.json({ data: result.rows, totalPages: totalPages });
   } catch (error: any) {
     return NextResponse.json(
       { status: 500, message: error.message },

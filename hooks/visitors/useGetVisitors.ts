@@ -19,7 +19,10 @@ const getVisitorsQuery = async ({pageNumber,
 
     const result = await axios(url)
 
-    return (await result.data) as Visitor[]
+    return (await result.data) as {
+        data:Visitor[],
+        totalPages: number
+    }
 }
 
 export const useGetVisitors = ({
