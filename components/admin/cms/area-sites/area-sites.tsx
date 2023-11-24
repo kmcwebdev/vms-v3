@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
 import { Site } from "@/types/site";
+import Image from "next/image";
 
 interface AreaSitesProps {
   sites: Site[];
@@ -66,7 +67,20 @@ const AreaSites: React.FC<AreaSitesProps> = ({ sites }) => {
                 className="group shadow-none transition ease-in-out hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
-                  <div className="h-64 w-full rounded-md bg-gray-100" />
+                  {e.site_banner ? (
+                    <div className="relative h-60 w-full rounded-md">
+                      <Image
+                        src={e.site_banner || "/kmc-logo-black.png"}
+                        alt="Site image"
+                        className="bottom-0 rounded-md object-cover"
+                        fill
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-64 w-full items-center justify-center rounded-md bg-gray-100">
+                      <p className=" font-bold text-white">No image</p>
+                    </div>
+                  )}
                 </CardHeader>
                 <CardContent className="px-3 pb-3 pt-0">
                   <div className="flex justify-between text-sm">
