@@ -34,13 +34,17 @@ export async function GET(req: Request) {
 
 const offset = (pageNumber - 1) * pageSize;
 
-const get_visitors_query = 
-`select * from visitors v
+let get_visitors_query = 
+`select * from visitors v`;
+
+if (filter) {
+  get_visitors_query += ` where tsv @@ to_tsquery('${filter}')`;
+}
+
+get_visitors_query += `
   order by visitor_id 
   limit ${pageSize} 
   offset ${offset}`;
-
-    // ${filter && `where tsv @@ to_tsquery('${filter}')`}
 
     const result = await sql.query(get_visitors_query);
 
