@@ -32,37 +32,8 @@ import { formatDate } from "@/lib/utils";
 import type { VisitorQueryParams } from "@/hooks/visitors/useGetVisitors";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
-const sites = [
-  {
-    value: "armstrong-corporate-center",
-    label: "Armstrong Corporate Center",
-  },
-  {
-    value: "uptown-place-tower-2",
-    label: "UpTown Place Tower 2",
-  },
-  {
-    value: "v-corporate-center",
-    label: "V Corporate Center",
-  },
-  {
-    value: "frabelle-corporate-plaza",
-    label: "Frabelle Corporate Plaza",
-  },
-  {
-    value: "picadilly-inc",
-    label: "Picadilly Inc.",
-  },
-  {
-    value: "four-neo",
-    label: "Four Neo",
-  },
-  {
-    value: "arthaland-century-pacific-tower",
-    label: "Arthaland Century Pacific Tower",
-  },
-];
+import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
+import { createSearchParams } from "@/lib/utils";
 
 const Visitors = () => {
   const router = useRouter();
@@ -82,12 +53,34 @@ const Visitors = () => {
     filter: searchParams.get("filter")?.toString(),
   });
 
+  const { data: allSites, isLoading: allSitesIsLoading } = useGetAllSites(
+    {
+      filter: undefined,
+    },
+    [],
+  );
+
+  const sitesList =
+    !allSitesIsLoading && allSites
+      ? allSites.map((item) => ({
+          label: item.site_name,
+          value: item.site_id,
+        }))
+      : [];
+
   const handleFilterSubmit = (data: VisitorQueryParams) => {
-    console.log("submit", visitorFiltersForm.getValues());
-    if (data) {
-      router.replace(`${window.location.pathname}?filter=${data.filter}`, {
-        scroll: false,
-      });
+    const newSearchParams = createSearchParams({
+      filter: data.filter,
+      pageNumber: searchParams.get("pageNumber")?.toString(),
+    });
+
+    if (newSearchParams) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
     }
   };
 
@@ -99,16 +92,20 @@ const Visitors = () => {
 
     const totalPages = visitors?.totalPages;
 
-    const newSearchParams = new URLSearchParams(window.location.search);
+    const newSearchParams = createSearchParams({
+      pageNumber: nextPageNumber,
+      filter: searchParams.get("filter")?.toString(),
+    });
 
-    if (currentPageNumber !== totalPages) {
-      newSearchParams.set("pageNumber", nextPageNumber.toString());
-      router.replace(
-        `${window.location.pathname}?${newSearchParams.toString()}`,
-        {
-          scroll: false,
-        },
-      );
+    if (newSearchParams) {
+      if (currentPageNumber !== totalPages) {
+        router.replace(
+          `${window.location.pathname}?${newSearchParams.toString()}`,
+          {
+            scroll: false,
+          },
+        );
+      }
     }
   };
 
@@ -119,14 +116,19 @@ const Visitors = () => {
     const previousPageNumber =
       currentPageNumber > 1 ? currentPageNumber - 1 : 1;
 
-    const newSearchParams = new URLSearchParams(window.location.search);
-    newSearchParams.set("pageNumber", previousPageNumber.toString());
-    router.replace(
-      `${window.location.pathname}?${newSearchParams.toString()}`,
-      {
-        scroll: false,
-      },
-    );
+    const newSearchParams = createSearchParams({
+      pageNumber: previousPageNumber,
+      filter: searchParams.get("filter")?.toString(),
+    });
+
+    if (newSearchParams) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
   };
 
   return (
@@ -147,24 +149,19 @@ const Visitors = () => {
             />
             <Form.Combobox
               name="sites"
-              data={sites}
+              data={sitesList}
               placeholder="Site"
-              onSelect={(e) => router.push(`${pathname}?site=${e}`)}
-            />
-            <Form.Combobox
-              name="status"
-              data={[
-                {
-                  value: "logged-in",
-                  label: "Logged in",
-                },
-                {
-                  value: "logged-out",
-                  label: "Logged out",
-                },
-              ]}
-              placeholder="Status"
-              onSelect={(e) => router.push(`${pathname}?status=${e}`)}
+              onSelect={(e: string) => {
+                const newSearchParams = createSearchParams({ site: e });
+                if (newSearchParams) {
+                  router.replace(
+                    `${window.location.pathname}?${newSearchParams.toString()}`,
+                    {
+                      scroll: false,
+                    },
+                  );
+                }
+              }}
             />
           </Form>
         </CardTitle>
