@@ -13,12 +13,10 @@ const querySchema = z.object({
     z.number().min(1),
   )
   .optional(),
-  filter: z.string().min(1).optional()
+  filter: z.string().min(1).optional(),
+  site: z.string().optional().nullable(),
 })
 
-interface CountResult {
-  count: number;
-}
 
 export async function GET(req: Request) {
   try {
@@ -34,7 +32,7 @@ export async function GET(req: Request) {
       });
     }
 
-    let {pageNumber = 1, pageSize = 10, filter} = queryParams.data
+    let {pageNumber = 1, pageSize = 10, filter, site} = queryParams.data
 
     const offset = (pageNumber - 1) * pageSize;
     
@@ -44,12 +42,18 @@ export async function GET(req: Request) {
     let count_query = `select count(*) from visitors v`;
     
     if (filter) {
-      get_visitors_query += ` where tsv @@ to_tsquery('${filter}')`;
+      get_visitors_query += ` where tsv @@ to_tsquery('${filter}')` ;
       count_query += ` where tsv @@ to_tsquery('${filter}')`;
     }
-    
+
+    if (site) {
+      const siteCondition = ` ${filter ? 'and' : 'where'} site_id = '${site}'`;
+      get_visitors_query += siteCondition;
+      count_query += siteCondition;
+    }
+    // and site_id='${site ? site?.toString() : null}'`;
     get_visitors_query += `
-      order by visitor_id 
+      order by visitor_id
       limit ${pageSize} 
       offset ${offset}`;
     

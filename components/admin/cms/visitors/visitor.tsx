@@ -51,7 +51,10 @@ const Visitors = () => {
       ) || 1,
     pageSize: 10,
     filter: searchParams.get("filter")?.toString(),
+    site: searchParams.get("site")?.toString() || "",
   });
+
+  console.log(searchParams.get("site")?.toString());
 
   const { data: allSites, isLoading: allSitesIsLoading } = useGetAllSites(
     {
@@ -72,6 +75,7 @@ const Visitors = () => {
     const newSearchParams = createSearchParams({
       filter: data.filter,
       pageNumber: searchParams.get("pageNumber")?.toString(),
+      site: data.site,
     });
 
     if (newSearchParams) {
@@ -148,7 +152,7 @@ const Visitors = () => {
               placeholder="Search visitor"
             />
             <Form.Combobox
-              name="sites"
+              name="site"
               data={sitesList}
               placeholder="Site"
               onSelect={(e: string) => {

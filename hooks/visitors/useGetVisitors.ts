@@ -6,16 +6,20 @@ export type VisitorQueryParams = {
     pageSize?: number,
     pageNumber?: number,
     filter?:string | undefined | null
+    site?:string | undefined | null
 }
 
 const getVisitorsQuery = async ({pageNumber,
-    pageSize, filter}:VisitorQueryParams) => {
+    pageSize, filter, site}:VisitorQueryParams) => {
+
+        console.log('site', site)
 
         const params = new URLSearchParams({
             pageNumber: pageNumber ? pageNumber.toString() :'1',
-            pageSize: pageSize ? pageSize.toString() : '10',
+            pageSize: pageSize ? pageSize.toString() : '10'
+            // site: '922c71be-f78b-4593-8186-de9c2f4f7680'
           });
-        const url = `/api/visitors?${params && params.toString()}${filter ? `&filter=${filter.toString() }`: ''}`
+        const url = `/api/visitors?${params && params.toString()}${filter ? `&filter=${filter.toString() }`: ''}${site ? `&site=${site.toString()}` : ''}`
 
     const result = await axios(url)
 
@@ -28,7 +32,8 @@ const getVisitorsQuery = async ({pageNumber,
 export const useGetVisitors = ({
 pageNumber,
 pageSize,
-filter
+filter,
+site
 }:VisitorQueryParams) => {
     const {
         data,
@@ -36,11 +41,20 @@ filter
         isFetching,
         isError
     } = useQuery({
-        queryKey: ['all-visitors-list', `pageNumber:${JSON.stringify(pageNumber)}` , `pageSize:${JSON.stringify(pageSize) }`, `filter:${JSON.stringify(filter?.toString()) }` ],
+        queryKey: 
+        ['all-visitors-list'
+        , `pageNumber:${JSON.stringify(pageNumber)}`
+        , `pageSize:${JSON.stringify(pageSize) }`
+        , `filter:${JSON.stringify(filter)}`
+        , `site:${JSON.stringify(site)}`
+    ],
+
+        
         queryFn: () => getVisitorsQuery({
             pageNumber: pageNumber ? pageNumber : 1,
             pageSize: pageSize ? pageSize : 10,
-            filter: filter
+            filter: filter,
+            site: site,
         })
     })
 
