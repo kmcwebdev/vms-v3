@@ -16,8 +16,8 @@ import Image from "next/image";
 import Stepper from "./stepper";
 import TimeDateDisplay from "./time-date-display";
 import { Separator } from "../ui/separator";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const STEP_INDEX = {
   "Fill up form": 0,
@@ -28,6 +28,8 @@ const STEP_INDEX = {
 const VisitorsLoginForm = () => {
   const [isTakePhotoTriggered, setIsTakePhotoTriggered] = useState(false);
   const [hasImageTaken, setHasImageTaken] = useState(false);
+
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -73,6 +75,7 @@ const VisitorsLoginForm = () => {
       });
       visitorsForm.reset();
       goTo(0);
+      router.push("/tablet");
     }
   };
 
@@ -119,6 +122,8 @@ const VisitorsLoginForm = () => {
               onClick={() => {
                 if (currentStepIndex === 1) {
                   setIsTakePhotoTriggered(true);
+                } else {
+                  setIsTakePhotoTriggered(false);
                 }
               }}
             >
