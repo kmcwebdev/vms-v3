@@ -15,11 +15,17 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import Clients from "./clients";
 import Visitors from "./visitors";
 import { Building2, User2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
-const SiteDetails = () => {
+interface ISiteDetailsProps {
+  siteId: string;
+}
+
+const SiteDetails = ({ siteId }: ISiteDetailsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  console.log(siteId);
 
   return (
     <Card className="shadow-none">

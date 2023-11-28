@@ -47,6 +47,7 @@ const Combobox = ({
 
   useEffect(() => {
     setValue(defaultValue || "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -60,13 +61,16 @@ const Combobox = ({
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-fit justify-between"
+              className="flex w-auto justify-between"
             >
-              {value
-                ? data.find((e) => e.value === value)?.label
-                : placeholder
-                ? placeholder
-                : "Select"}
+              <p className="truncate">
+                {value
+                  ? data.find((e) => e.value === value)?.label
+                  : placeholder
+                  ? placeholder
+                  : "Select"}
+              </p>
+
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
