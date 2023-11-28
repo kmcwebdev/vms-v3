@@ -34,6 +34,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Visitors = () => {
   const router = useRouter();
@@ -172,11 +173,19 @@ const Visitors = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {!visitorsDataIsLoading &&
+        {visitorsDataIsLoading || !visitors?.data ? (
+          <>
+            <SkeletonLoaderForVisitors />
+            <SkeletonLoaderForVisitors />
+            <SkeletonLoaderForVisitors />
+          </>
+        ) : (
+          !visitorsDataIsLoading &&
           visitors?.data &&
           visitors?.data?.map((visitor) => (
             <VisitorCard key={visitor.visitor_id} {...visitor} />
-          ))}
+          ))
+        )}
       </CardContent>
       <CardFooter className="flex justify-between ">
         <p className="text-xs text-neutral-500">
@@ -270,5 +279,20 @@ const VisitorCard = ({
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+const SkeletonLoaderForVisitors = () => {
+  return (
+    <Skeleton className="flex h-36 w-full flex-col justify-between rounded-xl border border-neutral-100 bg-transparent p-6">
+      <div className="h-5 w-44 rounded-md bg-neutral-100" />
+      <div className="flex items-center gap-x-2">
+        <div className="h-11 w-11 rounded-full bg-neutral-100" />
+        <div className="space-y-3">
+          <div className="h-5 w-44 rounded-md bg-neutral-100" />
+          <div className="h-5 w-56 rounded-md bg-neutral-100" />
+        </div>
+      </div>
+    </Skeleton>
   );
 };
