@@ -2,11 +2,7 @@ import React from "react";
 import Visitors from "@/components/admin/cms/visitors/visitor";
 
 const page = () => {
-  return (
-    <div>
-      <Visitors />
-    </div>
-  );
+  return <Visitors />;
 };
 
 export default page;

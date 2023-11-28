@@ -203,6 +203,7 @@ const VisitorCard = ({
   last_name,
   site_name,
   visitor_id,
+  email,
 }: Visitor) => {
   return (
     <Card className="shadow-none">
@@ -227,7 +228,7 @@ const VisitorCard = ({
                 {`${first_name} ${last_name}`}
               </p>
               <p className="text-sm text-muted-foreground group-hover:underline">
-                isabella.nguyen@email.com
+                {email}
               </p>
             </div>
           </div>
