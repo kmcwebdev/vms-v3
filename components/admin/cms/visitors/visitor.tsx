@@ -54,8 +54,6 @@ const Visitors = () => {
     site: searchParams.get("site")?.toString() || "",
   });
 
-  console.log(searchParams.get("site")?.toString());
-
   const { data: allSites, isLoading: allSitesIsLoading } = useGetAllSites(
     {
       filter: undefined,
@@ -156,7 +154,10 @@ const Visitors = () => {
               data={sitesList}
               placeholder="Site"
               onSelect={(e: string) => {
-                const newSearchParams = createSearchParams({ site: e });
+                const newSearchParams = createSearchParams({
+                  site: e,
+                  filter: searchParams.get("filter")?.toString(),
+                });
                 if (newSearchParams) {
                   router.replace(
                     `${window.location.pathname}?${newSearchParams.toString()}`,

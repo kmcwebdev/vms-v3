@@ -12,8 +12,6 @@ export type VisitorQueryParams = {
 const getVisitorsQuery = async ({pageNumber,
     pageSize, filter, site}:VisitorQueryParams) => {
 
-        console.log('site', site)
-
         const params = new URLSearchParams({
             pageNumber: pageNumber ? pageNumber.toString() :'1',
             pageSize: pageSize ? pageSize.toString() : '10'
