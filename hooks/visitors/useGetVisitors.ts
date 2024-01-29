@@ -23,7 +23,7 @@ const getVisitorsQuery = async ({pageNumber,
 
     return (await result.data) as {
         data:Visitor[],
-        totalPages: number
+        totalPage: number
     }
 }
 

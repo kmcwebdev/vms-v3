@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 type TopFiveMostVisitedSite = {
     site_name: string,
@@ -7,9 +8,9 @@ type TopFiveMostVisitedSite = {
 
 const getTopFiveMostVisitedSiteQuery = async () => {
     const url = `/api/analytics/sites/top-five`
-    const response = await fetch(url)
+    const response = await axios(url)
 
-    return (await response.json()) as TopFiveMostVisitedSite[]
+    return (await response.data()) as TopFiveMostVisitedSite[]
 
 }
 

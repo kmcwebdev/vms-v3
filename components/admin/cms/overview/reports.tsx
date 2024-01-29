@@ -37,6 +37,9 @@ const Reports = ({ site }: IReportProps) => {
     try {
       const response = await axios.get("/api/visitors/export-csv", {
         responseType: "blob",
+        params: {
+          site_id: "922c71be-f78b-4593-8186-de9c2f4f7680",
+        },
       });
 
       const url = window.URL.createObjectURL(new Blob([response.data]));

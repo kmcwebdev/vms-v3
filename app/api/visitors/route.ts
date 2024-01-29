@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { QueryResult, sql } from "@vercel/postgres";
 import z from 'zod'
+import { paginateQuery } from "@/lib/utils";
 
 const querySchema = z.object({
   pageSize: z.preprocess(
@@ -33,37 +34,29 @@ export async function GET(req: Request) {
     }
 
     let {pageNumber = 1, pageSize = 10, filter, site} = queryParams.data
-
-    const offset = (pageNumber - 1) * pageSize;
     
     let get_visitors_query = 
-    `select * from visitors v`;
-    
-    let count_query = `select count(*) from visitors v`;
+    `select *, COUNT(*) OVER() as total_records from visitors v`;
     
     if (filter) {
       get_visitors_query += ` where tsv @@ to_tsquery('${filter}')` ;
-      count_query += ` where tsv @@ to_tsquery('${filter}')`;
+      // count_query += ` where tsv @@ to_tsquery('${filter}')`;
     }
 
     if (site) {
       const siteCondition = ` ${filter ? 'and' : 'where'} site_id = '${site}'`;
       get_visitors_query += siteCondition;
-      count_query += siteCondition;
+      // count_query += siteCondition;
     }
-    // and site_id='${site ? site?.toString() : null}'`;
+
     get_visitors_query += `
       order by visitor_id
-      limit ${pageSize} 
-      offset ${offset}`;
+
+    `;
+  
+    const result = await paginateQuery(pageNumber, pageSize, get_visitors_query)
     
-    const result = await sql.query(get_visitors_query);
-    const countResult: QueryResult<{ count: number }> = await sql.query(count_query);
-    
-    const totalRecords = countResult.rows[0].count;
-    const totalPages = Math.ceil(totalRecords / pageSize);
-    
-    return NextResponse.json({ data: result.rows, totalPages: totalPages });
+    return NextResponse.json({ data: result.items, pageNumber: result.pageNumber, pageSize: result.pageLimit, totalPage: result.totalPages, totalRecord: result.totalRecords });
   } catch (error: any) {
     return NextResponse.json(
       { status: 500, message: error.message },

@@ -93,7 +93,7 @@ const Visitors = () => {
       : 1;
     const nextPageNumber = currentPageNumber + 1;
 
-    const totalPages = visitors?.totalPages;
+    const totalPages = visitors?.totalPage;
 
     const newSearchParams = createSearchParams({
       pageNumber: nextPageNumber,
@@ -190,7 +190,7 @@ const Visitors = () => {
       <CardFooter className="flex justify-between ">
         <p className="text-xs text-neutral-500">
           Page {searchParams.get("pageNumber")?.toString() || "1"} of{" "}
-          {visitors?.totalPages.toString()}
+          {visitors?.totalPage.toString()}
         </p>
         <div className="space-x-2">
           <Button variant="outline" onClick={handlePreviousPage}>
