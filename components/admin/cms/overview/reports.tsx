@@ -22,23 +22,42 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
 import type { RecentVisitors } from "@/types/global/visitor";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 interface IReportProps {
   site: Site[];
 }
 
+const exportVisitorSchema = z.object({
+  site: z.string(),
+  date: z.object({
+    from: z.date(),
+    to: z.date(),
+  }),
+});
+
 const Reports = ({ site }: IReportProps) => {
+  const [exportDialogOpen, setExportDialogIsOpen] = useState<boolean>(false);
+
   const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
     useGetRecentVisitors();
 
-  const exportForm = useForm();
+  const exportForm = useForm({
+    resolver: zodResolver(exportVisitorSchema),
+  });
+
+  console.log(exportForm.watch());
+
+  const siteSelected = exportForm.watch("site");
 
   const downloadCSV = async () => {
     try {
       const response = await axios.get("/api/visitors/export-csv", {
         responseType: "blob",
         params: {
-          site_id: "922c71be-f78b-4593-8186-de9c2f4f7680",
+          site_id: siteSelected,
         },
       });
 
@@ -113,6 +132,10 @@ const Reports = ({ site }: IReportProps) => {
     },
   ];
 
+  const onFormSubmitHandler = () => {
+    setExportDialogIsOpen((e) => !e);
+  };
+
   return (
     <Card className=" shadow-none">
       <CardHeader>
@@ -120,32 +143,42 @@ const Reports = ({ site }: IReportProps) => {
           <Form
             name="site"
             useFormReturn={exportForm}
-            onSubmit={() => console.log("submitted export")}
+            onSubmit={onFormSubmitHandler}
+            className="inline-flex gap-x-2"
           >
             <Form.Combobox
               name="site"
               data={allSiteData}
               placeholder="Select site"
             />
+
+            <DateRangePicker
+              onChange={(e) => console.log("date", e)}
+              name="date"
+            />
+            <Dialog open={exportDialogOpen}>
+              <DialogTrigger asChild>
+                <Button type="submit">Export</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Export visitors data</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to export all visitors data?
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setExportDialogIsOpen((e) => !e)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={downloadCSV}>Export</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </Form>
-          <DateRangePicker />
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Export</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Export visitors data</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to export all visitors data?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="secondary">Cancel</Button>
-                <Button onClick={downloadCSV}>Export</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </CardTitle>
       </CardHeader>
       <CardContent>

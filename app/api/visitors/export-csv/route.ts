@@ -11,20 +11,33 @@ const visitorExportFiltersSchema = z.object({
 export async function GET(req: Request) {
   try{
 
-    const {searchParams} = new URL(req.url)
+    const url = new URL(req.url);
+    const searchParams = url.searchParams;
 
-    const queryParams = visitorExportFiltersSchema.safeParse(searchParams)
+    const query = Object.fromEntries(searchParams);
+    const parsedQuery = visitorExportFiltersSchema.safeParse(query);
 
-    if (queryParams.success === false) {
-      return new Response(queryParams.error.message, {
-        status: 400,
-        statusText: `Bad request ${queryParams}`,
-      });
+    if (!parsedQuery.success) {
+      return new Response('Invalid query parameters', { status: 400 });
     }
 
-    const site_id = queryParams.data.site_id || '922c71be-f78b-4593-8186-de9c2f4f7680'
+    const {site_id} = parsedQuery.data
 
-    const visitor_query = `select first_name, last_name from visitors where site_id  = '${site_id}' limit 10`
+
+    const visitor_query = `
+    select 
+    v.first_name, 
+    v.last_name,
+    v.email,
+    v.person_to_visit,
+    v.company_to_visit,
+    s.site_name,
+    rov.reason_name
+    from visitors v
+    join sites s on v.site_id = s.site_id
+    join reason_of_visits rov on v.reason_of_visit_id = rov.reason_of_visit_id
+    where v.site_id  = '${site_id}' 
+    order by v.created_at desc`
 
     const result = await sql.query(visitor_query)
   
