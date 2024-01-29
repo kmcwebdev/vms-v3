@@ -5,7 +5,9 @@ import z from 'zod'
 import { formatDateToYYMMDD } from "@/lib/utils";
 
 const visitorExportFiltersSchema = z.object({
-  site_id: z.string().optional()
+  site_id: z.string(),
+  from: z.string(),
+  to: z.string(),
 })
 
 export async function GET(req: Request) {
@@ -21,8 +23,7 @@ export async function GET(req: Request) {
       return new Response('Invalid query parameters', { status: 400 });
     }
 
-    const {site_id} = parsedQuery.data
-
+    const {site_id, from, to} = parsedQuery.data
 
     const visitor_query = `
     select 
@@ -36,15 +37,36 @@ export async function GET(req: Request) {
     from visitors v
     join sites s on v.site_id = s.site_id
     join reason_of_visits rov on v.reason_of_visit_id = rov.reason_of_visit_id
-    where v.site_id  = '${site_id}' 
-    order by v.created_at desc`
+    where v.site_id = '${site_id}'
+    and v.created_at BETWEEN '${from}' AND '${to}'
+    order by v.created_at desc`;
 
-    const result = await sql.query(visitor_query)
-  
-    const csv = parse(result.rows);
+    let result = await sql.query(visitor_query)
 
     const date = new Date()
+
+    if (result.rows.length === 0) {
+      let result = [{}]
+      const csv = parse(result);
+      return new Response(csv, {
+        headers: {
+          "content-disposition": `vms-visitors-export-${formatDateToYYMMDD(date.toString())}.csv`,
+        },
+      });
+    }
+
+    const fields = [
+      'first_name',
+      'last_name',
+      'email',
+      'person_to_visit',
+      'company_to_visit',
+      'site_name',
+      'reason_name'
+    ];
   
+    const csv = parse(result.rows, { fields });
+
     return new Response(csv, {
       headers: {
         "content-disposition": `vms-visitors-export-${formatDateToYYMMDD(date.toString())}.csv`,

@@ -32,10 +32,12 @@ interface IReportProps {
 
 const exportVisitorSchema = z.object({
   site: z.string(),
-  date: z.object({
-    from: z.date(),
-    to: z.date(),
-  }),
+  date: z
+    .object({
+      from: z.date(),
+      to: z.date(),
+    })
+    .optional(),
 });
 
 const Reports = ({ site }: IReportProps) => {
@@ -48,9 +50,10 @@ const Reports = ({ site }: IReportProps) => {
     resolver: zodResolver(exportVisitorSchema),
   });
 
-  console.log(exportForm.watch());
-
   const siteSelected = exportForm.watch("site");
+  const dateSelected = exportForm.watch("date");
+
+  console.log("DATE", dateSelected);
 
   const downloadCSV = async () => {
     try {
@@ -58,6 +61,8 @@ const Reports = ({ site }: IReportProps) => {
         responseType: "blob",
         params: {
           site_id: siteSelected,
+          from: dateSelected.from,
+          to: dateSelected.to,
         },
       });
 
