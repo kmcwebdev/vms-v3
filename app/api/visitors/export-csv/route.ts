@@ -2,6 +2,7 @@ import { parse } from "json2csv";
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import z from 'zod'
+import { formatDateToYYMMDD } from "@/lib/utils";
 
 const visitorExportFiltersSchema = z.object({
   site_id: z.string().optional()
@@ -12,7 +13,7 @@ export async function GET(req: Request) {
 
     const {searchParams} = new URL(req.url)
 
-    const queryParams = visitorExportFiltersSchema.safeParse(Object.entries(searchParams))
+    const queryParams = visitorExportFiltersSchema.safeParse(searchParams)
 
     if (queryParams.success === false) {
       return new Response(queryParams.error.message, {
@@ -23,17 +24,17 @@ export async function GET(req: Request) {
 
     const site_id = queryParams.data.site_id || '922c71be-f78b-4593-8186-de9c2f4f7680'
 
-    console.log('SITE ID', site_id)
-
     const visitor_query = `select first_name, last_name from visitors where site_id  = '${site_id}' limit 10`
 
     const result = await sql.query(visitor_query)
   
     const csv = parse(result.rows);
+
+    const date = new Date()
   
     return new Response(csv, {
       headers: {
-        "content-disposition": `attachment; filename=${Date.now()}.csv`,
+        "content-disposition": `vms-visitors-export-${formatDateToYYMMDD(date.toString())}.csv`,
       },
     });
   }

@@ -39,7 +39,11 @@ export function formatDate(dateString: string) {
   return date.toLocaleString('en-US', options);
 }
 
-
+export function formatDateToYYMMDD(date: string) {
+  const dateNow = new Date(date)
+  const formattedDate = `${dateNow.getFullYear()}${dateNow.getMonth()}${dateNow.getDate()}`
+  return formattedDate
+}
 
 export async function paginateQuery(
   pageNumber: number,
