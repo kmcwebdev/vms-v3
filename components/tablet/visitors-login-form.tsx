@@ -14,16 +14,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { visitorSchema } from "@/schema/visitor";
 import Image from "next/image";
 import Stepper from "./stepper";
-import TimeDateDisplay from "./time-date-display";
 import { Separator } from "../ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 const STEP_INDEX = {
   "Fill up form": 0,
   "Take a snapshot": 1,
   "Review details": 2,
 };
+
+const TimeAndDateDisplay = dynamic(() => import("./time-date-display"), {
+  ssr: false,
+});
 
 const VisitorsLoginForm = () => {
   const [isTakePhotoTriggered, setIsTakePhotoTriggered] = useState(false);
@@ -84,7 +88,7 @@ const VisitorsLoginForm = () => {
       <nav className="mb-6 ">
         <div className="flex items-center justify-between">
           <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
-          <TimeDateDisplay />
+          <TimeAndDateDisplay />
         </div>
       </nav>
 

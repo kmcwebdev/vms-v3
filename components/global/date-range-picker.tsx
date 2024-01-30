@@ -18,8 +18,8 @@ interface IDateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2023, 0, 20),
-    to: addDays(new Date(2023, 0, 20), 20),
+    from: new Date(2024, 0, 1),
+    to: addDays(new Date(2024, 0, 30), 30),
   });
 
   const { control } = useFormContext();
