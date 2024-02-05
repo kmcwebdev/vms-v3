@@ -26,7 +26,9 @@ export async function GET(request: Request) {
         `;
         const result = await sql.query(get_site_by_id_query, [id]);
 
-        return NextResponse.json(result.rows);
+        return NextResponse.json(
+        result.rows[0]
+        );
     } 
     catch(error:any) {
         return NextResponse.json(

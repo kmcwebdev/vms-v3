@@ -16,6 +16,7 @@ import Clients from "./clients";
 import Visitors from "./visitors";
 import { Building2, User2 } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useGetSiteDetails } from "@/hooks/sites/useGetSiteDetails";
 
 interface ISiteDetailsProps {
   siteId: string;
@@ -25,13 +26,19 @@ const SiteDetails = ({ siteId }: ISiteDetailsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  console.log(siteId);
+  const { data: siteData, isLoading: siteDataIsLoading } = useGetSiteDetails({
+    id: siteId,
+  });
+
+  console.log(siteData);
 
   return (
     <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="mb-2 flex items-center justify-between">
-          <p className="font-medium">Armstrong Corporate Center</p>
+          <p className="font-medium">
+            {!siteDataIsLoading ? siteData?.site_name : ""}
+          </p>
           <TooltipProvider>
             <Tooltip>
               <Badge

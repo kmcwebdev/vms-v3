@@ -1,6 +1,5 @@
 import React from "react";
 import SiteDetails from "@/components/admin/cms/area-sites/details/site-details";
-
 interface pageProps {
   params: {
     "site-id": string;
