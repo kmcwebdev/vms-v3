@@ -29,7 +29,7 @@ import {
 import type { Visitor } from "@/types/global/visitor";
 import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
 import { formatDate } from "@/lib/utils";
-import type { VisitorQueryParams } from "@/hooks/visitors/useGetVisitors";
+import type { VisitorQueryParams } from "@/types/visitor";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";

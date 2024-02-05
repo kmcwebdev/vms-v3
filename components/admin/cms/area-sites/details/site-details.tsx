@@ -85,7 +85,7 @@ const SiteDetails = ({ siteId }: ISiteDetailsProps) => {
               <Clients />
             </TabsContent>
             <TabsContent value="visitors">
-              <Visitors />
+              <Visitors siteId={siteId} />
             </TabsContent>
           </Tabs>
         </div>

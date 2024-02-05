@@ -7,8 +7,16 @@ type TotalVisitorOnAllSites = {
     total_visitors: string
 }[]
 
+type VisitorQueryParams = {
+    pageSize?: number,
+    pageNumber?: number,
+    filter?:string | undefined | null
+    site?:string | undefined | null
+}
+
 
 export type {
     TotalVisitorOnAllSites,
-    Visitor
+    Visitor,
+    VisitorQueryParams
 }

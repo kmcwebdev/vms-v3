@@ -73,7 +73,7 @@ interface ISiteDetailsProps {
 const Clients = () => {
   const columns = createColumnHelper<Client>();
 
-  const downloadCsv = useDownloadCSV();
+  // const downloadCsv = useDownloadCSV();
 
   const searchClients = useForm();
 
@@ -141,13 +141,14 @@ const Clients = () => {
   ];
 
   const onDownloadVisitorsHandler = async () => {
-    void downloadCsv({
-      siteSelected: "09f5b0c5-9035-4714-b19e-6dbaba0807ed",
-      dateSelected: {
-        from: searchClients.getValues("date").from,
-        to: searchClients.getValues("date").to,
-      },
-    });
+    console.log("dl");
+    // void downloadCsv({
+    //   siteSelected: "09f5b0c5-9035-4714-b19e-6dbaba0807ed",
+    //   dateSelected: {
+    //     from: searchClients.getValues("date").from,
+    //     to: searchClients.getValues("date").to,
+    //   },
+    // });
   };
 
   const onSearchClientHandler = () => {

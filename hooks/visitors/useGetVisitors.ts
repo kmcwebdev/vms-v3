@@ -1,13 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import type { Visitor } from "@/types/global/visitor";
 import axios from "axios";
+import type { VisitorQueryParams } from "@/types/visitor";
 
-export type VisitorQueryParams = {
-    pageSize?: number,
-    pageNumber?: number,
-    filter?:string | undefined | null
-    site?:string | undefined | null
-}
+
 
 const getVisitorsQuery = async ({pageNumber,
     pageSize, filter, site}:VisitorQueryParams) => {

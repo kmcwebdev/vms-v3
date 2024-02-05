@@ -40,21 +40,23 @@ export async function GET(req: Request) {
     count(*) over() as total_records 
     from visitors v 
     inner join sites s on v.site_id = s.site_id 
-    inner join reason_of_visits rov on v.reason_of_visit_id = rov.reason_of_visit_id`;
+    inner join reason_of_visits rov on v.reason_of_visit_id = rov.reason_of_visit_id
+ `;
     
     if (filter) {
-      get_visitors_query += ` where tsv @@ to_tsquery('${filter}')` ;
+      get_visitors_query += ` where tsv @@ to_tsquery('${filter.replace(' ', '&')}:*')` ;
     }
 
     if (site) {
-      const siteCondition = ` ${filter ? 'and' : 'where'} site_id = '${site}'`;
+      const siteCondition = ` ${filter ? 'and' : 'where'} s.site_id = '${site}'`;
       get_visitors_query += siteCondition;
     }
 
     get_visitors_query += `
-      order by visitor_id
-
+    order by visitor_id
     `;
+
+    console.log(get_visitors_query)
   
     const result = await paginateQuery(pageNumber, pageSize, get_visitors_query)
     
