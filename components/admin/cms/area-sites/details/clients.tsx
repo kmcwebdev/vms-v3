@@ -11,7 +11,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Trash2, PencilLine } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PencilLine, Trash2, Download } from "lucide-react";
+import { useForm } from "react-hook-form";
+import Form from "@/components/global/form";
+import { useDownloadCSV } from "@/hooks/useDownloadToCsv";
+import DateRangePicker from "@/components/global/date-range-picker";
 
 interface Client {
   id: number;
@@ -59,8 +64,18 @@ const clients: Client[] = [
   },
 ];
 
+interface ISiteDetailsProps {
+  site_id: string;
+  from: string;
+  to: string;
+}
+
 const Clients = () => {
   const columns = createColumnHelper<Client>();
+
+  const downloadCsv = useDownloadCSV();
+
+  const searchClients = useForm();
 
   const clientColumns = [
     columns.accessor("name", {
@@ -125,10 +140,53 @@ const Clients = () => {
     }),
   ];
 
+  const onDownloadVisitorsHandler = async () => {
+    void downloadCsv({
+      siteSelected: "09f5b0c5-9035-4714-b19e-6dbaba0807ed",
+      dateSelected: {
+        from: searchClients.getValues("date").from,
+        to: searchClients.getValues("date").to,
+      },
+    });
+  };
+
+  const onSearchClientHandler = () => {
+    console.log("test", searchClients.getValues());
+  };
+
   return (
     <Card className="mt-3 pt-6 shadow-none">
       <CardContent>
-        <DataTable data={clients} columns={clientColumns} hasSearch />
+        <Form
+          name="search-client"
+          useFormReturn={searchClients}
+          onSubmit={onSearchClientHandler}
+          className="mb-8 flex justify-between"
+        >
+          <Form.Input
+            name="search"
+            placeholder="Search client"
+            type="text"
+            className="w-1/4"
+          />
+          <div className="inline-flex gap-x-2">
+            <DateRangePicker
+              onChange={(e) => console.log("date", e)}
+              name="date"
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              className="space-x-2 text-emerald-600 hover:text-emerald-800"
+              onClick={onDownloadVisitorsHandler}
+            >
+              <p>Export</p>
+              <Download className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </Form>
+
+        <DataTable data={clients} columns={clientColumns} />
       </CardContent>
     </Card>
   );

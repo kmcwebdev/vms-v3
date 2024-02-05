@@ -36,17 +36,19 @@ export async function GET(req: Request) {
     let {pageNumber = 1, pageSize = 10, filter, site} = queryParams.data
     
     let get_visitors_query = 
-    `select *, COUNT(*) OVER() as total_records from visitors v`;
+    `select *, 
+    count(*) over() as total_records 
+    from visitors v 
+    inner join sites s on v.site_id = s.site_id 
+    inner join reason_of_visits rov on v.reason_of_visit_id = rov.reason_of_visit_id`;
     
     if (filter) {
       get_visitors_query += ` where tsv @@ to_tsquery('${filter}')` ;
-      // count_query += ` where tsv @@ to_tsquery('${filter}')`;
     }
 
     if (site) {
       const siteCondition = ` ${filter ? 'and' : 'where'} site_id = '${site}'`;
       get_visitors_query += siteCondition;
-      // count_query += siteCondition;
     }
 
     get_visitors_query += `

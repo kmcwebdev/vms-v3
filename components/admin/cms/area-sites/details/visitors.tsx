@@ -16,73 +16,89 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
+import type { Visitor } from "@/types/global/visitor";
+import { formatDate } from "@/lib/utils";
 
 const Visitors = () => {
-  // const columnHelper = createColumnHelper<IRecentVisitors>();
+  const { data: visitorsData, isLoading: visitorsDataIsLoading } =
+    useGetVisitors({
+      pageNumber: 1,
+      pageSize: 10,
+    });
 
-  // const visitorColumns = [
-  //   columnHelper.accessor("timeout", {
-  //     header: "Time ",
-  //     cell: (value) => (
-  //       <Badge className=" font-normal">{value.getValue()}</Badge>
-  //     ),
-  //   }),
-  //   columnHelper.accessor("name", {
-  //     header: "Name",
-  //     cell: (value) => <p>{value.getValue()}</p>,
-  //   }),
-  //   columnHelper.accessor("siteVisited", {
-  //     header: "Site",
-  //     cell: (value) => <p>{value.getValue()}</p>,
-  //   }),
-  //   columnHelper.accessor("companyToVisit", {
-  //     header: "Company visited",
-  //     cell: (value) => <p>{value.getValue()}</p>,
-  //   }),
-  //   columnHelper.accessor("reasonToVisit", {
-  //     header: "Reason visited",
-  //     cell: (value) => <p>{value.getValue()}</p>,
-  //   }),
-  //   columnHelper.display({
-  //     id: "action",
-  //     cell: () => (
-  //       <AlertDialog>
-  //         <AlertDialogTrigger asChild>
-  //           <div
-  //             className={cn(
-  //               "w-fit rounded-full bg-gray-100 p-2 text-sm font-medium shadow-sm transition ease-in-out hover:cursor-pointer hover:bg-primary hover:text-white ",
-  //             )}
-  //           >
-  //             <LogOut size={12} />
-  //           </div>
-  //         </AlertDialogTrigger>
-  //         <AlertDialogContent>
-  //           <AlertDialogHeader>
-  //             <AlertDialogTitle>
-  //               Are you sure you want to log-out this visitor?
-  //             </AlertDialogTitle>
-  //             <AlertDialogDescription>
-  //               <ul>
-  //                 <li>Name: John Doe</li>
-  //                 <li>Site: Armstrong corporate center</li>
-  //                 <li>Reason of visit: Meeting</li>
-  //               </ul>
-  //             </AlertDialogDescription>
-  //           </AlertDialogHeader>
-  //           <AlertDialogFooter>
-  //             <AlertDialogCancel>Cancel</AlertDialogCancel>
-  //             <AlertDialogAction>Continue</AlertDialogAction>
-  //           </AlertDialogFooter>
-  //         </AlertDialogContent>
-  //       </AlertDialog>
-  //     ),
-  //   }),
-  // ];
+  console.log(visitorsData);
+
+  const columnHelper = createColumnHelper<Visitor>();
+
+  const visitorColumns = [
+    columnHelper.accessor("created_at", {
+      header: "Time ",
+      cell: (value) => (
+        <Badge className=" font-normal">{formatDate(value.getValue())}</Badge>
+      ),
+    }),
+    columnHelper.accessor("first_name", {
+      header: "First name",
+      cell: (value) => <p>{value.getValue()}</p>,
+    }),
+    columnHelper.accessor("last_name", {
+      header: "Last name",
+      cell: (value) => <p>{value.getValue()}</p>,
+    }),
+    columnHelper.accessor("reason_name", {
+      header: "Reason of visit",
+      cell: (value) => <p>{value.getValue()}</p>,
+    }),
+
+    columnHelper.display({
+      id: "action",
+      cell: () => (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <div
+              className={cn(
+                "w-fit rounded-full bg-gray-100 p-2 text-sm font-medium shadow-sm transition ease-in-out hover:cursor-pointer hover:bg-primary hover:text-white ",
+              )}
+            >
+              <LogOut size={12} />
+            </div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure you want to log-out this visitor?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <ul>
+                  <li>Name: John Doe</li>
+                  <li>Site: Armstrong corporate center</li>
+                  <li>Reason of visit: Meeting</li>
+                </ul>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ),
+    }),
+  ];
 
   return (
     <Card className="mt-3 pt-6 shadow-none">
       <CardContent>
-        {/* <DataTable data={visitorData} columns={visitorColumns} hasSearch /> */}
+        {!visitorsDataIsLoading && visitorsData && visitorsData?.data ? (
+          <DataTable
+            data={visitorsData?.data}
+            columns={visitorColumns}
+            hasSearch
+          />
+        ) : (
+          <p>Test</p>
+        )}
       </CardContent>
     </Card>
   );

@@ -10,6 +10,7 @@ type Visitor  = {
   site_id: string;
   site_name: string;
   reason_of_visit_id: string;
+  reason_name: string,
   created_at: string;
 }
 
