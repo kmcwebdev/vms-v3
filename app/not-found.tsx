@@ -1,15 +1,10 @@
 import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import NotFoundUi from "@/components/admin/not-found-ui";
 
 const Component = () => {
   return (
     <div>
-      <Link href="/cms">
-        <Button className="rounded-md px-4 py-2 text-white">
-          Go Back Home
-        </Button>
-      </Link>
+      <NotFoundUi />
     </div>
   );
 };
