@@ -6,8 +6,15 @@ type Site = {
     address?: string;
     is_active: boolean;
     created_at: string;
+    visitor_count: string
 }
 
+type MostVisitedSite = {
+    site_name: string,
+    count: string
+}[]
+
 export type {
-    Site
+    Site,
+    MostVisitedSite
 }

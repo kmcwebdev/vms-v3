@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
-import type { Site } from "@/types/site";
+import type { Site } from "@/types/global/site";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";

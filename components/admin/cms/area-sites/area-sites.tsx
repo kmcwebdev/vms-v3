@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
-import { Site } from "@/types/site";
+import type { Site } from "@/types/global/site";
 import Image from "next/image";
 
 interface AreaSitesProps {

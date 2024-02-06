@@ -20,10 +20,17 @@ export async function GET(request: Request) {
           }
 
           const { id } = queryParams.data;
-
+          // SELECT * FROM sites WHERE site_id 
           const get_site_by_id_query = `
-          SELECT * FROM sites WHERE site_id = $1
+          SELECT count(s.site_id) as visitor_count, s.site_id, s.site_name, s.site_banner, s.site_images, s.address, s.created_at, s.is_active 
+          FROM sites s
+          inner join visitors v on s.site_id  = v.site_id 
+          WHERE s.site_id = $1
+          group by s.site_id 
         `;
+
+   
+
         const result = await sql.query(get_site_by_id_query, [id]);
 
         return NextResponse.json(

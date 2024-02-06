@@ -62,7 +62,10 @@ const SiteDetails = ({ siteId }: ISiteDetailsProps) => {
       </CardHeader>
       <CardContent>
         <div>
-          <ClientAndVisitorCount />
+          <ClientAndVisitorCount
+            visitorCount={siteData?.visitor_count ?? "0"}
+            clientCount={"0"}
+          />
 
           <Tabs defaultValue={searchParams.get("tab") || "clients"}>
             <TabsList>
@@ -103,7 +106,13 @@ const SiteDetails = ({ siteId }: ISiteDetailsProps) => {
 
 export default SiteDetails;
 
-const ClientAndVisitorCount = () => {
+const ClientAndVisitorCount = ({
+  visitorCount,
+  clientCount,
+}: {
+  visitorCount: string;
+  clientCount: string;
+}) => {
   return (
     <div className="float-right">
       <TooltipProvider>
@@ -112,7 +121,7 @@ const ClientAndVisitorCount = () => {
             <TooltipTrigger asChild>
               <li className="inline-flex items-start gap-x-1 hover:cursor-pointer">
                 <Building2 className="h-4 w-4 text-gray-500" />
-                <p>5</p>
+                <p>{clientCount}</p>
               </li>
             </TooltipTrigger>
             <TooltipContent className="border bg-white text-neutral-800">
@@ -123,7 +132,7 @@ const ClientAndVisitorCount = () => {
             <TooltipTrigger asChild>
               <li className="inline-flex items-start gap-x-1 hover:cursor-pointer">
                 <User2 className="h-4 w-4 text-gray-500 " />
-                <p>47</p>
+                <p>{visitorCount}</p>
               </li>
             </TooltipTrigger>
             <TooltipContent className="border bg-white text-neutral-800">
