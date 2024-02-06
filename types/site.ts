@@ -5,6 +5,7 @@ type Site = {
     site_images: string | null,
     address: string,
     created_at: string,
+    visitor_count: number
 }
 
 type MostVisitedSite = {

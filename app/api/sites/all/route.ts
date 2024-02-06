@@ -22,11 +22,18 @@ export async function GET(request: Request) {
     const { filter } = queryParams.data;
 
     const all_sites_query = `
-        select site_id, site_name, site_banner, site_images, address 
-        from sites 
-        ${filter ? `where site_name ilike '%${filter}%'` : ``}
-        order by site_name
+    select count(s.site_id) as visitor_count, s.site_id , s.site_name, s.site_banner, s.site_images, address  from visitors v 
+    inner join sites s on s.site_id = v.site_id 
+    ${filter ? `where site_name ilike '%${filter}%'` : ``}
+    group by s.site_id order by s.site_name 
+
     `;
+    // select site_id, site_name, site_banner, site_images, address 
+    // from sites 
+    // ${filter ? `where site_name ilike '%${filter}%'` : ``}
+    // order by site_name
+
+
 
     const result = await sql.query(all_sites_query);
 

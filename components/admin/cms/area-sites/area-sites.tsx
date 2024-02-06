@@ -87,7 +87,7 @@ const AreaSites: React.FC<AreaSitesProps> = ({ sites }) => {
                     <h2>{e.site_name}</h2>
                     <div className="flex items-center gap-x-2">
                       <Users size={14} className="text-muted-foreground" />
-                      <p className="text-primary">63</p>
+                      <p className="text-muted-foreground">{e.visitor_count}</p>
                     </div>
                   </div>
                 </CardContent>
