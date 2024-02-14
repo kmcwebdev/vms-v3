@@ -15,17 +15,30 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import Clients from "./clients";
 import Visitors from "./visitors";
 import { Building2, User2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useGetSiteDetails } from "@/hooks/sites/useGetSiteDetails";
 
-const SiteDetails = () => {
+interface ISiteDetailsProps {
+  siteId: string;
+}
+
+const SiteDetails = ({ siteId }: ISiteDetailsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const { data: siteData, isLoading: siteDataIsLoading } = useGetSiteDetails({
+    id: siteId,
+  });
+
+  console.log(siteData);
 
   return (
     <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="mb-2 flex items-center justify-between">
-          <p className="font-medium">Armstrong Corporate Center</p>
+          <p className="font-medium">
+            {!siteDataIsLoading ? siteData?.site_name : ""}
+          </p>
           <TooltipProvider>
             <Tooltip>
               <Badge
@@ -49,7 +62,10 @@ const SiteDetails = () => {
       </CardHeader>
       <CardContent>
         <div>
-          <ClientAndVisitorCount />
+          <ClientAndVisitorCount
+            visitorCount={siteData?.visitor_count ?? "0"}
+            clientCount={"0"}
+          />
 
           <Tabs defaultValue={searchParams.get("tab") || "clients"}>
             <TabsList>
@@ -79,7 +95,7 @@ const SiteDetails = () => {
               <Clients />
             </TabsContent>
             <TabsContent value="visitors">
-              <Visitors />
+              <Visitors siteId={siteId} />
             </TabsContent>
           </Tabs>
         </div>
@@ -90,7 +106,13 @@ const SiteDetails = () => {
 
 export default SiteDetails;
 
-const ClientAndVisitorCount = () => {
+const ClientAndVisitorCount = ({
+  visitorCount,
+  clientCount,
+}: {
+  visitorCount: string;
+  clientCount: string;
+}) => {
   return (
     <div className="float-right">
       <TooltipProvider>
@@ -99,7 +121,7 @@ const ClientAndVisitorCount = () => {
             <TooltipTrigger asChild>
               <li className="inline-flex items-start gap-x-1 hover:cursor-pointer">
                 <Building2 className="h-4 w-4 text-gray-500" />
-                <p>5</p>
+                <p>{clientCount}</p>
               </li>
             </TooltipTrigger>
             <TooltipContent className="border bg-white text-neutral-800">
@@ -110,7 +132,7 @@ const ClientAndVisitorCount = () => {
             <TooltipTrigger asChild>
               <li className="inline-flex items-start gap-x-1 hover:cursor-pointer">
                 <User2 className="h-4 w-4 text-gray-500 " />
-                <p>47</p>
+                <p>{visitorCount}</p>
               </li>
             </TooltipTrigger>
             <TooltipContent className="border bg-white text-neutral-800">

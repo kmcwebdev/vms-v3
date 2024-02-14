@@ -8,7 +8,8 @@ import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
 import { createSearchParams } from "@/lib/utils";
-import { Site } from "@/types/site";
+import type { Site } from "@/types/global/site";
+import Image from "next/image";
 
 interface AreaSitesProps {
   sites: Site[];
@@ -62,18 +63,31 @@ const AreaSites: React.FC<AreaSitesProps> = ({ sites }) => {
             allSites?.map((e) => (
               <Card
                 key={e.site_id}
-                onClick={() => router.push(`/cms/area-sites/${e.site_name}`)}
+                onClick={() => router.push(`/cms/area-sites/${e.site_id}`)}
                 className="group shadow-none transition ease-in-out hover:cursor-pointer hover:border-orange-400"
               >
                 <CardHeader className="p-3">
-                  <div className="h-64 w-full rounded-md bg-gray-100" />
+                  {e.site_banner ? (
+                    <div className="relative h-60 w-full rounded-md">
+                      <Image
+                        src={e.site_banner || "/kmc-logo-black.png"}
+                        alt="Site image"
+                        className="bottom-0 rounded-md object-cover"
+                        fill
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-64 w-full items-center justify-center rounded-md bg-gray-100">
+                      <p className=" font-bold text-white">No image</p>
+                    </div>
+                  )}
                 </CardHeader>
                 <CardContent className="px-3 pb-3 pt-0">
                   <div className="flex justify-between text-sm">
                     <h2>{e.site_name}</h2>
                     <div className="flex items-center gap-x-2">
                       <Users size={14} className="text-muted-foreground" />
-                      <p className="text-primary">63</p>
+                      <p className="text-muted-foreground">{e.visitor_count}</p>
                     </div>
                   </div>
                 </CardContent>

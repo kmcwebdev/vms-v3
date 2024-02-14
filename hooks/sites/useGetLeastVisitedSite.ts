@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import type {MostVisitedSite} from "@/types/site"
+import type { MostVisitedSite } from "@/types/global/site"
 
 type LeastVisitedSite = MostVisitedSite
 

@@ -8,14 +8,21 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useFormContext } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
-const DateRangePicker = ({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) => {
+interface IDateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+  name: string;
+}
+
+const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2023, 0, 20),
-    to: addDays(new Date(2023, 0, 20), 20),
+    from: new Date(2024, 0, 1),
+    to: addDays(new Date(2024, 0, 30), 30),
   });
+
+  const { control } = useFormContext();
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -45,13 +52,22 @@ const DateRangePicker = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="end">
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
-            numberOfMonths={2}
+          <Controller
+            control={control}
+            name={name}
+            render={({ field }) => (
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={(e) => {
+                  setDate(e);
+                  field.onChange(e);
+                }}
+                numberOfMonths={2}
+              />
+            )}
           />
         </PopoverContent>
       </Popover>

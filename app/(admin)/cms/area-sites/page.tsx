@@ -1,6 +1,6 @@
 import React from "react";
 import AreaSites from "@/components/admin/cms/area-sites/area-sites";
-import { Site } from "@/types/site";
+import type { Site } from "@/types/global/site";
 import { env } from "@/lib/env.mjs";
 
 const page = async () => {

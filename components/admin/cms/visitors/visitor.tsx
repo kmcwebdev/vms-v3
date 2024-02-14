@@ -2,7 +2,13 @@
 
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
@@ -20,51 +26,112 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { RecentVisitors } from "@/types/global/visitor";
-import { useGetRecentVisitors } from "@/hooks/visitors/useGetRecentVisitors";
-
-const sites = [
-  {
-    value: "armstrong-corporate-center",
-    label: "Armstrong Corporate Center",
-  },
-  {
-    value: "uptown-place-tower-2",
-    label: "UpTown Place Tower 2",
-  },
-  {
-    value: "v-corporate-center",
-    label: "V Corporate Center",
-  },
-  {
-    value: "frabelle-corporate-plaza",
-    label: "Frabelle Corporate Plaza",
-  },
-  {
-    value: "picadilly-inc",
-    label: "Picadilly Inc.",
-  },
-  {
-    value: "four-neo",
-    label: "Four Neo",
-  },
-  {
-    value: "arthaland-century-pacific-tower",
-    label: "Arthaland Century Pacific Tower",
-  },
-];
+import type { Visitor } from "@/types/global/visitor";
+import { useGetVisitors } from "@/hooks/visitors/useGetVisitors";
+import { formatDate } from "@/lib/utils";
+import type { VisitorQueryParams } from "@/types/visitor";
+import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useGetAllSites } from "@/hooks/sites/useGetAllSites";
+import { createSearchParams } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Visitors = () => {
-  const { data: recentVisitorsData, isLoading: recentVisitorsDataIsLoading } =
-    useGetRecentVisitors();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const visitorFiltersForm = useForm();
 
-  const router = useRouter();
-  const pathname = usePathname();
+  const { data: visitors, isLoading: visitorsDataIsLoading } = useGetVisitors({
+    pageNumber:
+      parseInt(
+        (searchParams.has("pageNumber") &&
+          searchParams.get("pageNumber")?.toString()) ||
+          "1",
+      ) || 1,
+    pageSize: 10,
+    filter: searchParams.get("filter")?.toString(),
+    site: searchParams.get("site")?.toString() || "",
+  });
 
-  const handleFilterSubmit = () => {
-    console.log("submit", visitorFiltersForm.getValues());
+  const { data: allSites, isLoading: allSitesIsLoading } = useGetAllSites(
+    {
+      filter: undefined,
+    },
+    [],
+  );
+
+  const sitesList =
+    !allSitesIsLoading && allSites
+      ? allSites.map((item) => ({
+          label: item.site_name,
+          value: item.site_id,
+        }))
+      : [];
+
+  const handleFilterSubmit = (data: VisitorQueryParams) => {
+    const newSearchParams = createSearchParams({
+      filter: data.filter,
+      pageNumber: searchParams.get("pageNumber")?.toString(),
+      site: data.site,
+    });
+
+    if (newSearchParams) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
+  };
+
+  const handleNextPage = () => {
+    const currentPageNumber = searchParams.has("pageNumber")
+      ? parseInt(searchParams.get("pageNumber") as string)
+      : 1;
+    const nextPageNumber = currentPageNumber + 1;
+
+    const totalPages = visitors?.totalPage;
+
+    const newSearchParams = createSearchParams({
+      pageNumber: nextPageNumber,
+      filter: searchParams.get("filter")?.toString(),
+    });
+
+    if (newSearchParams) {
+      if (currentPageNumber !== totalPages) {
+        router.replace(
+          `${window.location.pathname}?${newSearchParams.toString()}`,
+          {
+            scroll: false,
+          },
+        );
+      }
+    }
+  };
+
+  const handlePreviousPage = () => {
+    const currentPageNumber = searchParams.has("pageNumber")
+      ? parseInt(searchParams.get("pageNumber") as string)
+      : 1;
+    const previousPageNumber =
+      currentPageNumber > 1 ? currentPageNumber - 1 : 1;
+
+    const newSearchParams = createSearchParams({
+      pageNumber: previousPageNumber,
+      filter: searchParams.get("filter")?.toString(),
+    });
+
+    if (newSearchParams) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
   };
 
   return (
@@ -79,41 +146,61 @@ const Visitors = () => {
             className="flex gap-x-2"
           >
             <Form.Input
-              name="search"
+              name="filter"
               type="text"
               placeholder="Search visitor"
             />
             <Form.Combobox
-              name="sites"
-              data={sites}
+              name="site"
+              data={sitesList}
               placeholder="Site"
-              onSelect={(e) => router.push(`${pathname}?site=${e}`)}
-            />
-            <Form.Combobox
-              name="status"
-              data={[
-                {
-                  value: "logged-in",
-                  label: "Logged in",
-                },
-                {
-                  value: "logged-out",
-                  label: "Logged out",
-                },
-              ]}
-              placeholder="Status"
-              onSelect={(e) => router.push(`${pathname}?status=${e}`)}
+              onSelect={(e: string) => {
+                const newSearchParams = createSearchParams({
+                  site: e,
+                  filter: searchParams.get("filter")?.toString(),
+                });
+                if (newSearchParams) {
+                  router.replace(
+                    `${window.location.pathname}?${newSearchParams.toString()}`,
+                    {
+                      scroll: false,
+                    },
+                  );
+                }
+              }}
             />
           </Form>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {!recentVisitorsDataIsLoading &&
-          recentVisitorsData &&
-          recentVisitorsData.map((visitor) => (
+        {visitorsDataIsLoading || !visitors?.data ? (
+          <>
+            <SkeletonLoaderForVisitors />
+            <SkeletonLoaderForVisitors />
+            <SkeletonLoaderForVisitors />
+          </>
+        ) : (
+          !visitorsDataIsLoading &&
+          visitors?.data &&
+          visitors?.data?.map((visitor) => (
             <VisitorCard key={visitor.visitor_id} {...visitor} />
-          ))}
+          ))
+        )}
       </CardContent>
+      <CardFooter className="flex justify-between ">
+        <p className="text-xs text-neutral-500">
+          Page {searchParams.get("pageNumber")?.toString() || "1"} of{" "}
+          {visitors?.totalPage.toString()}
+        </p>
+        <div className="space-x-2">
+          <Button variant="outline" onClick={handlePreviousPage}>
+            Back
+          </Button>
+          <Button variant="outline" onClick={handleNextPage}>
+            Next
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
@@ -127,7 +214,8 @@ const VisitorCard = ({
   last_name,
   site_name,
   visitor_id,
-}: RecentVisitors) => {
+  email,
+}: Visitor) => {
   return (
     <Card className="shadow-none">
       <CardHeader>
@@ -136,7 +224,7 @@ const VisitorCard = ({
           // variant={isLoggedOut ? "secondary" : "default"}
         >
           {/* {isLoggedOut ? "Logged out" : `${dateVisited} ${timeVisited}`} */}
-          {created_at}
+          {formatDate(created_at)}
         </Badge>
       </CardHeader>
       <CardContent>
@@ -151,7 +239,7 @@ const VisitorCard = ({
                 {`${first_name} ${last_name}`}
               </p>
               <p className="text-sm text-muted-foreground group-hover:underline">
-                isabella.nguyen@email.com
+                {email}
               </p>
             </div>
           </div>
@@ -191,5 +279,20 @@ const VisitorCard = ({
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+const SkeletonLoaderForVisitors = () => {
+  return (
+    <Skeleton className="flex h-36 w-full flex-col justify-between rounded-xl border border-neutral-100 bg-transparent p-6">
+      <div className="h-5 w-44 rounded-md bg-neutral-100" />
+      <div className="flex items-center gap-x-2">
+        <div className="h-11 w-11 rounded-full bg-neutral-100" />
+        <div className="space-y-3">
+          <div className="h-5 w-44 rounded-md bg-neutral-100" />
+          <div className="h-5 w-56 rounded-md bg-neutral-100" />
+        </div>
+      </div>
+    </Skeleton>
   );
 };
