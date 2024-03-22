@@ -73,8 +73,6 @@ interface ISiteDetailsProps {
 const Clients = () => {
   const columns = createColumnHelper<Client>();
 
-  // const downloadCsv = useDownloadCSV();
-
   const searchClients = useForm();
 
   const clientColumns = [
@@ -140,17 +138,6 @@ const Clients = () => {
     }),
   ];
 
-  const onDownloadVisitorsHandler = async () => {
-    console.log("dl");
-    // void downloadCsv({
-    //   siteSelected: "09f5b0c5-9035-4714-b19e-6dbaba0807ed",
-    //   dateSelected: {
-    //     from: searchClients.getValues("date").from,
-    //     to: searchClients.getValues("date").to,
-    //   },
-    // });
-  };
-
   const onSearchClientHandler = () => {
     console.log("test", searchClients.getValues());
   };
@@ -170,21 +157,6 @@ const Clients = () => {
             type="text"
             className="w-1/4"
           />
-          <div className="inline-flex gap-x-2">
-            <DateRangePicker
-              onChange={(e) => console.log("date", e)}
-              name="date"
-            />
-            <Button
-              type="button"
-              variant="secondary"
-              className="space-x-2 text-emerald-600 hover:text-emerald-800"
-              onClick={onDownloadVisitorsHandler}
-            >
-              <p>Export</p>
-              <Download className="h-3.5 w-3.5" />
-            </Button>
-          </div>
         </Form>
 
         <DataTable data={clients} columns={clientColumns} />

@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Reports from "./cms/overview/reports";
 import Notifications from "./cms/overview/notifications";
-import { Site } from "@/types/site";
+import type { Site } from "@/types/global/site";
 
 interface IAdminProps {
   site: Site[];

@@ -169,7 +169,7 @@ const Reports = ({ site }: IReportProps) => {
                 <DialogHeader>
                   <DialogTitle>Export visitors data</DialogTitle>
                   <DialogDescription>
-                    Are you sure you want to export all visitors data?
+                    Are you sure you want to export visitors data?
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>

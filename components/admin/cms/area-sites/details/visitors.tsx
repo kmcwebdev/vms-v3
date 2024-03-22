@@ -31,7 +31,7 @@ import { useRouter } from "next/navigation";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import DateRangePicker from "@/components/global/date-range-picker";
-import { useDownloadCSV } from "@/hooks/useDownloadToCsv";
+import axios from "axios";
 import type { VisitorQueryParams } from "@/types/visitor";
 
 const Visitors = ({ siteId }: { siteId: string }) => {
@@ -41,7 +41,32 @@ const Visitors = ({ siteId }: { siteId: string }) => {
 
   const searchClients = useForm();
 
-  // const downloadCsv = useDownloadCSV();
+  const dateSelected = searchClients.watch("date");
+
+  const downloadCSV = async () => {
+    try {
+      const response = await axios.get("/api/visitors/export-csv", {
+        responseType: "blob",
+        params: {
+          site_id: siteId,
+          from: dateSelected.from,
+          to: dateSelected.to,
+        },
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      const contentDisposition = response.headers["content-disposition"];
+
+      link.setAttribute("download", contentDisposition);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
 
   const {
     data: visitorsData,
@@ -182,14 +207,7 @@ const Visitors = ({ siteId }: { siteId: string }) => {
   };
 
   const onDownloadVisitorsHandler = async () => {
-    // void downloadCsv({
-    //   siteSelected: "09f5b0c5-9035-4714-b19e-6dbaba0807ed",
-    //   dateSelected: {
-    //     from: searchClients.getValues("date").from,
-    //     to: searchClients.getValues("date").to,
-    //   },
-    // });
-    console.log("dl");
+    downloadCSV();
   };
 
   return (
@@ -203,15 +221,12 @@ const Visitors = ({ siteId }: { siteId: string }) => {
         >
           <Form.Input
             name="filter"
-            placeholder="Search client"
+            placeholder="Search visitor"
             type="text"
             className="w-1/4"
           />
           <div className="inline-flex gap-x-2">
-            <DateRangePicker
-              onChange={(e) => console.log("date", e)}
-              name="date"
-            />
+            <DateRangePicker name="date" />
             <Button
               type="button"
               variant="secondary"

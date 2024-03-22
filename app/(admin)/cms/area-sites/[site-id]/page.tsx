@@ -7,8 +7,6 @@ interface pageProps {
 }
 
 const page: React.FC<pageProps> = (props) => {
-  console.log(props.params);
-
   return <SiteDetails siteId={props.params["site-id"]} />;
 };
 
