@@ -39,7 +39,7 @@ const WelcomePage = () => {
 
       <CardContent>
         <div className="mt-16">
-          <Lottie animationData={animation} />
+          <Lottie height={50} width={50} animationData={animation} />
         </div>
       </CardContent>
       <CardFooter>

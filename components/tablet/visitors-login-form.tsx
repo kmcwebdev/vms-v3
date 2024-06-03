@@ -63,7 +63,7 @@ const VisitorsLoginForm = () => {
     if (currentStepIndex > 0) {
       back();
     } else {
-      // void router.push()
+      router.push("/tablet");
     }
   };
 
@@ -88,15 +88,19 @@ const VisitorsLoginForm = () => {
       <nav className="mb-6 ">
         <div className="flex items-center justify-between">
           <Image src="/kmc-logo.ico" width={30} height={30} alt="Logo" />
-          <TimeAndDateDisplay />
         </div>
       </nav>
 
-      <div className="mb-3">
-        <h1 className="text-sm text-primary">Armstrong Corporate Center</h1>
-        <h2 className="text-3xl font-bold leading-none text-[#101622]">
-          Visitors Login
-        </h2>
+      <div className="mb-3 flex flex-row justify-between">
+        <div>
+          <h1 className="text-sm text-primary">Armstrong Corporate Center</h1>
+          <h2 className="text-3xl font-bold leading-none text-[#101622]">
+            Visitors Login
+          </h2>
+        </div>
+        <div>
+          <TimeAndDateDisplay />
+        </div>
       </div>
 
       <Separator className="mb-6" />
@@ -134,8 +138,8 @@ const VisitorsLoginForm = () => {
               {currentStepIndex === 1 && !hasImageTaken
                 ? "Take photo"
                 : isLastStep
-                ? "Submit"
-                : "Next"}
+                  ? "Submit"
+                  : "Next"}
             </Button>
           </CardFooter>
         </Card>

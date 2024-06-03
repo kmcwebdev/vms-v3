@@ -32,7 +32,7 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[260px] justify-start text-left font-normal",
+              "justify-start text-left font-light border-gray-300",
               !date && "text-muted-foreground",
             )}
           >

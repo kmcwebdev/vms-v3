@@ -43,11 +43,11 @@ const FillUpForm = () => {
             htmlFor="lastName"
             className=" text-sm font-medium text-neutral-700"
           >
-            Last name
+            Last Name
           </label>
           <Form.Input
             name="fillUpForm.lastName"
-            placeholder="Type your last name here"
+            placeholder="Your Last Name"
             type="text"
           />
         </div>
@@ -57,11 +57,11 @@ const FillUpForm = () => {
             htmlFor="firstName"
             className=" text-sm font-medium text-neutral-700"
           >
-            First name
+            First Name
           </label>
           <Form.Input
             name="fillUpForm.firstName"
-            placeholder="Type your last name here"
+            placeholder="Your First Name"
             type="text"
           />
         </div>
@@ -75,7 +75,7 @@ const FillUpForm = () => {
           </label>
           <Form.Input
             name="fillUpForm.email"
-            placeholder="Type your last name here"
+            placeholder="Your Email Address"
             type="text"
           />
         </div>
@@ -85,11 +85,11 @@ const FillUpForm = () => {
             htmlFor="email"
             className=" text-sm font-medium text-neutral-700"
           >
-            Company to visit
+            Company to Visit
           </label>
           <Form.Input
             name="fillUpForm.companyToVisit"
-            placeholder="Type the company you want to visit"
+            placeholder="Name of the Company you are visiting"
             type="text"
           />
         </div>
@@ -111,11 +111,11 @@ const FillUpForm = () => {
             htmlFor="email"
             className=" text-sm font-medium text-neutral-700"
           >
-            Person to visit
+            Person to Visit
           </label>
           <Form.Input
             name="fillUpForm.personToVisit"
-            placeholder="Type the person you want to visit"
+            placeholder="Name of the Person you are visiting"
             type="text"
           />
         </div>
@@ -134,8 +134,8 @@ const FillUpForm = () => {
 
         <Form.Select
           name="fillUpForm.reasonToVisit"
-          label="Reason to visit"
-          placeholder="Select a reason you're visiting the site"
+          label="Reason to Visit"
+          placeholder="Select a Reason"
           data={reasonToVisit}
         />
       </CardContent>
