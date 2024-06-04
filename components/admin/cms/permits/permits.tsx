@@ -11,57 +11,76 @@ import { useState } from "react";
 import GatePassForm from "./forms/gate-pass";
 import WorkPermitForm from "./forms/work-permit";
 import TempParkingForm from "./forms/temp-parking";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 const Permits = () => {
-  const [activeForm, setActiveForm] = useState("");
+  const router = useRouter();
 
-  const renderForm = () => {
-    switch (activeForm) {
-      case "Gate Pass":
-        return <GatePassForm />;
-      case "Work Permit":
-        return <WorkPermitForm />;
-      case "Temp Parking":
-        return <TempParkingForm />;
-      default:
-        return null;
-    }
-  };
+  const searchParams = useSearchParams();
+
+  let title;
+  const tab = searchParams.get("tab");
+
+  switch (tab) {
+    case "Gate Pass":
+      title = "Gate Pass";
+      break;
+    case "Work Permit":
+      title = "Work Permit";
+      break;
+    case "Temp Parking":
+      title = "Temp Parking";
+      break;
+    default:
+      title = "KMC Permits";
+      break;
+  }
+
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="flex w-full justify-between text-xl font-bold">
-          KMC Permits
-        </CardTitle>
+        <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="group flex items-center hover:cursor-pointer">
-            <div className="ml-4 space-y-1">
-              <div className="flex justify-center gap-10">
-                <button
-                  className="rounded-3xl bg-yellow-500 p-6 text-sm font-bold text-white hover:bg-orange-400"
-                  onClick={() => setActiveForm("Gate Pass")}
-                >
-                  Gate Pass
-                </button>
-                <button
-                  className="rounded-3xl bg-yellow-500 p-6 text-sm font-bold text-white hover:bg-orange-400"
-                  onClick={() => setActiveForm("Work Permit")}
-                >
-                  Work Permit
-                </button>
-                <button
-                  className="rounded-3xl bg-yellow-500 p-6 text-sm font-bold text-white hover:bg-orange-400"
-                  onClick={() => setActiveForm("Temp Parking")}
-                >
-                  Temp Parking
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mt-4">{renderForm()}</div>
+      <CardContent>
+        <Tabs defaultValue={searchParams.get("tab") || "default"}>
+          <TabsList>
+            <TabsTrigger
+              value="gate-pass"
+              onClick={() =>
+                router.push(`${window.location.pathname}?tab=gate-pass`)
+              }
+            >
+              Gate Pass
+            </TabsTrigger>
+            <TabsTrigger
+              value="work-permit"
+              onClick={() =>
+                router.push(`${window.location.pathname}?tab=work-permit`)
+              }
+            >
+              Work Permit
+            </TabsTrigger>
+            <TabsTrigger
+              value="temp-parking"
+              onClick={() =>
+                router.push(`${window.location.pathname}?tab=temp-parking`)
+              }
+            >
+              Temp Parking
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="gate-pass">
+            <GatePassForm />
+          </TabsContent>
+          <TabsContent value="work-permit">
+            <WorkPermitForm />
+          </TabsContent>
+          <TabsContent value="temp-parking">
+            <TempParkingForm />
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
