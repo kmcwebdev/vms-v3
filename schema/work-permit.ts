@@ -1,16 +1,16 @@
 import z from "zod";
 
 const itemSchema = z.object({
-  description: z.string(),
-  qty: z.number(),
-  unit: z.string(),
-  remark: z.string(),
+  description: z.string().optional(),
+  qty: z.number().optional(),
+  unit: z.string().optional(),
+  remark: z.string().optional(),
 });
 
 const workerSchema = z.object({
-  name: z.string(),
-  company: z.string(),
-  description: z.string(),
+  name: z.string().optional(),
+  company: z.string().optional(),
+  description: z.string().optional(),
 });
 
 const fillUpFormSchema = z.object({
@@ -41,23 +41,24 @@ const fillUpFormSchema = z.object({
   workType: z.array(
     z.string().min(1, { message: "This field has to be filled." }),
   ),
-  otherWorkType: z.string().min(1, { message: "This field has to be filled." }),
+  otherWorkType: z.string().min(1, { message: "This field has to be filled." }).optional(),
   workRequirements: z.array(
     z.string().min(1, { message: "This field has to be filled." }),
   ),
   otherWorkRequirements: z
     .string()
-    .min(1, { message: "This field has to be filled." }),
+    .min(1, { message: "This field has to be filled." }).optional(),
   emailsToNotify: z.array(
     z
       .string()
       .min(1, { message: "This field has to be filled." })
-      .email("This is not a valid email."),
-  ),
-  scope: z.string().min(1, { message: "This field has to be filled." }),
-  workers: z.array(workerSchema),
-  items: z.array(itemSchema),
-  files: z.instanceof(File)
+      .email("This is not a valid email.")
+      .optional()
+  ).optional(),
+  scope: z.string().min(1, { message: "This field has to be filled." }).optional(),
+  workers: z.array(workerSchema).optional(),
+  items: z.array(itemSchema).optional(),
+  files: z.array(z.instanceof(File)).optional()
 });
 
 export const workPermitSchema = z.object({

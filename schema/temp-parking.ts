@@ -27,5 +27,5 @@ const fillUpFormSchema = z.object({
     .string()
     .min(1, { message: "This field has to be filled." })
     .email("This is not a valid email."),
-  files: z.instanceof(File),
+    files: z.array(z.instanceof(File)).optional()
 });

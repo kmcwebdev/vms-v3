@@ -1,10 +1,10 @@
 import z from "zod";
 
 const itemSchema = z.object({
-  description: z.string(),
-  qty: z.number(),
-  unit: z.string(),
-  remark: z.string(),
+  description: z.string().optional(),
+  qty: z.number().optional(),
+  unit: z.string().optional(),
+  remark: z.string().optional(),
 });
 
 const fillUpFormSchema = z.object({
@@ -30,12 +30,16 @@ const fillUpFormSchema = z.object({
     .string()
     .time()
     .min(1, { message: "This field has to be filled." }),
-  reason: z.string(),
-  emailsToNotify: z.array(z.string()
-    .min(1, { message: "This field has to be filled." })
-    .email("This is not a valid email.")),
-  items: z.array(itemSchema),
-  files: z.instanceof(File)
+  reason: z.string().optional(),
+  emailsToNotify: z.array(
+    z
+      .string()
+      .min(1, { message: "This field has to be filled." })
+      .email("This is not a valid email.")
+      .optional()
+  ).optional(),
+  items: z.array(itemSchema).optional(),
+  files: z.array(z.instanceof(File)).optional(),
 });
 
 export const gatePassSchema = z.object({
