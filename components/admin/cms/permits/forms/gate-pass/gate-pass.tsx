@@ -1,9 +1,11 @@
+"use client";
+
 import Form from "../../../../../global/form";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { Visitor } from "@/types/visitor";
+import { GatePass } from "@/types/gate-pass";
 import {
   Accordion,
   AccordionHeader,
@@ -18,11 +20,14 @@ const GatePassForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
-  const gatePassForm = useForm<Visitor>({});
+  const gatePassForm = useForm<GatePass>({});
+
   const router = useRouter();
 
   const onFormSubmit = (data: any) => {
-    router.push("/cms");
+    console.log("submitted", gatePassForm.getValues());
+    gatePassForm.reset();
+    router.push("/cms/permits?tab=default/");
   };
 
   return (
@@ -95,8 +100,9 @@ const GatePassForm = () => {
 
         {/* Attach File and Submit Buttons */}
         <div className="mt-5 flex flex-row justify-between">
-          <FileUpload/>
+          <FileUpload />
           <Button
+            onSubmit={onFormSubmit}
             type="submit"
             className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
           >

@@ -14,6 +14,7 @@ export default function Part1() {
   const [selectedFloor, setSelectedFloor] = React.useState("");
   const [availableFloors, setAvailableFloors] = React.useState<number[]>([]);
   const [selectedBuilding, setSelectedBuilding] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState("");
 
   React.useEffect(() => {
     const building = buildings.find((b) => b.name === selectedBuilding);
@@ -78,6 +79,31 @@ export default function Part1() {
       <div className="mb-4 flex flex-row justify-evenly gap-5 p-2">
         <div className="w-full">
           <label className="block text-sm font-medium text-gray-700">
+            Service Category
+          </label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground hover:bg-transparent">
+                {selectedCategory || "Select a Category"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              sideOffset={5}
+              className="max-h-60 w-40 overflow-y-auto text-sm"
+            >
+              {["Delivery", "Pull-Out", "Transfer Between Floors"].map((type) => (
+                <DropdownMenuItem
+                  key={type}
+                  onSelect={() => setSelectedCategory(type)}
+                >
+                  {type}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="w-full">
+          <label className="block text-sm font-medium text-gray-700">
             Site
           </label>
           <DropdownMenu>
@@ -126,17 +152,6 @@ export default function Part1() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-        <div className="w-full">
-          <label className="block text-sm font-medium text-gray-700">
-            Driver Name
-          </label>
-          <Input
-            type="text"
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-            required
-            placeholder="Input Driver's Name"
-          />
         </div>
       </div>
     </>

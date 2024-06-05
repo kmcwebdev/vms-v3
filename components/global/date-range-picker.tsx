@@ -40,8 +40,8 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "LLL dd")} -{" "}
+                  {format(date.to, "LLL dd")}
                 </>
               ) : (
                 format(date.from, "LLL dd, y")

@@ -1,10 +1,13 @@
 import React from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Permits from "@/components/admin/cms/permits/permits";
+import UserManagement from "@/components/admin/cms/user-management/page";
 
 const page = () => {
   return (
-    <Permits/>
+    <>
+      <Permits />
+      <UserManagement/>
+    </>
   );
 };
 
