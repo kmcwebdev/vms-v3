@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Site } from "@/types/site";
+import { Site } from "@/types/global/site";
 
 type GetAllSitesQuery = {
   filter?: string;

@@ -23,8 +23,8 @@ const TimeDateDisplay: React.FC = () => {
   const formattedTime = dateTime.toLocaleTimeString();
 
   return (
-    <div className="text-xs">
-      <p className="text-end">{formattedTime}</p>
+    <div className="text-lg flex flex-col text-end">
+      <p>{formattedTime}</p>
       <p>{formattedDate}</p>
     </div>
   );
