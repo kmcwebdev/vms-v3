@@ -13,6 +13,8 @@ const workerSchema = z.object({
   description: z.string().optional(),
 });
 
+const timeRegex = /^([01]\d|2[0-3]):?([0-5]\d)$/;
+
 const fillUpFormSchema = z.object({
   type: z.string(),
   email: z
@@ -29,15 +31,13 @@ const fillUpFormSchema = z.object({
     .string()
     .min(1, { message: "This field has to be filled." }),
   number: z.number(),
-  date: z.string().date().min(1, { message: "This field has to be filled." }),
-  startTime: z
-    .string()
-    .time()
-    .min(1, { message: "This field has to be filled." }),
-  endTime: z
-    .string()
-    .time()
-    .min(1, { message: "This field has to be filled." }),
+  date: z.date(),
+  startTime: z.string().refine(val => timeRegex.test(val), {
+    message: "Invalid time format. Expected HH:MM."
+  }),
+  endTime: z.string().refine(val => timeRegex.test(val), {
+    message: "Invalid time format. Expected HH:MM."
+  }),
   workType: z.array(
     z.string().min(1, { message: "This field has to be filled." }),
   ),
