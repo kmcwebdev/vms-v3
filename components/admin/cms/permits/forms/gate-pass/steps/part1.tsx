@@ -16,10 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-
-export default function Part1({ formControl } : {
-  formControl : any
-}) {
+export default function Part1({ formControl }: { formControl: any }) {
   const [selectedType, setSelectedType] = React.useState("Client");
   const [selectedFloor, setSelectedFloor] = React.useState("");
   const [availableFloors, setAvailableFloors] = React.useState<number[]>([]);
@@ -90,7 +87,6 @@ export default function Part1({ formControl } : {
                     type="email"
                     className="mt-1 block w-full rounded-md border border-gray-300"
                     placeholder="Input Requester Email"
-                    
                     onChange={(e) => {
                       setSelectedEmail(e.target.value);
                       field.onChange(e.target.value);

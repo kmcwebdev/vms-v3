@@ -4,7 +4,7 @@ import { Form } from "@/components/ui/form";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Accordion,
   AccordionHeader,
@@ -62,7 +62,7 @@ const GatePassForm = () => {
             </AccordionBody>
           </Accordion>
 
-          {/* <Accordion open={open === 3}>
+          <Accordion open={open === 3}>
             <AccordionHeader
               className="text-sm font-medium"
               onClick={() => handleOpen(3)}
@@ -72,11 +72,10 @@ const GatePassForm = () => {
             <AccordionBody>
               <Part3 formControl={form} />
             </AccordionBody>
-          </Accordion> */}
+          </Accordion>
 
-          
           <div className="mt-5 flex flex-row justify-between">
-            <FileUpload />
+            <FileUpload formControl={form} />
             <Button
               type="submit"
               className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"

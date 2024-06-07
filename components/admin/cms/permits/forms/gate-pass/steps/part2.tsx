@@ -19,7 +19,7 @@ export default function Part2({ formControl }: { formControl: any }) {
   });
   const [selectedCarrierName, setSelectedCarrierName] = React.useState("");
   const [selectedCompany, setSelectedCompany] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState("");
+  const [selectedDateRange, setSelectedDateRange] = React.useState("");
   const [selectedReason, setSelectedReason] = React.useState("");
 
   return (
@@ -62,7 +62,6 @@ export default function Part2({ formControl }: { formControl: any }) {
                     type="text"
                     className="mt-1 block w-full rounded-md border border-gray-300"
                     placeholder="Input Personnel Company"
-                    {...field}
                     onChange={(e) => {
                       setSelectedCompany(e.target.value);
                       field.onChange(e.target.value);
@@ -77,7 +76,7 @@ export default function Part2({ formControl }: { formControl: any }) {
       </div>
 
       {/* Date and Time */}
-      <div className="flex flex-row justify-start gap-5 p-2">
+      {/* <div className="flex flex-row justify-start gap-5 p-2">
         <FormField
           control={formControl.control}
           name="dateRange"
@@ -91,7 +90,7 @@ export default function Part2({ formControl }: { formControl: any }) {
                     className="border-gray-300"
                     name="dateRange"
                     onChange={(e) => {
-                      console.log(e)
+                      setSelectedDateRange(e.target.toString())
                     }}
                   />
                 </FormControl>
@@ -99,8 +98,8 @@ export default function Part2({ formControl }: { formControl: any }) {
               </FormItem>
             );
           }}
-        />
-        {/* <FormField
+        /> 
+         <FormField
           control={formControl.control}
           name="time"
           render={({ field }) => {
@@ -118,8 +117,8 @@ export default function Part2({ formControl }: { formControl: any }) {
               </FormItem>
             );
           }}
-        /> */}
-      </div>
+        /> 
+      </div> */}
 
       {/* Reason for Visit */}
       <FormField

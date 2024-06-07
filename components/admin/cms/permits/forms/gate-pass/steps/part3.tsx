@@ -16,7 +16,7 @@ export default function Part3({ formControl }: { formControl: any }) {
   const [emailInput, setEmailInput] = React.useState("");
   const [emails, setEmails] = React.useState<string[]>([]);
   const [items, setItems] = React.useState([
-    { description: "", qty: 1, unit: "pcs", remarks: "" },
+    { description: "", qty: "", unit: "", remarks: "" },
   ]);
 
   const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ export default function Part3({ formControl }: { formControl: any }) {
   };
 
   const handleAddItem = () => {
-    const newItems = [...items, { description: "", qty: 1, unit: "pcs", remarks: "" }];
+    const newItems = [...items, { description: "", qty: "", unit: "", remarks: "" }];
     setItems(newItems);
     setValue("items", newItems); // Update form value
   };
@@ -53,7 +53,7 @@ export default function Part3({ formControl }: { formControl: any }) {
     setValue("items", newItems); // Update form value
   };
 
-  const handleItemChange = (index: number, field: string, value: string) => {
+  const handleItemChange = (index: number, field: string, value: any) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
@@ -129,7 +129,7 @@ export default function Part3({ formControl }: { formControl: any }) {
                         placeholder="Qty"
                         value={item.qty}
                         onChange={(e) =>
-                          handleItemChange(index, "qty", e.target.value)
+                          handleItemChange(index, "qty", e.target.value.toString())
                         }
                         className="mt-1 block w-1/4 rounded-md border border-gray-300 p-2"
                       />
