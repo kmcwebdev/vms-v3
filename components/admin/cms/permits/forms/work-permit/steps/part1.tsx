@@ -44,6 +44,7 @@ export default function Part1({ formControl }: { formControl: any }) {
       <FormField
         control={formControl.control}
         name="type"
+        defaultValue={"Client"}
         render={({ field }) => {
           return (
             <FormItem className="flex flex-col p-2">

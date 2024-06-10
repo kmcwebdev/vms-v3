@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
+import { Item } from "@/types/global/item";
 
 export default function Part3({ formControl }: { formControl: any }) {
   const { setValue } = useFormContext();
@@ -41,7 +42,8 @@ export default function Part3({ formControl }: { formControl: any }) {
     setValue("emailsToNotify", newEmails); // Update form value
   };
 
-  const handleAddItem = () => {
+  const handleAddItem = (e:any) => {
+    e.preventDefault();
     const newItems = [...items, { description: "", qty: "", unit: "", remarks: "" }];
     setItems(newItems);
     setValue("items", newItems); // Update form value
@@ -53,7 +55,7 @@ export default function Part3({ formControl }: { formControl: any }) {
     setValue("items", newItems); // Update form value
   };
 
-  const handleItemChange = (index: number, field: string, value: any) => {
+  const handleItemChange = (index: number, field: keyof Item, value: any) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);

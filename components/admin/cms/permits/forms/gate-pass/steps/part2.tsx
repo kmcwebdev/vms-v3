@@ -129,8 +129,7 @@ export default function Part2({ formControl }: { formControl: any }) {
             <FormItem className="flex w-full flex-col p-2">
               <FormLabel>Reason</FormLabel>
               <FormControl>
-                <Textarea
-                  {...field}
+                <Input
                   placeholder="Input your Reason"
                   className="border-gray-300"
                   onChange={(e) => {

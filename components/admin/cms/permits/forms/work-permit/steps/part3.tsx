@@ -10,6 +10,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
+import { Item } from "@/types/global/item";
+import { Worker } from "@/types/global/worker";
+
 
 export default function Part3({ formControl }: { formControl: any }) {
   const { setValue } = useFormContext();
@@ -20,7 +23,8 @@ export default function Part3({ formControl }: { formControl: any }) {
     { name: "", company: "", description: "" },
   ]);
 
-  const handleAddItem = () => {
+  const handleAddItem = (e:any) => {
+    e.preventDefault();
     const newItems = [...items, { description: "", qty: "", unit: "", remarks: "" }];
     setItems(newItems);
     setValue("items", newItems); // Update form value
@@ -32,14 +36,15 @@ export default function Part3({ formControl }: { formControl: any }) {
     setValue("items", newItems); // Update form value
   };
 
-  const handleItemChange = (index: number, field: string, value: any) => {
+  const handleItemChange = (index: number, field: keyof Item, value: any) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
     setValue("items", newItems); // Update form value
   };
 
-  const handleAddWorker = () => {
+  const handleAddWorker = (e:any) => {
+    e.preventDefault();
     const newWorkers = [...workers, { name: "", company: "", description: "" }]
     setWorkers(newWorkers);
     setValue("workers", newWorkers);
@@ -51,7 +56,7 @@ export default function Part3({ formControl }: { formControl: any }) {
     setValue("workers", newWorkers)
   };
 
-  const handleWorkerChange = (index: number, field: string, value: any) => {
+  const handleWorkerChange = (index: number, field: keyof Worker, value: any) => {
     const newWorkers = [...workers];
     newWorkers[index][field] = value;
     setWorkers(newWorkers);
