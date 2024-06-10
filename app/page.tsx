@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <main className="items-center justify-between p-24">
-      <Button>Submit</Button>
-    </main>
-  );
+  redirect("/cms");
 }

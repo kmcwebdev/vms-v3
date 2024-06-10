@@ -58,6 +58,15 @@ const MainNav = ({
         >
           Manage Users
         </Link>
+        <Link
+          href="/cms/permits"
+          className={cn(
+            "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+            pathName === "/cms/permits" && "text-black",
+          )}
+        >
+          Permits
+        </Link>
       </div>
       <Form
         name="search"
