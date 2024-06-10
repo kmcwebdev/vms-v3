@@ -1,11 +1,10 @@
 "use client";
 
-import Form from "../../../../../global/form";
+import { Form } from "@/components/ui/form";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { GatePass } from "@/types/gate-pass";
 import {
   Accordion,
   AccordionHeader,
@@ -15,100 +14,92 @@ import Part1 from "./steps/part1";
 import Part2 from "./steps/part2";
 import Part3 from "./steps/part3";
 import FileUpload from "@/components/ui/file-upload";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { gatePassSchema } from "@/schema/gate-pass";
 
 const GatePassForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
 
-  const gatePassForm = useForm<GatePass>({});
+  const form = useForm<z.infer<typeof gatePassSchema>>({
+    resolver: zodResolver(gatePassSchema),
+  });
 
   const router = useRouter();
 
-  const onFormSubmit = (data: any) => {
-    console.log("submitted", gatePassForm.getValues());
-    gatePassForm.reset();
-    router.push("/cms/permits?tab=default/");
+  const handleSubmit = (values: z.infer<typeof gatePassSchema>) => {
+    console.log({ values });
+    router.push("/cms/permits");
+
+    // FORM RESET below resets values but not the fields display?
+    // form.reset({type: "",
+    //   email: "",
+    //   name: "",
+    //   serviceCategory: "",
+    //   site: "",
+    //   floor: "",
+    //   carrierName: "",
+    //   company: "",
+    //   // dateRange: ""
+    //   // timeRange: "",
+    //   reason: "",
+    //   emailsToNotify: [],
+    //   items: [],
+    //   files: [],});
   };
 
   return (
     <div className="rounded-md p-4">
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
-      <Form
-        name="gate-pass"
-        useFormReturn={gatePassForm}
-        onSubmit={onFormSubmit}
-      >
-        <Accordion
-          onPointerLeaveCapture={null}
-          onPointerEnterCapture
-          placeholder={null}
-          open={open === 1}
-        >
-          <AccordionHeader
-            className="text-sm font-medium"
-            onClick={() => handleOpen(1)}
-            onPointerLeaveCapture={null}
-            onPointerEnterCapture
-            placeholder={null}
-          >
-            Part 1 (Personal Information)
-          </AccordionHeader>
-          <AccordionBody>
-            <Part1 />
-          </AccordionBody>
-        </Accordion>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <Accordion open={open === 1}>
+            <AccordionHeader
+              className="text-sm font-medium"
+              onClick={() => handleOpen(1)}
+            >
+              Part 1 (Personal Information)
+            </AccordionHeader>
+            <AccordionBody>
+              <Part1 formControl={form} />
+            </AccordionBody>
+          </Accordion>
 
-        <Accordion
-          onPointerLeaveCapture={null}
-          onPointerEnterCapture
-          placeholder={null}
-          open={open === 2}
-        >
-          <AccordionHeader
-            className="text-sm font-medium"
-            onClick={() => handleOpen(2)}
-            onPointerLeaveCapture={null}
-            onPointerEnterCapture
-            placeholder={null}
-          >
-            Part 2 (Work Details)
-          </AccordionHeader>
-          <AccordionBody>
-            <Part2 />
-          </AccordionBody>
-        </Accordion>
+          <Accordion open={open === 2}>
+            <AccordionHeader
+              className="text-sm font-medium"
+              onClick={() => handleOpen(2)}
+            >
+              Part 2 (Work Details)
+            </AccordionHeader>
+            <AccordionBody>
+              <Part2 formControl={form} />
+            </AccordionBody>
+          </Accordion>
 
-        <Accordion
-          onPointerLeaveCapture={null}
-          onPointerEnterCapture
-          placeholder={null}
-          open={open === 3}
-        >
-          <AccordionHeader
-            className="text-sm font-medium"
-            onClick={() => handleOpen(3)}
-            onPointerLeaveCapture={null}
-            onPointerEnterCapture
-            placeholder={null}
-          >
-            Part 3 (Additional Information)
-          </AccordionHeader>
-          <AccordionBody>
-            <Part3 />
-          </AccordionBody>
-        </Accordion>
+          <Accordion open={open === 3}>
+            <AccordionHeader
+              className="text-sm font-medium"
+              onClick={() => handleOpen(3)}
+            >
+              Part 3 (Additional Information)
+            </AccordionHeader>
+            <AccordionBody>
+              <Part3 formControl={form} />
+            </AccordionBody>
+          </Accordion>
 
-        {/* Attach File and Submit Buttons */}
-        <div className="mt-5 flex flex-row justify-between">
-          <FileUpload />
-          <Button
-            onSubmit={onFormSubmit}
-            type="submit"
-            className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
-          >
-            Submit
-          </Button>
-        </div>
+          <div className="mt-5 flex flex-row justify-between">
+            <FileUpload formControl={form} />
+            <Button
+              type="submit"
+              className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
+            >
+              Submit
+            </Button>
+          </div>
+        </form>
       </Form>
     </div>
   );

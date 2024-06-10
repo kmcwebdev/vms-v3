@@ -11,7 +11,7 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-const TimeRangeSelector = ({ onChange, value }) => (
+const TimeRangeSelector = ({ onChange, value }: {onChange:any, value:any}) => (
   <div className="flex gap-2">
     <select
       className="block w-1/2 rounded-md border border-gray-300 p-2 text-sm text-gray-500"
@@ -40,3 +40,5 @@ const TimeRangeSelector = ({ onChange, value }) => (
 );
 
 export { TimeRangeSelector };
+
+

@@ -1,6 +1,6 @@
 import React from "react";
 import Admin from "@/components/admin";
-import { Site } from "@/types/site";
+import { Site } from "@/types/global/site";
 import { env } from "@/lib/env.mjs";
 
 const page = async () => {
