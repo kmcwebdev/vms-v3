@@ -5,8 +5,6 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { Visitor } from "@/types/visitor";
-import { XIcon } from "lucide-react";
 import {
   Accordion,
   AccordionHeader,
@@ -28,11 +26,11 @@ const WorkPermitForm = () => {
   const form = useForm<z.infer<typeof workPermitSchema>>({
     resolver: zodResolver(workPermitSchema),
   });
+
   const router = useRouter();
 
   const handleSubmit = (values: z.infer<typeof workPermitSchema>) => {
-    console.log({ values });
-    router.push("/cms/permits");
+    console.log("PERMIT VALUES", { values });
   };
 
   return (

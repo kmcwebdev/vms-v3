@@ -86,6 +86,9 @@ export default function Part2({ formControl }: { formControl: any }) {
 
   return (
     <>
+      <div className="flex flex-row justify-start gap-5 p-2">
+        <DateRangePicker name="dateRange" />
+      </div>
       {/* Date and Time */}
       {/* <div className="flex flex-row justify-start gap-5 p-2">
         <FormField
@@ -284,7 +287,7 @@ export default function Part2({ formControl }: { formControl: any }) {
           name="emailsToNotify"
           render={() => {
             return (
-              <FormItem className="flex flex-col p-2 w-full">
+              <FormItem className="flex w-full flex-col p-2">
                 <FormLabel>Emails to Notify</FormLabel>
                 <FormControl>
                   <Input
@@ -323,7 +326,7 @@ export default function Part2({ formControl }: { formControl: any }) {
           name="scope"
           render={({ field }) => {
             return (
-              <FormItem className="flex flex-col p-2 w-full">
+              <FormItem className="flex w-full flex-col p-2">
                 <FormLabel>Scope</FormLabel>
                 <FormControl>
                   <Input

@@ -23,11 +23,11 @@ const TempParkingForm = () => {
   const form = useForm<z.infer<typeof tempParkingSchema>>({
     resolver: zodResolver(tempParkingSchema),
   });
+
   const router = useRouter();
 
   const handleSubmit = (values: z.infer<typeof tempParkingSchema>) => {
-    console.log({ values });
-    router.push("/cms/permits");
+    console.log("PERMIT VALUES", { values });
   };
 
   return (

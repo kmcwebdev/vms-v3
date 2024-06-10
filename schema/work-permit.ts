@@ -24,7 +24,10 @@ const workPermitSchema = z.object({
   contractor: z.string(),
   personInCharge: z.string(),
   number: z.string(),
-  // dateRange: z.string(),
+  dateRange: z.object({
+    from: z.date(),
+    to: z.date()
+  }),
   // timeRange: z.string(),
   workTypes: z.array(z.string()),
   otherWorkTypes: z.string().optional(),

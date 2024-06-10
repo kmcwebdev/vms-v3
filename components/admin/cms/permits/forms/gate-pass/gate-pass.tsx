@@ -29,31 +29,18 @@ const GatePassForm = () => {
   const router = useRouter();
 
   const handleSubmit = (values: z.infer<typeof gatePassSchema>) => {
-    console.log({ values });
-    router.push("/cms/permits");
+    console.log("PERMIT VALUES", { values });
+  };
 
-    // FORM RESET below resets values but not the fields display?
-    // form.reset({type: "",
-    //   email: "",
-    //   name: "",
-    //   serviceCategory: "",
-    //   site: "",
-    //   floor: "",
-    //   carrierName: "",
-    //   company: "",
-    //   // dateRange: ""
-    //   // timeRange: "",
-    //   reason: "",
-    //   emailsToNotify: [],
-    //   items: [],
-    //   files: [],});
+  const handleError = (errors: any) => {
+    console.log("Validation errors:", errors); // Log validation errors
   };
 
   return (
     <div className="rounded-md p-4">
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
           <Accordion open={open === 1}>
             <AccordionHeader
               className="text-sm font-medium"
@@ -106,3 +93,5 @@ const GatePassForm = () => {
 };
 
 export default GatePassForm;
+
+

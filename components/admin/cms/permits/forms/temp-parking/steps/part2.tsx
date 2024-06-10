@@ -72,6 +72,10 @@ export default function Part2({ formControl }: { formControl: any }) {
         ))}
       </div>
 
+      <div className="flex flex-row justify-start gap-5 p-2">
+        <DateRangePicker name="dateRange" />
+      </div>
+
       {/* Date and Time */}
       {/* <div className="flex flex-row justify-start gap-5 p-2">
         <FormField
