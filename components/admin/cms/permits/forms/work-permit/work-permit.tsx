@@ -33,11 +33,15 @@ const WorkPermitForm = () => {
     console.log("PERMIT VALUES", { values });
   };
 
+  const handleError = (errors: any) => {
+    console.log("Validation errors:", errors); // Log validation errors
+  };
+
   return (
     <div className="rounded-md p-4">
       <h2 className="mb-4 text-lg font-bold">Work Permit Form</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
           <Accordion open={open === 1}>
             <AccordionHeader
               className="text-sm font-medium"

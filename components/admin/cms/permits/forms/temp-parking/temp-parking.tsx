@@ -3,7 +3,6 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { Visitor } from "@/types/visitor";
 import {
   Accordion,
   AccordionHeader,
@@ -30,11 +29,15 @@ const TempParkingForm = () => {
     console.log("PERMIT VALUES", { values });
   };
 
+  const handleError = (errors: any) => {
+    console.log("Validation errors:", errors); // Log validation errors
+  };
+
   return (
     <div className="rounded-md p-4">
       <h2 className="mb-4 text-lg font-bold">Temporary Parking Form</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
           <Accordion open={open === 1}>
             <AccordionHeader
               className="text-sm font-medium"

@@ -21,7 +21,6 @@ const gatePassSchema = z.object({
     from: z.date(),
     to: z.date()
   }),
-  // timeRange: z.string(),
   reason: z.string().optional(),
   emailsToNotify: z
     .array(z.string().email("This is not a valid email."))

@@ -1,5 +1,4 @@
 import DateRangePicker from "@/components/global/date-range-picker";
-import { TimeRangeSelector } from "@/components/ui/time-range-selector";
 import React from "react";
 import {
   DropdownMenu,
@@ -21,10 +20,6 @@ import {
 import { useFormContext } from "react-hook-form";
 
 export default function Part2({ formControl }: { formControl: any }) {
-  const [selectedTimeRange, setSelectedTimeRange] = React.useState({
-    start: "08:00",
-    end: "17:00",
-  });
   const [selectedWorkTypes, setSelectedWorkTypes] = React.useState<string[]>(
     [],
   );
@@ -33,7 +28,6 @@ export default function Part2({ formControl }: { formControl: any }) {
     React.useState<string[]>([]);
   const [emails, setEmails] = React.useState<string[]>([]);
   const [emailInput, setEmailInput] = React.useState("");
-  const [selectedDateRange, setSelectedDateRange] = React.useState("");
   const [selectedOtherWorkTypes, setSelectedOtherWorkTypes] =
     React.useState("");
   const [selectedOtherWorkRequirements, setSelectedOtherWorkRequirements] =
@@ -89,50 +83,6 @@ export default function Part2({ formControl }: { formControl: any }) {
       <div className="flex flex-row justify-start gap-5 p-2">
         <DateRangePicker name="dateRange" />
       </div>
-      {/* Date and Time */}
-      {/* <div className="flex flex-row justify-start gap-5 p-2">
-        <FormField
-          control={formControl.control}
-          name="dateRange"
-          render={({ field }) => {
-            return (
-              <FormItem className="flex w-full flex-col">
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <DateRangePicker
-                    {...field}
-                    className="border-gray-300"
-                    name="dateRange"
-                    onChange={(e) => {
-                      setSelectedDateRange(e.target.toString())
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        /> 
-         <FormField
-          control={formControl.control}
-          name="time"
-          render={({ field }) => {
-            return (
-              <FormItem className="flex w-full flex-col">
-                <FormLabel>Time</FormLabel>
-                <FormControl>
-                  <TimeRangeSelector
-                    {...field}
-                    value={selectedTimeRange}
-                    onChange={setSelectedTimeRange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        /> 
-      </div> */}
 
       {/* Type of Work and Work Requirements */}
       <div className="flex flex-row justify-evenly gap-5 p-2">

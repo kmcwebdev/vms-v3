@@ -28,7 +28,6 @@ const workPermitSchema = z.object({
     from: z.date(),
     to: z.date()
   }),
-  // timeRange: z.string(),
   workTypes: z.array(z.string()),
   otherWorkTypes: z.string().optional(),
   workRequirements: z.array(z.string()),

@@ -15,7 +15,6 @@ const tempParkingSchema = z.object({
     from: z.date(),
     to: z.date()
   }),
-  // timeRange: z.string(),
   managerEmail: z.string().email(),
   files: z.array(z.instanceof(File)).optional(),
 });
