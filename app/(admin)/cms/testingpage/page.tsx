@@ -21,7 +21,7 @@ const formSchema = z.object({
 });
 
 const handleSubmit = (values: z.infer<typeof formSchema>) => {
-  console.log({ values });
+  console.log("VALUES",{ values });
 };
 
 export default function Page() {
@@ -38,7 +38,11 @@ export default function Page() {
           onSubmit={form.handleSubmit(handleSubmit)}
           className="flex w-full max-w-md flex-col gap-4"
         >
-          <FormField
+             <DateRangePicker
+              onChange={(e) => console.log("date", e)}
+              name="date-now"
+            />
+          {/* <FormField
             control={form.control}
             name="date"
             render={({ field }) => {
@@ -60,7 +64,7 @@ export default function Page() {
                 </FormItem>
               );
             }}
-          />
+          /> */}
           <Button
             type="submit"
             className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
