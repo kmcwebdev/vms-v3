@@ -26,11 +26,13 @@ const GatePassForm = () => {
     resolver: zodResolver(gatePassSchema),
   });
 
+  console.log(form.getValues());
+
   const router = useRouter();
 
   const handleSubmit = (values: z.infer<typeof gatePassSchema>) => {
-    console.log({ values });
-    router.push("/cms/permits");
+    console.log("PERMIT VALUES", { values });
+    // router.push("/cms/permits");
 
     // FORM RESET below resets values but not the fields display?
     // form.reset({type: "",
