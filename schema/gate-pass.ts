@@ -18,8 +18,8 @@ const gatePassSchema = z.object({
   carrierName: z.string(),
   company: z.string(),
   dateRange: z.object({
-    from: z.date(),
-    to: z.date()
+    from: z.string(),
+    to: z.string()
   }),
   reason: z.string().optional(),
   emailsToNotify: z

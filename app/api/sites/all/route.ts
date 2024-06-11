@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     const { filter } = queryParams.data;
 
     const all_sites_query = `
-    select count(s.site_id) as visitor_count, s.site_id , s.site_name, s.site_banner, s.site_images, address  from visitors v 
+    select count(s.site_id) as visitor_count, s.site_id , s.site_name, s.site_banner, s.site_images, address from visitors v 
     inner join sites s on s.site_id = v.site_id 
     ${filter ? `where site_name ilike '%${filter}%'` : ``}
     group by s.site_id order by s.site_name 

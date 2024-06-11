@@ -12,8 +12,8 @@ const tempParkingSchema = z.object({
   vehicleNumber: z.string(),
   parkingNumber: z.string(),
   dateRange: z.object({
-    from: z.date(),
-    to: z.date()
+    from: z.string(),
+    to: z.string()
   }),
   managerEmail: z.string().email(),
   files: z.array(z.instanceof(File)).optional(),

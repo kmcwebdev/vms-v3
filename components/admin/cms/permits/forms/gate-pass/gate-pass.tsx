@@ -31,6 +31,7 @@ const GatePassForm = () => {
 
   const handleSubmit = (values: z.infer<typeof gatePassSchema>) => {
     console.log("PERMIT VALUES", { values });
+    
   };
 
   const handleError = (errors: any) => {

@@ -66,8 +66,9 @@ export default function Part2({ formControl }: { formControl: any }) {
         ))}
       </div>
 
-      <div className="flex flex-row justify-start gap-5 p-2">
-        <DateRangePicker name="dateRange" />
+      <div className="flex flex-col justify-start p-2">
+        <p className="font-medium">Date</p>
+        <DateRangePicker name="dateRange" className="mt-1"/>
       </div>
 
       {/* Manager Email */}
