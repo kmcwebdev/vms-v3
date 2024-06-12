@@ -19,16 +19,13 @@ interface IDateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2024, 0, 1),
-    to: addDays(new Date(2024, 0, 30), 30),
+    // from: new Date(2024, 0, 1),
+    // to: addDays(new Date(2024, 0, 30), 30),
+    from: undefined,
+    to: undefined
   });
 
   const { control } = useFormContext();
-
-  const parseDateString = (dateString: string) => {
-    const [year, month, day] = dateString.split("-");
-    return new Date(Number(year), Number(month) - 1, Number(day));
-  };
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -52,7 +49,7 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
                 format(date.from, "LLL dd, y")
               )
             ) : (
-              <span>Pick a date</span>
+              <span className="font-light text-gray-500">Pick Your Date Range</span>
             )}
           </Button>
         </PopoverTrigger>

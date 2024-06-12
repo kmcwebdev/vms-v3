@@ -17,22 +17,45 @@ import FileUpload from "@/components/ui/file-upload";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { gatePassSchema } from "@/schema/gate-pass";
+import { useFormState, useFormStatus } from "react-dom";
+import { useRef } from "react";
 
+export async function FormSubmit(
+  prevState: any,
+  values: z.infer<typeof gatePassSchema>,
+) {
+  console.log("PERMIT VALUES", { values });
+  try {
+    const res = await fetch("/api/post-gate-pass", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Submission error:", error);
+  }
+}
 
 const GatePassForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-
+  const [state, handleSubmit] = useFormState(FormSubmit, "");
+  const { pending } = useFormStatus();
+  const ref = useRef();
   const form = useForm<z.infer<typeof gatePassSchema>>({
     resolver: zodResolver(gatePassSchema),
   });
 
   const router = useRouter();
-
-  const handleSubmit = (values: z.infer<typeof gatePassSchema>) => {
-    console.log("PERMIT VALUES", { values });
-    
-  };
 
   const handleError = (errors: any) => {
     console.log("Validation errors:", errors); // Log validation errors
@@ -43,6 +66,7 @@ const GatePassForm = () => {
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
+          <div className="text-green-500 text/md">{state.message}</div>
           <Accordion open={open === 1}>
             <AccordionHeader
               className="text-sm font-medium"
@@ -82,6 +106,7 @@ const GatePassForm = () => {
           <div className="mt-5 flex flex-row justify-between">
             <FileUpload formControl={form} />
             <Button
+              aria-disabled={pending}
               type="submit"
               className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
             >
@@ -95,5 +120,3 @@ const GatePassForm = () => {
 };
 
 export default GatePassForm;
-
-
