@@ -39,7 +39,6 @@ export async function FormSubmit(
 
     const data = await res.json();
     return data;
-    
   } catch (error) {
     console.error("Submission error:", error);
   }
@@ -50,7 +49,7 @@ const GatePassForm = () => {
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const [state, handleSubmit] = useFormState(FormSubmit, "");
   const { pending } = useFormStatus();
-  
+
   const form = useForm<z.infer<typeof gatePassSchema>>({
     resolver: zodResolver(gatePassSchema),
   });
@@ -67,8 +66,16 @@ const GatePassForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
           {/* <div className="text-green-500 text/md">{state.message}</div> */}
-          <Accordion open={open === 1}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 1}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(1)}
             >
@@ -79,8 +86,16 @@ const GatePassForm = () => {
             </AccordionBody>
           </Accordion>
 
-          <Accordion open={open === 2}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 2}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(2)}
             >
@@ -91,8 +106,16 @@ const GatePassForm = () => {
             </AccordionBody>
           </Accordion>
 
-          <Accordion open={open === 3}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 3}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(3)}
             >

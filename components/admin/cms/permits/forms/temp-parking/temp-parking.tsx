@@ -62,8 +62,16 @@ const TempParkingForm = () => {
       <h2 className="mb-4 text-lg font-bold">Temporary Parking Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          <Accordion open={open === 1}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 1}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(1)}
             >
@@ -73,8 +81,16 @@ const TempParkingForm = () => {
               <Part1 formControl={form} />
             </AccordionBody>
           </Accordion>
-          <Accordion open={open === 2}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 2}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(2)}
             >
