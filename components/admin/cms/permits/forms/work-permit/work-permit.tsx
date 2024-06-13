@@ -18,20 +18,44 @@ import FileUpload from "@/components/ui/file-upload";
 import { workPermitSchema } from "@/schema/work-permit";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormState, useFormStatus } from "react-dom";
+
+export async function FormSubmit(
+  prevState: any,
+  values: z.infer<typeof workPermitSchema>,
+) {
+  console.log("PERMIT VALUES", { values });
+  try {
+    const res = await fetch("/api/post-work-permit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Submission error:", error);
+  }
+}
 
 const WorkPermitForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+  const [state, handleSubmit] = useFormState(FormSubmit, "");
+  const { pending } = useFormStatus();
 
   const form = useForm<z.infer<typeof workPermitSchema>>({
     resolver: zodResolver(workPermitSchema),
   });
 
   const router = useRouter();
-
-  const handleSubmit = (values: z.infer<typeof workPermitSchema>) => {
-    console.log("PERMIT VALUES", { values });
-  };
 
   const handleError = (errors: any) => {
     console.log("Validation errors:", errors); // Log validation errors
@@ -42,39 +66,63 @@ const WorkPermitForm = () => {
       <h2 className="mb-4 text-lg font-bold">Work Permit Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          <Accordion open={open === 1}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 1}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(1)}
             >
               Part 1 (Personal Information)
             </AccordionHeader>
             <AccordionBody>
-              <Part1 formControl={form}/>
+              <Part1 formControl={form} />
             </AccordionBody>
           </Accordion>
 
-          <Accordion open={open === 2}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 2}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(2)}
             >
               Part 2 (Work Details)
             </AccordionHeader>
             <AccordionBody>
-              <Part2 formControl={form}/>
+              <Part2 formControl={form} />
             </AccordionBody>
           </Accordion>
 
-          <Accordion open={open === 3}>
+          <Accordion
+            placeholder={null}
+            onPointerEnterCapture
+            onPointerLeaveCapture
+            open={open === 3}
+          >
             <AccordionHeader
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
               className="text-sm font-medium"
               onClick={() => handleOpen(3)}
             >
               Part 3 (Further Information)
             </AccordionHeader>
             <AccordionBody>
-              <Part3 formControl={form}/>
+              <Part3 formControl={form} />
             </AccordionBody>
           </Accordion>
 
@@ -82,6 +130,7 @@ const WorkPermitForm = () => {
           <div className="mt-5 flex flex-row justify-between">
             <FileUpload formControl={form} />
             <Button
+              aria-disabled={pending}
               type="submit"
               className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
             >

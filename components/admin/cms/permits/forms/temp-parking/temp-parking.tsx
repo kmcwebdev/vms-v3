@@ -14,20 +14,44 @@ import FileUpload from "@/components/ui/file-upload";
 import { tempParkingSchema } from "@/schema/temp-parking";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormState, useFormStatus } from "react-dom";
+
+export async function FormSubmit(
+  prevState: any,
+  values: z.infer<typeof tempParkingSchema>,
+) {
+  console.log("PERMIT VALUES", { values });
+  try {
+    const res = await fetch("/api/post-temp-parking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Submission error:", error);
+  }
+}
 
 const TempParkingForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
+  const [state, handleSubmit] = useFormState(FormSubmit, "");
+  const { pending } = useFormStatus();
 
   const form = useForm<z.infer<typeof tempParkingSchema>>({
     resolver: zodResolver(tempParkingSchema),
   });
 
   const router = useRouter();
-
-  const handleSubmit = (values: z.infer<typeof tempParkingSchema>) => {
-    console.log("PERMIT VALUES", { values });
-  };
 
   const handleError = (errors: any) => {
     console.log("Validation errors:", errors); // Log validation errors
@@ -57,7 +81,7 @@ const TempParkingForm = () => {
               Part 2 (Vehicle Details)
             </AccordionHeader>
             <AccordionBody>
-              <Part2 formControl={form}/>
+              <Part2 formControl={form} />
             </AccordionBody>
           </Accordion>
 
@@ -65,6 +89,7 @@ const TempParkingForm = () => {
           <div className="mt-5 flex flex-row justify-between">
             <FileUpload formControl={form} />
             <Button
+              aria-disabled={pending}
               type="submit"
               className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
             >

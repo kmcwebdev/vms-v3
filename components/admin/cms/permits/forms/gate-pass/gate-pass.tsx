@@ -18,7 +18,6 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { gatePassSchema } from "@/schema/gate-pass";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRef } from "react";
 
 export async function FormSubmit(
   prevState: any,
@@ -40,6 +39,7 @@ export async function FormSubmit(
 
     const data = await res.json();
     return data;
+    
   } catch (error) {
     console.error("Submission error:", error);
   }
@@ -50,7 +50,7 @@ const GatePassForm = () => {
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   const [state, handleSubmit] = useFormState(FormSubmit, "");
   const { pending } = useFormStatus();
-  const ref = useRef();
+  
   const form = useForm<z.infer<typeof gatePassSchema>>({
     resolver: zodResolver(gatePassSchema),
   });
@@ -66,7 +66,7 @@ const GatePassForm = () => {
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          <div className="text-green-500 text/md">{state.message}</div>
+          {/* <div className="text-green-500 text/md">{state.message}</div> */}
           <Accordion open={open === 1}>
             <AccordionHeader
               className="text-sm font-medium"
