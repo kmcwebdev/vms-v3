@@ -54,7 +54,7 @@ const TempParkingForm = () => {
   const router = useRouter();
 
   const handleError = (errors: any) => {
-    console.log("Validation errors:", errors); // Log validation errors
+    console.log("Validation errors:", errors); 
   };
 
   return (

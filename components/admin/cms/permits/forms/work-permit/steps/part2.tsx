@@ -67,7 +67,7 @@ export default function Part2({ formControl }: { formControl: any }) {
       const newEmails = [...emails, emailInput.trim()];
       setEmails(newEmails);
       setEmailInput("");
-      setValue("emailsToNotify", newEmails); // Update form value
+      setValue("emailsToNotify", newEmails);
       e.preventDefault();
     }
   };
@@ -75,7 +75,7 @@ export default function Part2({ formControl }: { formControl: any }) {
   const handleRemoveEmail = (index: number) => {
     const newEmails = emails.filter((_, i) => i !== index);
     setEmails(newEmails);
-    setValue("emailsToNotify", newEmails); // Update form value
+    setValue("emailsToNotify", newEmails); 
   };
 
   return (

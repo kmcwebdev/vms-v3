@@ -49,7 +49,7 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
                 format(date.from, "LLL dd, y")
               )
             ) : (
-              <span className="font-light text-gray-500">Pick Your Date Range</span>
+              <span className="font-light text-gray-500">Select Dates</span>
             )}
           </Button>
         </PopoverTrigger>

@@ -4,7 +4,6 @@ import { Form } from "@/components/ui/form";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import {
   Accordion,
   AccordionHeader,
@@ -54,10 +53,8 @@ const GatePassForm = () => {
     resolver: zodResolver(gatePassSchema),
   });
 
-  const router = useRouter();
-
   const handleError = (errors: any) => {
-    console.log("Validation errors:", errors); // Log validation errors
+    console.log("Validation errors:", errors); 
   };
 
   return (
