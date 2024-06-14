@@ -16,7 +16,7 @@ const tempParkingSchema = z.object({
     to: z.string()
   }),
   managerEmail: z.string().email(),
-  files: z.array(z.instanceof(File)).optional(),
+  files: z.array(z.string()).optional(),
 });
 
 export { tempParkingSchema };

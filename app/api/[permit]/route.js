@@ -43,7 +43,6 @@ export async function POST(req, { params }) {
       const emailsToNotifyArray = emailsToNotify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
       const formattedItems = JSON.stringify(items);
-      const formattedFiles = JSON.stringify(files);
 
       const insertQuery = `
         INSERT INTO gate_pass_submissions (
@@ -68,7 +67,7 @@ export async function POST(req, { params }) {
         reason,
         formattedEmailsToNotify,
         formattedItems,
-        formattedFiles,
+        files,
         status,
       ];
 
@@ -138,7 +137,6 @@ export async function POST(req, { params }) {
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
       const formattedItems = JSON.stringify(items);
       const formattedWorkers = JSON.stringify(workers);
-      const formattedFiles = JSON.stringify(files);
 
       const insertQuery = `
         INSERT INTO work_permit_submissions (
@@ -171,7 +169,7 @@ export async function POST(req, { params }) {
         scope,
         formattedWorkers,
         formattedItems,
-        formattedFiles,
+        files,
         status
       ];
 
@@ -230,8 +228,6 @@ export async function POST(req, { params }) {
       } = parsedData.data;
       const status = "Pending";
 
-      const formattedFiles = JSON.stringify(files);
-
       const insertQuery = `
         INSERT INTO temp_parking_submissions (
           type, email, name, site, floor, driver_name, vehicle_model,
@@ -256,7 +252,7 @@ export async function POST(req, { params }) {
         dateRange.from,
         dateRange.to,
         managerEmail,
-        formattedFiles,
+        files,
         status
       ];
 

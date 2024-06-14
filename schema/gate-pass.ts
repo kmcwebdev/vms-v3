@@ -26,7 +26,7 @@ const gatePassSchema = z.object({
     .array(z.string().email("This is not a valid email."))
     .optional(),
   items: z.array(itemSchema).optional(),
-  files: z.array(z.instanceof(File)).optional(),
+  files: z.array(z.string()).optional(),
 });
 
 export { gatePassSchema };

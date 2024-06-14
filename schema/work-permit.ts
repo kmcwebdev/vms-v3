@@ -38,7 +38,7 @@ const workPermitSchema = z.object({
   scope: z.string().optional(),
   workers: z.array(workerSchema).optional(),
   items: z.array(itemSchema).optional(),
-  files: z.array(z.instanceof(File)).optional(),
+  files: z.array(z.string()).optional(),
 });
 
 export { workPermitSchema };

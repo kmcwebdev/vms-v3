@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { buildings } from "@/components/global/sites";
 import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
+
 
 const people = [
   {
@@ -81,7 +81,7 @@ const ManageUsers = () => {
                   Name
                 </label>
                 <Input
-                  type="number"
+                  type="text"
                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                   required
                   placeholder="Input Customer Name"

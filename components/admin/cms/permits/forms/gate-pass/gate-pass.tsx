@@ -54,7 +54,7 @@ const GatePassForm = () => {
   });
 
   const handleError = (errors: any) => {
-    console.log("Validation errors:", errors); 
+    console.log("Validation errors:", errors);
   };
 
   return (
@@ -128,7 +128,7 @@ const GatePassForm = () => {
             <Button
               aria-disabled={pending}
               type="submit"
-              className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
+              className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500 self-center  "
             >
               Submit
             </Button>
