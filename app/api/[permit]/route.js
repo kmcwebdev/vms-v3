@@ -170,7 +170,7 @@ export async function POST(req, { params }) {
         formattedWorkers,
         formattedItems,
         files,
-        status
+        status,
       ];
 
       const result = await query(insertQuery, values);
@@ -253,7 +253,7 @@ export async function POST(req, { params }) {
         dateRange.to,
         managerEmail,
         files,
-        status
+        status,
       ];
 
       const result = await query(insertQuery, values);
@@ -278,9 +278,133 @@ export async function POST(req, { params }) {
         status: 500,
       });
     }
-  } 
-  
-  else {
+  } else {
+    responseMessage = { message: "Invalid permit" };
+    return new Response(JSON.stringify(responseMessage), {
+      headers: { "Content-Type": "application/json" },
+      status: 403,
+    });
+  }
+}
+
+export async function GET(req, { params }) {
+  let responseMessage = { message: "Invalid Request" };
+  const permit = params.permit;
+
+  if (permit === "get-gate-pass") {
+    try {
+      let selectQuery = `
+        SELECT 
+          submission_id, type, email, name, service_category, site, floor, carrier_name, 
+          company, date_from, date_to, reason, emails_to_notify, items, files, status
+        FROM 
+          gate_pass_submissions
+      `;
+      const result = await query(selectQuery);
+
+      if (result.rows.length === 0) {
+        responseMessage = { message: "No records found" };
+        return new Response(JSON.stringify(responseMessage), {
+          headers: { "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      responseMessage = {
+        message: "Records retrieved successfully",
+        data: result.rows,
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      responseMessage = {
+        message: "An error occurred while processing the request",
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+  } else if (permit === "get-work-permit") {
+    try {
+      let selectQuery = `
+        SELECT
+          submission_id, type, email, name, work_area, site, floor, tenant,
+          contractor, person_in_charge, number, date_from, date_to, work_types,
+          other_work_types, work_requirements, other_work_requirements,
+          emails_to_notify, scope, workers, items, files, status
+        FROM
+          work_permit_submissions
+      `;
+
+      const result = await query(selectQuery);
+
+      if (result.rows.length === 0) {
+        responseMessage = { message: "No records found" };
+        return new Response(JSON.stringify(responseMessage), {
+          headers: { "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      responseMessage = {
+        message: "Records retrieved successfully",
+        data: result.rows,
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      responseMessage = {
+        message: "An error occurred while processing the request",
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+  } else if (permit === "get-temp-parking") {
+    try {
+      let selectQuery = `
+      SELECT 
+        submission_id, type, email, name, site, floor, driver_name, vehicle_model,
+        vehicle_color, vehicle_number, parking_number, date_from, date_to,
+        manager_email, files, status
+      FROM
+        temp_parking_submissions
+    `;
+
+      const result = await query(selectQuery);
+
+      if (result.rows.length === 0) {
+        responseMessage = { message: "No records found" };
+        return new Response(JSON.stringify(responseMessage), {
+          headers: { "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      responseMessage = {
+        message: "Records retrieved successfully",
+        data: result.rows,
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      responseMessage = {
+        message: "An error occurred while processing the request",
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+  } else {
     responseMessage = { message: "Invalid permit" };
     return new Response(JSON.stringify(responseMessage), {
       headers: { "Content-Type": "application/json" },
