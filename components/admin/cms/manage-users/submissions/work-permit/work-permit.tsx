@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { buildings } from "@/components/global/sites";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const WorkPermitSubmissions = () => {
   const [workPermitSubmissions, setWorkPermitSubmissions] = useState([]);
@@ -245,7 +246,11 @@ const WorkPermitSubmissions = () => {
                         colSpan={5}
                         className="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                       >
-                        No submissions found.
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
                       </td>
                     </tr>
                   )}
@@ -256,9 +261,23 @@ const WorkPermitSubmissions = () => {
         </div>
       </div>
       <Separator className="mt-2" />
-
     </>
   );
 };
 
 export default WorkPermitSubmissions;
+
+const SkeletonLoaderForSubmissions = () => {
+  return (
+    <Skeleton className="flex h-16 w-full flex-col justify-between rounded-xl border border-neutral-100 bg-transparent p-6">
+      <div>
+        <div className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+          <div className="flex items-center">
+            <div></div>
+          </div>
+          <div className="whitespace-nowrap px-3 py-5 text-sm text-gray-500"></div>
+        </div>
+      </div>
+    </Skeleton>
+  );
+};

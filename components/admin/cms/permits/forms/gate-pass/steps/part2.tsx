@@ -77,6 +77,7 @@ export default function Part2({ formControl }: { formControl: any }) {
       <FormField
         control={formControl.control}
         name="reason"
+        defaultValue={"No Specified Reason"}
         render={({ field }) => {
           return (
             <FormItem className="flex w-full flex-col p-2">

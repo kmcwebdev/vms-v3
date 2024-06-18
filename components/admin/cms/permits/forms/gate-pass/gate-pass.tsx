@@ -62,7 +62,7 @@ const GatePassForm = () => {
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          {/* <div className="text-green-500 text/md">{state.message}</div> */}
+          <div className="text-green-500 text/md">{state.message}</div>
           <Accordion
             placeholder={null}
             onPointerEnterCapture

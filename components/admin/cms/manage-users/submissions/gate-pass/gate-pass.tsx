@@ -19,13 +19,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { buildings } from "@/components/global/sites";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import ViewGatePassApplication from "./view-details/view-details";
 
 const GatePassSubmissions = () => {
   const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [selectedBuilding, setSelectedBuilding] = React.useState("");
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // change filter form type when building filtration (NOT Visitor)
   const useFormResponses = useForm<Visitor>();
+
+  useEffect(() => {
+    console.log(isModalOpen);
+  },[isModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -46,6 +54,16 @@ const GatePassSubmissions = () => {
 
   const onFormSubmit = (data: Visitor) => {
     console.log("Form submitted with data:", data);
+  };
+
+  const handleViewClick = (submission: any) => {
+    setSelectedSubmission(submission);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedSubmission(null);
   };
 
   return (
@@ -209,33 +227,33 @@ const GatePassSubmissions = () => {
                           {submission.type}
                         </td>
                         <td className="flex justify-between self-stretch whitespace-nowrap px-3 py-8 text-sm font-medium">
-                          <a
-                            href="#"
-                            className="text-green-600 hover:text-green-900"
+                          <Button
+                            onClick={() => handleViewClick(submission)}
+                            className="bg-transparent text-green-600 hover:bg-gray-50 hover:text-green-900"
                           >
                             <EyeOpenIcon
                               className="inline h-5 w-5"
                               aria-hidden="true"
                             />
-                          </a>
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
+                          </Button>
+                          <Button
+                            onClick={() => {}}
+                            className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
                           >
                             <Pencil1Icon
                               className="inline h-5 w-5"
                               aria-hidden="true"
                             />
-                          </a>
-                          <a
-                            href="#"
-                            className="text-red-600 hover:text-red-900"
+                          </Button>
+                          <Button
+                            onClick={() => {}}
+                            className="bg-transparent text-red-600 hover:bg-gray-50 hover:text-red-900"
                           >
                             <Cross1Icon
                               className="inline h-5 w-5"
                               aria-hidden="true"
                             />
-                          </a>
+                          </Button>
                         </td>
                       </tr>
                     ))
@@ -245,7 +263,11 @@ const GatePassSubmissions = () => {
                         colSpan={5}
                         className="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                       >
-                        No submissions found.
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
+                        <SkeletonLoaderForSubmissions />
                       </td>
                     </tr>
                   )}
@@ -256,9 +278,29 @@ const GatePassSubmissions = () => {
         </div>
       </div>
       <Separator className="mt-2" />
+
+      <ViewGatePassApplication
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        submission={selectedSubmission}
+      />
     </>
   );
 };
 
 export default GatePassSubmissions;
 
+const SkeletonLoaderForSubmissions = () => {
+  return (
+    <Skeleton className="flex h-16 w-full flex-col justify-between rounded-xl border border-neutral-100 bg-transparent p-6">
+      <div>
+        <div className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+          <div className="flex items-center">
+            <div></div>
+          </div>
+          <div className="whitespace-nowrap px-3 py-5 text-sm text-gray-500"></div>
+        </div>
+      </div>
+    </Skeleton>
+  );
+};

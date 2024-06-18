@@ -62,6 +62,7 @@ const TempParkingForm = () => {
       <h2 className="mb-4 text-lg font-bold">Temporary Parking Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
+        <div className="text/md text-green-500">{state.message}</div>
           <Accordion
             placeholder={null}
             onPointerEnterCapture

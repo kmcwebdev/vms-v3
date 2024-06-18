@@ -109,6 +109,7 @@ export default function Part3({ formControl }: { formControl: any }) {
       <FormField
         control={formControl.control}
         name="items"
+        defaultValue={"No Items Indicated"}
         render={() => {
           return (
             <FormItem className="flex flex-col p-2">
