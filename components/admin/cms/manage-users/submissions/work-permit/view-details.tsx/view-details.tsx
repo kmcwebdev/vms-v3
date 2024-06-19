@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { XMarkIcon, PaperClipIcon } from "@heroicons/react/24/outline";
 
-export default function ViewGatePassApplication({
+export default function ViewWorkPermitApplication({
   isOpen,
   onClose,
   submission,
@@ -37,7 +37,7 @@ export default function ViewGatePassApplication({
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <DialogTitle className="text-base font-semibold leading-6 text-gray-900">
-                          Gate Pass Application Details
+                          Work Permit Application Details
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -82,19 +82,20 @@ export default function ViewGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Service Category
+                                Job Scope
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.service_category}
+                                {submission?.work_area} for {submission?.tenant}
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Carrier Name / Company
+                                Contractor Name / POC
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.carrier_name} /{" "}
-                                {submission?.company}
+                                {submission?.contractor} /{" "}
+                                {submission?.person_in_charge} (
+                                {submission?.number})
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -116,10 +117,58 @@ export default function ViewGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Reason
+                                Work Types
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.reason}
+                                {submission?.work_types.join(", ")}
+                                {submission?.work_types.includes("Others") &&
+                                  submission?.other_work_types && (
+                                    <>, Other Work Type: {submission.other_work_types}</>
+                                  )}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Work Requirements
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {submission?.work_requirements.join(", ")}
+                                {submission?.work_requirements.includes("other") &&
+                                  submission?.other_work_requirements && (
+                                    <>, {submission.other_work_requirements}</>
+                                  )}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Other Info
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {submission?.scope}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Workers
+                              </dt>
+                              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                {submission?.workers?.map(
+                                  (worker: any, index: number) => (
+                                    <div key={index} className="mb-2">
+                                      <strong>Worker {index + 1}</strong>
+                                      <div>
+                                        <i>Name:</i> {worker.name}
+                                      </div>
+                                      <div>
+                                        <i>Company:</i> {worker.company}
+                                      </div>
+                                      <div>
+                                        <i>Description:</i> {worker.description}
+                                      </div>
+                                      <br></br>
+                                    </div>
+                                  ),
+                                )}
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

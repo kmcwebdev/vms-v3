@@ -275,6 +275,7 @@ export default function Part2({ formControl }: { formControl: any }) {
         <FormField
           control={formControl.control}
           name="scope"
+          defaultValue={"Not Specified"}
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col p-2">

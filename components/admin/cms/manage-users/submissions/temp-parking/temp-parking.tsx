@@ -20,13 +20,20 @@ import {
 import { buildings } from "@/components/global/sites";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import ViewTempParkingApplication from "./view-details/view-details";
 
 const TempParkingSubmissions = () => {
   const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [selectedBuilding, setSelectedBuilding] = React.useState("");
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // change filter form type when building filtration (NOT Visitor)
   const useFormResponses = useForm<Visitor>();
+
+  useEffect(() => {
+    //console.log(isModalOpen);
+  }, [isModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -37,7 +44,7 @@ const TempParkingSubmissions = () => {
         }
         const data = await response.json();
         setTempParkingSubmissions(data.data);
-        console.log("Data from API:", data);
+        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -45,8 +52,47 @@ const TempParkingSubmissions = () => {
     fetchData();
   }, []);
 
+  // this to be updated later when adding filtering
   const onFormSubmit = (data: Visitor) => {
     console.log("Form submitted with data:", data);
+  };
+
+  const handleViewClick = (submission: any) => {
+    setSelectedSubmission(submission);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedSubmission(null);
+  };
+
+  const handleDelete = async (submissionId: any) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this submission?",
+    );
+
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`/api/delete-temp-parking/${submissionId}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete submission");
+        }
+
+        setTempParkingSubmissions((prevSubmissions: any) =>
+          prevSubmissions.filter(
+            (submission: any) => submission.submission_id !== submissionId,
+          ),
+        );
+
+        console.log("Submission deleted successfully");
+      } catch (error) {
+        console.error("Error deleting submission:", error);
+      }
+    }
   };
 
   return (
@@ -200,7 +246,7 @@ const TempParkingSubmissions = () => {
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           <div className="text-gray-900">{submission.site}</div>
                           <div className="mt-1 text-gray-500">
-                            {submission.floor}
+                            <p>Level {submission.floor}</p>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
@@ -210,33 +256,35 @@ const TempParkingSubmissions = () => {
                           {submission.type}
                         </td>
                         <td className="flex justify-between self-stretch whitespace-nowrap px-3 py-8 text-sm font-medium">
-                          <a
-                            href="#"
-                            className="text-green-600 hover:text-green-900"
+                          <Button
+                            onClick={() => handleViewClick(submission)}
+                            className="bg-transparent text-green-600 hover:bg-gray-50 hover:text-green-900"
                           >
                             <EyeOpenIcon
                               className="inline h-5 w-5"
                               aria-hidden="true"
                             />
-                          </a>
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
+                          </Button>
+                          <Button
+                            onClick={() => {}}
+                            className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
                           >
                             <Pencil1Icon
                               className="inline h-5 w-5"
                               aria-hidden="true"
                             />
-                          </a>
-                          <a
-                            href="#"
-                            className="text-red-600 hover:text-red-900"
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              handleDelete(submission.submission_id)
+                            }
+                            className="bg-transparent text-red-600 hover:bg-gray-50 hover:text-red-900"
                           >
                             <Cross1Icon
                               className="inline h-5 w-5"
                               aria-hidden="true"
                             />
-                          </a>
+                          </Button>
                         </td>
                       </tr>
                     ))
@@ -261,6 +309,11 @@ const TempParkingSubmissions = () => {
         </div>
       </div>
       <Separator className="mt-2" />
+      <ViewTempParkingApplication
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        submission={selectedSubmission}
+      />
     </>
   );
 };

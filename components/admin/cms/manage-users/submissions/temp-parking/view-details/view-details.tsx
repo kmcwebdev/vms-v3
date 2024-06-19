@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { XMarkIcon, PaperClipIcon } from "@heroicons/react/24/outline";
 
-export default function ViewGatePassApplication({
+export default function ViewTempParkingApplication({
   isOpen,
   onClose,
   submission,
@@ -37,7 +37,7 @@ export default function ViewGatePassApplication({
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <DialogTitle className="text-base font-semibold leading-6 text-gray-900">
-                          Gate Pass Application Details
+                          Temporary Parking Application Details
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -82,27 +82,19 @@ export default function ViewGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Service Category
-                              </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.service_category}
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Carrier Name / Company
-                              </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.carrier_name} /{" "}
-                                {submission?.company}
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Location
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 {submission?.site} (Level {submission?.floor})
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Vehicle Details
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {submission?.vehicle_model} ({submission?.vehicle_color}) - {submission?.vehicle_number} <br></br>
+                                Requested for Parking Number {submission?.parking_number}
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -116,37 +108,10 @@ export default function ViewGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Reason
+                                Manager Email <br></br> <div className="font-light italic">(For Verification)</div>
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.reason}
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Items
-                              </dt>
-                              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                                {submission?.items?.map(
-                                  (item: any, index: number) => (
-                                    <div key={index} className="mb-2">
-                                      <strong>Item {index + 1}</strong>
-                                      <div>
-                                        <i>Description:</i> {item.description}
-                                      </div>
-                                      <div>
-                                        <i>Quantity:</i> {item.qty}
-                                      </div>
-                                      <div>
-                                        <i>Unit:</i> {item.unit}
-                                      </div>
-                                      <div>
-                                        <i>Remarks:</i> {item.remarks}
-                                      </div>
-                                      <br></br>
-                                    </div>
-                                  ),
-                                )}
+                                {submission?.manager_email}
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

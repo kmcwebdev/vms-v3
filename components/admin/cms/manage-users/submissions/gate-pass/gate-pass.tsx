@@ -32,8 +32,8 @@ const GatePassSubmissions = () => {
   const useFormResponses = useForm<Visitor>();
 
   useEffect(() => {
-    console.log(isModalOpen);
-  },[isModalOpen]);
+    //console.log(isModalOpen);
+  }, [isModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,7 +44,7 @@ const GatePassSubmissions = () => {
         }
         const data = await response.json();
         setGatePassSubmissions(data.data);
-        console.log("Data from API:", data);
+        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -52,6 +52,7 @@ const GatePassSubmissions = () => {
     fetchData();
   }, []);
 
+  // this to be updated later when adding filtering
   const onFormSubmit = (data: Visitor) => {
     console.log("Form submitted with data:", data);
   };
@@ -64,6 +65,34 @@ const GatePassSubmissions = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedSubmission(null);
+  };
+
+  const handleDelete = async (submissionId: any) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this submission?",
+    );
+
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`/api/delete-gate-pass/${submissionId}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete submission");
+        }
+
+        setGatePassSubmissions((prevSubmissions: any) =>
+          prevSubmissions.filter(
+            (submission: any) => submission.submission_id !== submissionId,
+          ),
+        );
+
+        console.log("Submission deleted successfully");
+      } catch (error) {
+        console.error("Error deleting submission:", error);
+      }
+    }
   };
 
   return (
@@ -217,7 +246,7 @@ const GatePassSubmissions = () => {
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                           <div className="text-gray-900">{submission.site}</div>
                           <div className="mt-1 text-gray-500">
-                            {submission.floor}
+                            <p>Level {submission.floor}</p>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
@@ -246,7 +275,9 @@ const GatePassSubmissions = () => {
                             />
                           </Button>
                           <Button
-                            onClick={() => {}}
+                            onClick={() =>
+                              handleDelete(submission.submission_id)
+                            }
                             className="bg-transparent text-red-600 hover:bg-gray-50 hover:text-red-900"
                           >
                             <Cross1Icon
