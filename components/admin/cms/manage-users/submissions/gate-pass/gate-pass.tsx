@@ -58,6 +58,7 @@ const GatePassSubmissions = () => {
     filterSubmissions();
   }, [selectedStatus, selectedSite, selectedName, gatePassSubmissions]);
 
+
   const filterSubmissions = () => {
     let filtered = gatePassSubmissions;
 

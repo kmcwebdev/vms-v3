@@ -271,9 +271,9 @@ const TempParkingSubmissions = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {Array.isArray(tempParkingSubmissions) &&
-                  tempParkingSubmissions.length > 0 ? (
-                    tempParkingSubmissions.map((submission: any) => (
+                  {Array.isArray(filteredSubmissions) &&
+                  filteredSubmissions.length > 0 ? (
+                    filteredSubmissions.map((submission: any) => (
                       <tr key={submission.submission_id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
