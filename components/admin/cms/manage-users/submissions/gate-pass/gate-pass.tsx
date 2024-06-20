@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
-import { Visitor } from "@/types/visitor";
 import { Button } from "@/components/ui/button";
 import {
   MagnifyingGlassIcon,
@@ -24,12 +23,15 @@ import ViewGatePassApplication from "./view-details/view-details";
 
 const GatePassSubmissions = () => {
   const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
+  const [filteredSubmissions, setFilteredSubmissions] = useState([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
-  const [selectedBuilding, setSelectedBuilding] = React.useState("");
+  const [selectedSite, setSelectedSite] = React.useState("");
+  const [selectedName, setSelectedName] = useState("");
+
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // change filter form type when building filtration (NOT Visitor)
-  const useFormResponses = useForm<Visitor>();
+
+  const form = useForm();
 
   useEffect(() => {
     //console.log(isModalOpen);
@@ -52,10 +54,36 @@ const GatePassSubmissions = () => {
     fetchData();
   }, []);
 
-  // this to be updated later when adding filtering
-  const onFormSubmit = (data: Visitor) => {
-    console.log("Form submitted with data:", data);
+  useEffect(() => {
+    filterSubmissions();
+  }, [selectedStatus, selectedSite, selectedName, gatePassSubmissions]);
+
+  const filterSubmissions = () => {
+    let filtered = gatePassSubmissions;
+
+    if (selectedStatus) {
+      filtered = filtered.filter(
+        (submission: any) => submission.status === selectedStatus,
+      );
+    }
+
+    if (selectedSite) {
+      filtered = filtered.filter(
+        (submission: any) => submission.site === selectedSite,
+      );
+    }
+
+    if (selectedName) {
+      const lowerCaseName = selectedName.toLowerCase();
+      filtered = filtered.filter((submission: any) =>
+        submission.name.toLowerCase().includes(lowerCaseName),
+      );
+    }
+
+    setFilteredSubmissions(filtered);
   };
+
+  const onFormSubmit = (data: any) => {};
 
   const handleViewClick = (submission: any) => {
     setSelectedSubmission(submission);
@@ -95,20 +123,34 @@ const GatePassSubmissions = () => {
     }
   };
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedName(e.target.value);
+  };
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+  };
+
+  const handleSiteChange = (site: string) => {
+    setSelectedSite(site);
+  };
+
+  const reset = () => {
+    setSelectedName("");
+    setSelectedStatus("");
+    setSelectedSite("");
+    setFilteredSubmissions([...gatePassSubmissions]);
+  };
+
   return (
     <>
       <Form
         name="submission-filter"
-        useFormReturn={useFormResponses}
+        useFormReturn={form}
         onSubmit={onFormSubmit}
       >
         <div className="mt-5 flex flex-row gap-5 p-2">
-          <div className="content-end">
-            <Button>
-              <MagnifyingGlassIcon className="h-6 w-6" />
-            </Button>
-          </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <label className="block text-sm font-medium text-gray-700">
               Date
             </label>
@@ -116,7 +158,7 @@ const GatePassSubmissions = () => {
               className="mt-1 border-gray-300 shadow-none "
               name="dateRange"
             />
-          </div>
+          </div> */}
           <div className="w-full">
             <label className="block text-sm font-medium text-gray-700">
               Name
@@ -124,8 +166,8 @@ const GatePassSubmissions = () => {
             <Input
               type="text"
               className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
-              required
               placeholder="Input Customer Name"
+              onChange={handleNameChange}
             />
           </div>
           <div className="w-full">
@@ -142,16 +184,10 @@ const GatePassSubmissions = () => {
                 sideOffset={5}
                 className="max-h-60 w-40 overflow-y-auto text-sm"
               >
-                {[
-                  "Pending",
-                  "Approved - Site Admin",
-                  "Declined - Site Admin",
-                  "Approved - Building Admin",
-                  "Declined - Building Admin",
-                ].map((type) => (
+                {["Pending", "Approved", "Declined"].map((type) => (
                   <DropdownMenuItem
                     key={type}
-                    onSelect={() => setSelectedStatus(type)}
+                    onSelect={() => handleStatusChange(type)}
                   >
                     {type}
                   </DropdownMenuItem>
@@ -166,7 +202,7 @@ const GatePassSubmissions = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                  {selectedBuilding || "Select Site"}
+                  {selectedSite || "Select Site"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -176,13 +212,18 @@ const GatePassSubmissions = () => {
                 {buildings.map((building) => (
                   <DropdownMenuItem
                     key={building.name}
-                    onSelect={() => setSelectedBuilding(building.name)}
+                    onSelect={() => handleSiteChange(building.name)}
                   >
                     {building.name}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+          </div>
+          <div className="w-1/2 content-end">
+            <Button onClick={reset} className="w-full">
+              Reset Filters
+            </Button>
           </div>
         </div>
       </Form>
@@ -227,9 +268,9 @@ const GatePassSubmissions = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {Array.isArray(gatePassSubmissions) &&
-                  gatePassSubmissions.length > 0 ? (
-                    gatePassSubmissions.map((submission: any) => (
+                  {Array.isArray(filteredSubmissions) &&
+                  filteredSubmissions.length > 0 ? (
+                    filteredSubmissions.map((submission: any) => (
                       <tr key={submission.submission_id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -308,6 +349,7 @@ const GatePassSubmissions = () => {
           </div>
         </div>
       </div>
+
       <Separator className="mt-2" />
 
       <ViewGatePassApplication

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
-import { Visitor } from "@/types/visitor";
 import { Button } from "@/components/ui/button";
 import {
   MagnifyingGlassIcon,
@@ -24,12 +23,15 @@ import ViewTempParkingApplication from "./view-details/view-details";
 
 const TempParkingSubmissions = () => {
   const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
+  const [filteredSubmissions, setFilteredSubmissions] = useState([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
-  const [selectedBuilding, setSelectedBuilding] = React.useState("");
+  const [selectedSite, setSelectedSite] = React.useState("");
+  const [selectedName, setSelectedName] = useState("");
+
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // change filter form type when building filtration (NOT Visitor)
-  const useFormResponses = useForm<Visitor>();
+
+  const form = useForm();
 
   useEffect(() => {
     //console.log(isModalOpen);
@@ -52,10 +54,36 @@ const TempParkingSubmissions = () => {
     fetchData();
   }, []);
 
-  // this to be updated later when adding filtering
-  const onFormSubmit = (data: Visitor) => {
-    console.log("Form submitted with data:", data);
+  useEffect(() => {
+    filterSubmissions();
+  }, [selectedStatus, selectedSite, selectedName, tempParkingSubmissions]);
+
+  const filterSubmissions = () => {
+    let filtered = tempParkingSubmissions;
+
+    if (selectedStatus) {
+      filtered = filtered.filter(
+        (submission: any) => submission.status === selectedStatus,
+      );
+    }
+
+    if (selectedSite) {
+      filtered = filtered.filter(
+        (submission: any) => submission.site === selectedSite,
+      );
+    }
+
+    if (selectedName) {
+      const lowerCaseName = selectedName.toLowerCase();
+      filtered = filtered.filter((submission: any) =>
+        submission.name.toLowerCase().includes(lowerCaseName),
+      );
+    }
+
+    setFilteredSubmissions(filtered);
   };
+
+  const onFormSubmit = (data: any) => {};
 
   const handleViewClick = (submission: any) => {
     setSelectedSubmission(submission);
@@ -74,9 +102,12 @@ const TempParkingSubmissions = () => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(`/api/delete-temp-parking/${submissionId}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `/api/delete-temp-parking/${submissionId}`,
+          {
+            method: "DELETE",
+          },
+        );
 
         if (!response.ok) {
           throw new Error("Failed to delete submission");
@@ -95,20 +126,34 @@ const TempParkingSubmissions = () => {
     }
   };
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedName(e.target.value);
+  };
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+  };
+
+  const handleSiteChange = (site: string) => {
+    setSelectedSite(site);
+  };
+
+  const reset = () => {
+    setSelectedName("");
+    setSelectedStatus("");
+    setSelectedSite("");
+    setFilteredSubmissions([...tempParkingSubmissions]);
+  };
+
   return (
     <>
       <Form
         name="submission-filter"
-        useFormReturn={useFormResponses}
+        useFormReturn={form}
         onSubmit={onFormSubmit}
       >
         <div className="mt-5 flex flex-row gap-5 p-2">
-          <div className="content-end">
-            <Button>
-              <MagnifyingGlassIcon className="h-6 w-6" />
-            </Button>
-          </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <label className="block text-sm font-medium text-gray-700">
               Date
             </label>
@@ -116,7 +161,7 @@ const TempParkingSubmissions = () => {
               className="mt-1 border-gray-300 shadow-none "
               name="dateRange"
             />
-          </div>
+          </div> */}
           <div className="w-full">
             <label className="block text-sm font-medium text-gray-700">
               Name
@@ -124,8 +169,8 @@ const TempParkingSubmissions = () => {
             <Input
               type="text"
               className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
-              required
               placeholder="Input Customer Name"
+              onChange={handleNameChange}
             />
           </div>
           <div className="w-full">
@@ -142,16 +187,10 @@ const TempParkingSubmissions = () => {
                 sideOffset={5}
                 className="max-h-60 w-40 overflow-y-auto text-sm"
               >
-                {[
-                  "Pending",
-                  "Approved - Site Admin",
-                  "Declined - Site Admin",
-                  "Approved - Building Admin",
-                  "Declined - Building Admin",
-                ].map((type) => (
+                {["Pending", "Approved", "Declined"].map((type) => (
                   <DropdownMenuItem
                     key={type}
-                    onSelect={() => setSelectedStatus(type)}
+                    onSelect={() => handleStatusChange(type)}
                   >
                     {type}
                   </DropdownMenuItem>
@@ -166,7 +205,7 @@ const TempParkingSubmissions = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                  {selectedBuilding || "Select Site"}
+                  {selectedSite || "Select Site"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -176,13 +215,18 @@ const TempParkingSubmissions = () => {
                 {buildings.map((building) => (
                   <DropdownMenuItem
                     key={building.name}
-                    onSelect={() => setSelectedBuilding(building.name)}
+                    onSelect={() => handleSiteChange(building.name)}
                   >
                     {building.name}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+          </div>
+          <div className="w-1/2 content-end">
+            <Button onClick={reset} className="w-full">
+              Reset Filters
+            </Button>
           </div>
         </div>
       </Form>

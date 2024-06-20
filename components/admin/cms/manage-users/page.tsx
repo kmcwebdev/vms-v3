@@ -44,10 +44,10 @@ const ManageUsers = () => {
     <>
       <Card className="shadow-none">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">User Management</CardTitle>
+          <CardTitle className="text-xl font-bold">Permit Application Management</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue={searchParams.get("tab") || "default"}>
+          <Tabs defaultValue={searchParams.get("tab") || "gate-pass"}>
             <TabsList>
               <TabsTrigger
                 value="gate-pass"

@@ -17,6 +17,7 @@ import React from "react";
 
 const Permits = () => {
   const router = useRouter();
+  
 
   const searchParams = useSearchParams();
 
@@ -44,7 +45,7 @@ const Permits = () => {
         <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue={searchParams.get("tab") || "default"}>
+        <Tabs defaultValue={searchParams.get("tab") || "gate-pass"}>
           <TabsList>
             <TabsTrigger
               value="gate-pass"
