@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -54,34 +54,34 @@ const TempParkingSubmissions = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    filterSubmissions();
-  }, [selectedStatus, selectedSite, selectedName, tempParkingSubmissions]);
-
-  const filterSubmissions = () => {
+  const filterSubmissions = useCallback(() => {
     let filtered = tempParkingSubmissions;
 
     if (selectedStatus) {
       filtered = filtered.filter(
-        (submission: any) => submission.status === selectedStatus,
+        (submission:any) => submission.status === selectedStatus
       );
     }
 
     if (selectedSite) {
       filtered = filtered.filter(
-        (submission: any) => submission.site === selectedSite,
+        (submission:any) => submission.site === selectedSite
       );
     }
 
     if (selectedName) {
       const lowerCaseName = selectedName.toLowerCase();
-      filtered = filtered.filter((submission: any) =>
-        submission.name.toLowerCase().includes(lowerCaseName),
+      filtered = filtered.filter((submission:any) =>
+        submission.name.toLowerCase().includes(lowerCaseName)
       );
     }
 
     setFilteredSubmissions(filtered);
-  };
+  }, [selectedStatus, selectedSite, selectedName, tempParkingSubmissions]);
+
+  useEffect(() => {
+    filterSubmissions();
+  }, [filterSubmissions]);
 
   const onFormSubmit = (data: any) => {};
 

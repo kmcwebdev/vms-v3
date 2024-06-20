@@ -49,9 +49,7 @@ export default function ViewGatePassApplication({
 
       const data = await response.json();
       if (data.message === "Updated Successfully") {
-        // Update local state
         setSelectedStatus(newStatus);
-        status(submission)
         console.log("Status updated successfully");
       } else {
         console.error("Failed to update status", data.message);
