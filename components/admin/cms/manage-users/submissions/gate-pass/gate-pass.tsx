@@ -361,6 +361,8 @@ const GatePassSubmissions = () => {
         onClose={handleCloseModal}
         submission={selectedSubmission}
       />
+
+      
     </>
   );
 };
