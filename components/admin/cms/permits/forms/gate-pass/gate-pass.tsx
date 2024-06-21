@@ -18,6 +18,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { gatePassSchema } from "@/schema/gate-pass";
 import { useFormState, useFormStatus } from "react-dom";
 
+const accordionData = [
+  { id: 1, title: "Part 1 (Personal Information)", Component: Part1 },
+  { id: 2, title: "Part 2 (Work Details)", Component: Part2 },
+  { id: 3, title: "Part 3 (Additional Information)", Component: Part3 },
+];
+
 export async function FormSubmit(
   prevState: any,
   values: z.infer<typeof gatePassSchema>,
@@ -62,73 +68,35 @@ const GatePassForm = () => {
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          <div className="text-green-500 text/md">{state.message}</div>
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 1}
-          >
-            <AccordionHeader
+          <div className="text/md text-green-500">{state.message}</div>
+          {accordionData.map(({ id, title, Component }) => (
+            <Accordion
+              key={id}
               placeholder={null}
               onPointerEnterCapture
               onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(1)}
+              open={open === id}
             >
-              Part 1 (Personal Information)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part1 formControl={form} />
-            </AccordionBody>
-          </Accordion>
-
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 2}
-          >
-            <AccordionHeader
-              placeholder={null}
-              onPointerEnterCapture
-              onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(2)}
-            >
-              Part 2 (Work Details)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part2 formControl={form} />
-            </AccordionBody>
-          </Accordion>
-
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 3}
-          >
-            <AccordionHeader
-              placeholder={null}
-              onPointerEnterCapture
-              onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(3)}
-            >
-              Part 3 (Additional Information)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part3 formControl={form} />
-            </AccordionBody>
-          </Accordion>
-
+              <AccordionHeader
+                placeholder={null}
+                onPointerEnterCapture
+                onPointerLeaveCapture
+                className="text-sm font-medium"
+                onClick={() => handleOpen(id)}
+              >
+                {title}
+              </AccordionHeader>
+              <AccordionBody>
+                <Component formControl={form} />
+              </AccordionBody>
+            </Accordion>
+          ))}
           <div className="mt-5 flex flex-row justify-between">
             <FileUpload formControl={form} />
             <Button
               aria-disabled={pending}
               type="submit"
-              className="mt-4 max-h-11 rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500 self-center  "
+              className="mt-4 max-h-11 self-center rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500  "
             >
               Submit
             </Button>

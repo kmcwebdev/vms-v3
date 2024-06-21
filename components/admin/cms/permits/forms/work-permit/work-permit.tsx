@@ -20,6 +20,12 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormState, useFormStatus } from "react-dom";
 
+const accordionData = [
+  { id: 1, title: "Part 1 (Personal Information)", Component: Part1 },
+  { id: 2, title: "Part 2 (Work Details)", Component: Part2 },
+  { id: 3, title: "Part 3 (Additional Information)", Component: Part3 },
+]
+
 export async function FormSubmit(
   prevState: any,
   values: z.infer<typeof workPermitSchema>,
@@ -65,7 +71,29 @@ const WorkPermitForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
           <div className="text/md text-green-500">{state.message}</div>
-          <Accordion
+          {accordionData.map(({ id, title, Component }) => (
+            <Accordion
+              key={id}
+              placeholder={null}
+              onPointerEnterCapture
+              onPointerLeaveCapture
+              open={open === id}
+            >
+              <AccordionHeader
+                placeholder={null}
+                onPointerEnterCapture
+                onPointerLeaveCapture
+                className="text-sm font-medium"
+                onClick={() => handleOpen(id)}
+              >
+                {title}
+              </AccordionHeader>
+              <AccordionBody>
+                <Component formControl={form} />
+              </AccordionBody>
+            </Accordion>
+          ))}
+          {/* <Accordion
             placeholder={null}
             onPointerEnterCapture
             onPointerLeaveCapture
@@ -123,7 +151,7 @@ const WorkPermitForm = () => {
             <AccordionBody>
               <Part3 formControl={form} />
             </AccordionBody>
-          </Accordion>
+          </Accordion> */}
 
           {/* Attach File and Submit Buttons */}
           <div className="mt-5 flex flex-row justify-between">

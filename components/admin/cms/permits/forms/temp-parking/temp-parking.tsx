@@ -2,7 +2,7 @@ import { Form } from "@/components/ui/form";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import {
   Accordion,
   AccordionHeader,
@@ -15,6 +15,11 @@ import { tempParkingSchema } from "@/schema/temp-parking";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormState, useFormStatus } from "react-dom";
+
+const accordionData = [
+  {id: 1, title: "Part 1 (Personal Information)", Component: Part1},
+  {id: 2, title: "Part 2 (Vehicle Information)", Component: Part2}
+]
 
 export async function FormSubmit(
   prevState: any,
@@ -35,6 +40,7 @@ export async function FormSubmit(
     }
 
     const data = await res.json();
+    redirect('/cms');
     return data;
   } catch (error) {
     console.error("Submission error:", error);
@@ -63,44 +69,28 @@ const TempParkingForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
         <div className="text/md text-green-500">{state.message}</div>
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 1}
-          >
-            <AccordionHeader
+          {accordionData.map(({id, title, Component}) => (
+            <Accordion
+              key={id}
               placeholder={null}
               onPointerEnterCapture
               onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(1)}
+              open={open===id}
             >
-              Part 1 (Personal Details)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part1 formControl={form} />
-            </AccordionBody>
-          </Accordion>
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 2}
-          >
-            <AccordionHeader
-              placeholder={null}
-              onPointerEnterCapture
-              onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(2)}
-            >
-              Part 2 (Vehicle Details)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part2 formControl={form} />
-            </AccordionBody>
-          </Accordion>
+              <AccordionHeader
+                placeholder={null}
+                onPointerEnterCapture
+                onPointerLeaveCapture
+                className="text-sm font-medium"
+                onClick={() => handleOpen(id)}
+              >
+                {title}
+              </AccordionHeader>
+              <AccordionBody>
+                <Component formControl={form} />
+              </AccordionBody>
+            </Accordion>
+          ))}
 
           {/* Attach File and Submit Buttons */}
           <div className="mt-5 flex flex-row justify-between">
