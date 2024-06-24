@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Card,
   CardContent,
@@ -8,19 +8,20 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { useForm } from "react-hook-form";
-import { Visitor } from "@/types/visitor";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense } from "react";
 import GatePassSubmissions from "./submissions/gate-pass/gate-pass";
 import WorkPermitSubmissions from "./submissions/work-permit/work-permit";
 import TempParkingSubmissions from "./submissions/temp-parking/temp-parking";
+import { useRoleCheck } from "@/utils/client-roles";
 
-const ManageUsers = () => {
-
+export default function ManageUsers() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const {role, loading} = useRoleCheck();
+
+  console.log("Role", role);
 
   let title;
   const tab = searchParams.get("tab");
@@ -95,5 +96,3 @@ const ManageUsers = () => {
     </>
   );
 };
-
-export default ManageUsers;

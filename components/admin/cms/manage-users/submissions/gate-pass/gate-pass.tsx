@@ -20,6 +20,8 @@ import { buildings } from "@/components/global/sites";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import ViewGatePassApplication from "./view-details/view-details";
+import EditGatePassApplication from "./edit-details/edit-details";
+
 
 const GatePassSubmissions = () => {
   const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
@@ -28,14 +30,17 @@ const GatePassSubmissions = () => {
   const [selectedSite, setSelectedSite] = React.useState("");
   const [selectedName, setSelectedName] = useState("");
 
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
 
   const form = useForm();
 
   useEffect(() => {
-    //console.log(isModalOpen);
-  }, [isModalOpen]);
+    //console.log(isViewModalOpen);
+  }, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -86,14 +91,24 @@ const GatePassSubmissions = () => {
   const onFormSubmit = (data: any) => {};
 
   const handleViewClick = (submission: any) => {
-    setSelectedSubmission(submission);
-    setIsModalOpen(true);
+    setSelectedViewSubmission(submission);
+    setIsViewModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedSubmission(null);
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setSelectedViewSubmission(null);
   };
+
+  const handleEditClick = (submission: any) => {
+    setSelectedEditSubmission(submission);
+    setIsEditModalOpen(true);
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedEditSubmission(null);
+  }
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -322,7 +337,7 @@ const GatePassSubmissions = () => {
                             />
                           </Button>
                           <Button
-                            onClick={() => {}}
+                            onClick={() => handleEditClick(submission)}
                             className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
                           >
                             <Pencil1Icon
@@ -368,9 +383,15 @@ const GatePassSubmissions = () => {
       <Separator className="mt-2" />
 
       <ViewGatePassApplication
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        submission={selectedSubmission}
+        isOpen={isViewModalOpen}
+        onClose={handleCloseViewModal}
+        submission={selectedViewSubmission}
+        onStatusChange={updateSubmissionStatus}
+      />
+      <EditGatePassApplication
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        submission={selectedEditSubmission}
         onStatusChange={updateSubmissionStatus}
       />
     </>
