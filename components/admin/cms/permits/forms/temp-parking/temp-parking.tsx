@@ -56,8 +56,6 @@ const TempParkingForm = () => {
     resolver: zodResolver(tempParkingSchema),
   });
 
-  const router = useRouter();
-
   const handleError = (errors: any) => {
     console.log("Validation errors:", errors); 
   };

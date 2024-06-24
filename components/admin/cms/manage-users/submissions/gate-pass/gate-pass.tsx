@@ -59,20 +59,20 @@ const GatePassSubmissions = () => {
 
     if (selectedStatus) {
       filtered = filtered.filter(
-        (submission:any) => submission.status === selectedStatus
+        (submission: any) => submission.status === selectedStatus,
       );
     }
 
     if (selectedSite) {
       filtered = filtered.filter(
-        (submission:any) => submission.site === selectedSite
+        (submission: any) => submission.site === selectedSite,
       );
     }
 
     if (selectedName) {
       const lowerCaseName = selectedName.toLowerCase();
-      filtered = filtered.filter((submission:any) =>
-        submission.name.toLowerCase().includes(lowerCaseName)
+      filtered = filtered.filter((submission: any) =>
+        submission.name.toLowerCase().includes(lowerCaseName),
       );
     }
 
@@ -142,9 +142,20 @@ const GatePassSubmissions = () => {
     setFilteredSubmissions([...gatePassSubmissions]);
   };
 
-  // Add functionality here to update submissions 
+  // Add functionality here to update submissions
   // if the status is changed from the view panel
   // or if there are wholesale changes from edit.
+
+  const updateSubmissionStatus = (submissionId: any, newStatus: any) => {
+    setGatePassSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
+          ? { ...submission, status: newStatus }
+          : submission,
+      ),
+    );
+    filterSubmissions();
+  };
 
   return (
     <>
@@ -360,9 +371,8 @@ const GatePassSubmissions = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         submission={selectedSubmission}
+        onStatusChange={updateSubmissionStatus}
       />
-
-      
     </>
   );
 };

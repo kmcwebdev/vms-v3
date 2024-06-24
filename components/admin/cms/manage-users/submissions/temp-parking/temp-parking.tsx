@@ -145,6 +145,17 @@ const TempParkingSubmissions = () => {
     setFilteredSubmissions([...tempParkingSubmissions]);
   };
 
+  const updateSubmissionStatus = (submissionId:any, newStatus:any) => {
+    setTempParkingSubmissions((prevSubmissions:any) =>
+      prevSubmissions.map((submission:any) =>
+        submission.submission_id === submissionId
+          ? { ...submission, status: newStatus }
+          : submission
+      )
+    );
+    filterSubmissions();
+  };
+
   return (
     <>
       <Form
@@ -357,6 +368,7 @@ const TempParkingSubmissions = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         submission={selectedSubmission}
+        onStatusChange={updateSubmissionStatus}
       />
     </>
   );

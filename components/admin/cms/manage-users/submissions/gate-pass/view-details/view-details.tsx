@@ -18,11 +18,13 @@ import { Button } from "@/components/ui/button";
 export default function ViewGatePassApplication({
   isOpen,
   onClose,
-  submission
+  submission,
+  onStatusChange
 }: {
     isOpen: boolean;
     onClose: any;
     submission: any;
+    onStatusChange: any;
   }) {
   const [selectedStatus, setSelectedStatus] = useState(submission?.status || "");
 
@@ -31,6 +33,7 @@ export default function ViewGatePassApplication({
   }, [submission]);
 
   const updateSubmissionStatus = async (newStatus:any) => {
+    setSelectedStatus(newStatus);
     try {
       const response = await fetch(
         `/api/update-gate-pass/${submission.submission_id}`,
@@ -47,20 +50,10 @@ export default function ViewGatePassApplication({
         throw new Error("Failed to update status");
       }
 
-      const data = await response.json();
-      if (data.message === "Updated Successfully") {
-        setSelectedStatus(newStatus);
-        console.log("Status updated successfully");
-      } else {
-        console.error("Failed to update status", data.message);
-      }
+      onStatusChange(submission.submission_id, newStatus);
     } catch (error) {
       console.error("Error updating status:", error);
     }
-  };
-
-  const handleStatusChange = (status:any) => {
-    updateSubmissionStatus(status);
   };
 
   return (
@@ -127,7 +120,7 @@ export default function ViewGatePassApplication({
                                   (type) => (
                                     <DropdownMenuItem
                                       key={type}
-                                      onSelect={() => handleStatusChange(type)}
+                                      onSelect={() => updateSubmissionStatus(type)}
                                     >
                                       {type}
                                     </DropdownMenuItem>
