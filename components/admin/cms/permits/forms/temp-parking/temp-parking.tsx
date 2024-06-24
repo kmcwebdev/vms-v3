@@ -40,7 +40,6 @@ export async function FormSubmit(
     }
 
     const data = await res.json();
-    redirect('/cms');
     return data;
   } catch (error) {
     console.error("Submission error:", error);
