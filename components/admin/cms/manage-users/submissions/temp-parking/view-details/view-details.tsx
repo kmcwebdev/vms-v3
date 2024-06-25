@@ -38,7 +38,7 @@ export default function ViewTempParkingApplication({
     setSelectedStatus(newStatus);
     try {
       const response = await fetch(
-        `/api/update-temp-parking-status/${submission.submission_id}`,
+        `/api/permits/update-temp-parking-status/${submission.submission_id}`,
         {
           method: "PUT",
           headers: {

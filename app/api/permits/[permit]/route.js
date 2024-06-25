@@ -404,7 +404,9 @@ export async function GET(req, { params }) {
         status: 500,
       });
     }
-  } else {
+  } 
+  // will soon add get-gate-pass-unique, get-work-permit-unique, and get-temp-parking-unique
+  else {
     responseMessage = { message: "Invalid permit" };
     return new Response(JSON.stringify(responseMessage), {
       headers: { "Content-Type": "application/json" },

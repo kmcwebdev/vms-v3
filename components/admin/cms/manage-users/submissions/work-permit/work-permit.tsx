@@ -40,7 +40,7 @@ const WorkPermitSubmissions = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/get-work-permit");
+        const response = await fetch("/api/permits/get-work-permit");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

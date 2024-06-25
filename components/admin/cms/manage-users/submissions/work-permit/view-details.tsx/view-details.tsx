@@ -38,7 +38,7 @@ export default function ViewWorkPermitApplication({
     setSelectedStatus(newStatus);
     try {
       const response = await fetch(
-        `/api/update-work-permit-status/${submission.submission_id}`,
+        `/api/permits/update-work-permit-status/${submission.submission_id}`,
         {
           method: "PUT",
           headers: {

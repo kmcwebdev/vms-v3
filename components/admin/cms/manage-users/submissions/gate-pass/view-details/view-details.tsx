@@ -36,7 +36,7 @@ export default function ViewGatePassApplication({
     setSelectedStatus(newStatus);
     try {
       const response = await fetch(
-        `/api/update-gate-pass-status/${submission.submission_id}`,
+        `/api/permits/update-gate-pass-status/${submission.submission_id}`,
         {
           method: "PUT",
           headers: {

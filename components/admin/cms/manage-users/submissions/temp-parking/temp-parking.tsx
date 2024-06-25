@@ -40,7 +40,7 @@ const TempParkingSubmissions = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/get-temp-parking");
+        const response = await fetch("/api/permits/get-temp-parking");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

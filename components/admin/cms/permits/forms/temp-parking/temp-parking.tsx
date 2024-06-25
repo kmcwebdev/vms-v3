@@ -27,7 +27,7 @@ export async function FormSubmit(
 ) {
   console.log("PERMIT VALUES", { values });
   try {
-    const res = await fetch("/api/post-temp-parking", {
+    const res = await fetch("/api/permits/post-temp-parking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

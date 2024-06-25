@@ -25,7 +25,7 @@ const GatePassSubmissions = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/get-gate-pass");
+        const response = await fetch("/api/permits/get-gate-pass");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

@@ -7,19 +7,6 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon, PaperClipIcon } from "@heroicons/react/24/outline";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { gatePassSchema } from "@/schema/gate-pass";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useFormState, useFormStatus } from "react-dom";
 
 
 export default function EditGatePassApplication({

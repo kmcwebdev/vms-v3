@@ -139,7 +139,8 @@ export async function DELETE(req, { params }) {
 export async function PUT(req, { params }) {
   let responseMessage = { message: "Invalid Request" };
   const permit = params.permit;
-
+  // will soon add update-gate-pass-submission, update-work-permit-submission, and update-temp-parking-submission
+  // this is for a complete edit of the form from the admin management panel or the user updating his submission while it is still pending
   if (
     !["update-gate-pass-status", "update-work-permit-status", "update-temp-parking-status"].includes(
       permit,

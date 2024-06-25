@@ -30,7 +30,7 @@ export async function FormSubmit(
 ) {
   console.log("PERMIT VALUES", { values });
   try {
-    const res = await fetch("/api/post-gate-pass", {
+    const res = await fetch("/api/permits/post-gate-pass", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
