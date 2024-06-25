@@ -14,14 +14,20 @@ import { Suspense } from "react";
 import GatePassSubmissions from "./submissions/gate-pass/gate-pass";
 import WorkPermitSubmissions from "./submissions/work-permit/work-permit";
 import TempParkingSubmissions from "./submissions/temp-parking/temp-parking";
-import { useRoleCheck } from "@/utils/client-roles";
+import { auth } from "@clerk/nextjs/server";
+import { useUser } from "@clerk/clerk-react";
+import {redirect} from 'next/navigation';
 
 export default function ManageUsers() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const {role, loading} = useRoleCheck();
 
-  console.log("Role", role);
+  const {user} = useUser();
+
+  const userRole = user?.publicMetadata.role;
+  if (userRole !== 'admin') {
+    redirect('/not-found');
+  }
 
   let title;
   const tab = searchParams.get("tab");
