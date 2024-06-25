@@ -1,22 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
-import Form from "@/components/global/form";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  MagnifyingGlassIcon,
   EyeOpenIcon,
   Pencil1Icon,
   Cross1Icon,
 } from "@radix-ui/react-icons";
-import DateRangePicker from "@/components/global/date-range-picker";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { buildings } from "@/components/global/sites";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import ViewGatePassApplication from "./view-details/view-details";
@@ -25,18 +13,10 @@ import EditGatePassApplication from "./edit-details/edit-details";
 
 const GatePassSubmissions = () => {
   const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
-  const [filteredSubmissions, setFilteredSubmissions] = useState([]);
-  const [selectedStatus, setSelectedStatus] = React.useState("");
-  const [selectedSite, setSelectedSite] = React.useState("");
-  const [selectedName, setSelectedName] = useState("");
-
   const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-
-  const form = useForm();
 
   useEffect(() => {
     //console.log(isViewModalOpen);
@@ -58,37 +38,6 @@ const GatePassSubmissions = () => {
     }
     fetchData();
   }, []);
-
-  const filterSubmissions = useCallback(() => {
-    let filtered = gatePassSubmissions;
-
-    if (selectedStatus) {
-      filtered = filtered.filter(
-        (submission: any) => submission.status === selectedStatus,
-      );
-    }
-
-    if (selectedSite) {
-      filtered = filtered.filter(
-        (submission: any) => submission.site === selectedSite,
-      );
-    }
-
-    if (selectedName) {
-      const lowerCaseName = selectedName.toLowerCase();
-      filtered = filtered.filter((submission: any) =>
-        submission.name.toLowerCase().includes(lowerCaseName),
-      );
-    }
-
-    setFilteredSubmissions(filtered);
-  }, [selectedStatus, selectedSite, selectedName, gatePassSubmissions]);
-
-  useEffect(() => {
-    filterSubmissions();
-  }, [filterSubmissions]);
-
-  const onFormSubmit = (data: any) => {};
 
   const handleViewClick = (submission: any) => {
     setSelectedViewSubmission(submission);
@@ -138,125 +87,9 @@ const GatePassSubmissions = () => {
     }
   };
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedName(e.target.value);
-  };
-
-  const handleStatusChange = (status: string) => {
-    setSelectedStatus(status);
-  };
-
-  const handleSiteChange = (site: string) => {
-    setSelectedSite(site);
-  };
-
-  const reset = () => {
-    setSelectedName("");
-    setSelectedStatus("");
-    setSelectedSite("");
-    setFilteredSubmissions([...gatePassSubmissions]);
-  };
-
-  // Add functionality here to update submissions
-  // if the status is changed from the view panel
-  // or if there are wholesale changes from edit.
-
-  const updateSubmissionStatus = (submissionId: any, newStatus: any) => {
-    setGatePassSubmissions((prevSubmissions: any) =>
-      prevSubmissions.map((submission: any) =>
-        submission.submission_id === submissionId
-          ? { ...submission, status: newStatus }
-          : submission,
-      ),
-    );
-    filterSubmissions();
-  };
-
   return (
     <>
-      <Form
-        name="submission-filter"
-        useFormReturn={form}
-        onSubmit={onFormSubmit}
-      >
-        <div className="mt-5 flex flex-row gap-5 p-2">
-          {/* <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700">
-              Date
-            </label>
-            <DateRangePicker
-              className="mt-1 border-gray-300 shadow-none "
-              name="dateRange"
-            />
-          </div> */}
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <Input
-              type="text"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
-              placeholder="Input Customer Name"
-              onChange={handleNameChange}
-            />
-          </div>
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700">
-              Status
-            </label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                  {selectedStatus || "Select a Status"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                sideOffset={5}
-                className="max-h-60 w-40 overflow-y-auto text-sm"
-              >
-                {["Pending", "Approved", "Declined"].map((type) => (
-                  <DropdownMenuItem
-                    key={type}
-                    onSelect={() => handleStatusChange(type)}
-                  >
-                    {type}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700">
-              Site
-            </label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                  {selectedSite || "Select Site"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                sideOffset={5}
-                className="max-h-60 w-40 overflow-y-auto text-sm"
-              >
-                {buildings.map((building) => (
-                  <DropdownMenuItem
-                    key={building.name}
-                    onSelect={() => handleSiteChange(building.name)}
-                  >
-                    {building.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="w-1/2 content-end">
-            <Button onClick={reset} className="w-full">
-              Reset Filters
-            </Button>
-          </div>
-        </div>
-      </Form>
+      
       <div className="mt-5 px-4 sm:px-6 lg:px-8">
         <div className="flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -298,9 +131,9 @@ const GatePassSubmissions = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {Array.isArray(filteredSubmissions) &&
-                  filteredSubmissions.length > 0 ? (
-                    filteredSubmissions.map((submission: any) => (
+                  {Array.isArray(gatePassSubmissions) &&
+                  gatePassSubmissions.length > 0 ? (
+                    gatePassSubmissions.map((submission: any) => (
                       <tr key={submission.submission_id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -386,7 +219,6 @@ const GatePassSubmissions = () => {
         isOpen={isViewModalOpen}
         onClose={handleCloseViewModal}
         submission={selectedViewSubmission}
-        onStatusChange={updateSubmissionStatus}
       />
       <EditGatePassApplication
         isOpen={isEditModalOpen}

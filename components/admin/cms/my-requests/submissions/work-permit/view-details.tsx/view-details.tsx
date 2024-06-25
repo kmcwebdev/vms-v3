@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Dialog,
   DialogPanel,
@@ -7,57 +7,16 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon, PaperClipIcon } from "@heroicons/react/24/outline";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 
-export default function ViewTempParkingApplication({
+export default function ViewWorkPermitApplication({
   isOpen,
   onClose,
   submission,
-  onStatusChange,
 }: {
   isOpen: boolean;
   onClose: any;
   submission: any;
-  onStatusChange: any;
 }) {
-  const [selectedStatus, setSelectedStatus] = useState(
-    submission?.status || "",
-  );
-
-  useEffect(() => {
-    setSelectedStatus(submission?.status || "");
-  }, [submission]);
-
-  const updateSubmissionStatus = async (newStatus: any) => {
-    setSelectedStatus(newStatus);
-    try {
-      const response = await fetch(
-        `/api/update-temp-parking-status/${submission.submission_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status: newStatus }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update status");
-      }
-
-      onStatusChange(submission.submission_id, newStatus);
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-  };
-
   return (
     <Transition show={isOpen}>
       <Dialog className="relative z-10" onClose={onClose}>
@@ -79,7 +38,7 @@ export default function ViewTempParkingApplication({
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <DialogTitle className="text-base font-semibold leading-6 text-gray-900">
-                          Temporary Parking Application Details
+                          Work Permit Application Details
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -96,43 +55,15 @@ export default function ViewTempParkingApplication({
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       <div>
-                      <div className="flex flex-row justify-between">
-                          <div className="px-4 sm:px-0">
-                            <h3 className="text-base font-semibold leading-7 text-gray-900">
-                              Applicant Information
-                            </h3>
-                            <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-                              Personal details and application
-                            </p>
-                          </div>
-                          <div className="w-1/2">
-                            <label className="block text-sm font-medium text-gray-700">
-                              Update Status
-                            </label>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                                  {selectedStatus}
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent
-                                sideOffset={5}
-                                className="max-h-60 w-40 overflow-y-auto text-sm"
-                              >
-                                {["Pending", "Approved", "Declined"].map(
-                                  (type) => (
-                                    <DropdownMenuItem
-                                      key={type}
-                                      onSelect={() => updateSubmissionStatus(type)}
-                                    >
-                                      {type}
-                                    </DropdownMenuItem>
-                                  )
-                                )}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
+                        <div className="px-4 sm:px-0">
+                          <h3 className="text-base font-semibold leading-7 text-gray-900">
+                            Applicant Information
+                          </h3>
+                          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+                            Personal details and application
+                          </p>
                         </div>
+
                         <div className="mt-6 border-t border-gray-100">
                           <dl className="divide-y divide-gray-100">
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -153,22 +84,28 @@ export default function ViewTempParkingApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Location
+                                Job Scope
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.site} (Level {submission?.floor})
+                                {submission?.work_area} for {submission?.tenant}
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Vehicle Details
+                                Contractor Name / POC
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.vehicle_model} (
-                                {submission?.vehicle_color}) -{" "}
-                                {submission?.vehicle_number} <br></br>
-                                Requested for Parking Number{" "}
-                                {submission?.parking_number}
+                                {submission?.contractor} /{" "}
+                                {submission?.person_in_charge} (
+                                {submission?.number})
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Location
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {submission?.site} (Level {submission?.floor})
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -182,13 +119,90 @@ export default function ViewTempParkingApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Manager Email <br></br>{" "}
-                                <div className="font-light italic">
-                                  (For Verification)
-                                </div>
+                                Work Types
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.manager_email}
+                                {submission?.work_types.join(", ")}
+                                {submission?.work_types.includes("Others") &&
+                                  submission?.other_work_types && (
+                                    <>
+                                      , Other Work Type:{" "}
+                                      {submission.other_work_types}
+                                    </>
+                                  )}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Work Requirements
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {submission?.work_requirements.join(", ")}
+                                {submission?.work_requirements.includes(
+                                  "other",
+                                ) &&
+                                  submission?.other_work_requirements && (
+                                    <>, {submission.other_work_requirements}</>
+                                  )}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Other Info
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {submission?.scope}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Workers
+                              </dt>
+                              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                {submission?.workers?.map(
+                                  (worker: any, index: number) => (
+                                    <div key={index} className="mb-2">
+                                      <strong>Worker {index + 1}</strong>
+                                      <div>
+                                        <i>Name:</i> {worker.name}
+                                      </div>
+                                      <div>
+                                        <i>Company:</i> {worker.company}
+                                      </div>
+                                      <div>
+                                        <i>Description:</i> {worker.description}
+                                      </div>
+                                      <br></br>
+                                    </div>
+                                  ),
+                                )}
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Items
+                              </dt>
+                              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                {submission?.items?.map(
+                                  (item: any, index: number) => (
+                                    <div key={index} className="mb-2">
+                                      <strong>Item {index + 1}</strong>
+                                      <div>
+                                        <i>Description:</i> {item.description}
+                                      </div>
+                                      <div>
+                                        <i>Quantity:</i> {item.qty}
+                                      </div>
+                                      <div>
+                                        <i>Unit:</i> {item.unit}
+                                      </div>
+                                      <div>
+                                        <i>Remarks:</i> {item.remarks}
+                                      </div>
+                                      <br></br>
+                                    </div>
+                                  ),
+                                )}
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

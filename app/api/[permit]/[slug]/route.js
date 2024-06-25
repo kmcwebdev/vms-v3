@@ -141,7 +141,7 @@ export async function PUT(req, { params }) {
   const permit = params.permit;
 
   if (
-    !["update-gate-pass", "update-work-permit", "update-temp-parking"].includes(
+    !["update-gate-pass-status", "update-work-permit-status", "update-temp-parking-status"].includes(
       permit,
     )
   ) {
@@ -167,13 +167,13 @@ export async function PUT(req, { params }) {
   let tableName;
 
   switch (permit) {
-    case "update-gate-pass":
+    case "update-gate-pass-status":
       tableName = "gate_pass_submissions";
       break;
-    case "update-work-permit":
+    case "update-work-permit-status":
       tableName = "work_permit_submissions";
       break;
-    case "update-temp-parking":
+    case "update-temp-parking-status":
       tableName = "temp_parking_submissions";
       break;
   }
@@ -211,3 +211,4 @@ export async function PUT(req, { params }) {
     });
   }
 }
+

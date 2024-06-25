@@ -21,82 +21,16 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormState, useFormStatus } from "react-dom";
 
-export async function FormSubmit(
-  prevState: any,
-  values: z.infer<typeof gatePassSchema>,
-) {
-  console.log("PERMIT VALUES", { values });
-  try {
-    const res = await fetch("/api/post-gate-pass", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Server error: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Submission error:", error);
-  }
-}
 
 export default function EditGatePassApplication({
   isOpen,
   onClose,
   submission,
-  onStatusChange,
 }: {
   isOpen: boolean;
   onClose: any;
   submission: any;
-  onStatusChange: any;
 }) {
-  const [selectedStatus, setSelectedStatus] = useState(
-    submission?.status || "",
-  );
-
-  useEffect(() => {
-    setSelectedStatus(submission?.status || "");
-  }, [submission]);
-
-  const updateSubmissionStatus = async (newStatus: any) => {
-    setSelectedStatus(newStatus);
-    try {
-      const response = await fetch(
-        `/api/update-gate-pass/${submission.submission_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status: newStatus }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update status");
-      }
-
-      onStatusChange(submission.submission_id, newStatus);
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-  };
-
-  const form = useForm<z.infer<typeof gatePassSchema>>({
-    resolver: zodResolver(gatePassSchema),
-  });
-  const [state, handleSubmit] = useFormState(FormSubmit, "");
-  const { pending } = useFormStatus();
-  const handleError = (errors: any) => {
-    console.log("Validation errors:", errors);
-  };
 
   return (
     <Transition show={isOpen}>
@@ -133,13 +67,8 @@ export default function EditGatePassApplication({
                         </div>
                       </div>
                     </div>
-                    <Form {...form}>
-                      <form
-                        onSubmit={form.handleSubmit(handleSubmit, handleError)}
-                      >
                         <div className="relative mt-6 flex-1 px-4 sm:px-6">
                           <div>
-                            <div className="flex flex-row justify-between">
                               <div className="px-4 sm:px-0">
                                 <h3 className="text-base font-semibold leading-7 text-gray-900">
                                   Applicant Information
@@ -148,36 +77,6 @@ export default function EditGatePassApplication({
                                   Personal details and application
                                 </p>
                               </div>
-                              <div className="w-1/2">
-                                <label className="block text-sm font-medium text-gray-700">
-                                  Update Status
-                                </label>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                                      {selectedStatus}
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent
-                                    sideOffset={5}
-                                    className="max-h-60 w-40 overflow-y-auto text-sm"
-                                  >
-                                    {["Pending", "Approved", "Declined"].map(
-                                      (type) => (
-                                        <DropdownMenuItem
-                                          key={type}
-                                          onSelect={() =>
-                                            updateSubmissionStatus(type)
-                                          }
-                                        >
-                                          {type}
-                                        </DropdownMenuItem>
-                                      ),
-                                    )}
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </div>
-                            </div>
 
                             <div className="mt-6 border-t border-gray-100">
                               <dl className="divide-y divide-gray-100">
@@ -315,8 +214,6 @@ export default function EditGatePassApplication({
                             {/* Add more details as needed */}
                           </div>
                         </div>
-                      </form>
-                    </Form>
                   </div>
                 </DialogPanel>
               </TransitionChild>

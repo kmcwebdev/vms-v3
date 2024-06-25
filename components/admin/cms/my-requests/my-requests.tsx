@@ -14,20 +14,10 @@ import { Suspense } from "react";
 import GatePassSubmissions from "./submissions/gate-pass/gate-pass";
 import WorkPermitSubmissions from "./submissions/work-permit/work-permit";
 import TempParkingSubmissions from "./submissions/temp-parking/temp-parking";
-import { auth } from "@clerk/nextjs/server";
-import { useUser } from "@clerk/clerk-react";
-import {redirect} from 'next/navigation';
 
-export default function ManageUsers() {
+export default function MyRequests() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const {user} = useUser();
-
-  const userRole = user?.publicMetadata.role;
-  if (userRole !== 'admin') {
-    redirect('/not-found');
-  }
 
   let title;
   const tab = searchParams.get("tab");
@@ -51,7 +41,7 @@ export default function ManageUsers() {
     <>
       <Card className="shadow-none">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">Permit Application Management</CardTitle>
+          <CardTitle className="text-xl font-bold">My Requests</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue={searchParams.get("tab") || "gate-pass"}>

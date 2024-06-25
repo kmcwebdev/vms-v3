@@ -6,12 +6,17 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
+import { useUser } from "@clerk/clerk-react";
+import { redirect } from "next/navigation";
 
 const MainNav = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
   const pathName = usePathname();
+  const { user } = useUser();
+
+  const userRole = user?.publicMetadata.role;
 
   const searchForm = useForm();
 
@@ -49,15 +54,7 @@ const MainNav = ({
         >
           Area Sites
         </Link>
-        <Link
-          href="/cms/manage-users"
-          className={cn(
-            "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-            pathName === "/cms/manage-users" && "text-black",
-          )}
-        >
-          Manage Users
-        </Link>
+
         <Link
           href="/cms/permits"
           className={cn(
@@ -67,6 +64,28 @@ const MainNav = ({
         >
           Permits
         </Link>
+        {userRole === "admin" && (
+          <Link
+            href="/cms/manage-users"
+            className={cn(
+              "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+              pathName === "/cms/manage-users" && "text-black",
+            )}
+          >
+            Manage Users
+          </Link>
+        )}
+        {userRole !== "admin" && (
+          <Link
+            href="/cms/my-requests"
+            className={cn(
+              "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+              pathName === "/cms/my-requests" && "text-black",
+            )}
+          >
+            My Requests
+          </Link>
+        )}
       </div>
       <Form
         name="search"
