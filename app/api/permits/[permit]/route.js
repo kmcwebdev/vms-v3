@@ -2,9 +2,11 @@ import { gatePassSchema } from "@/schema/gate-pass";
 import { workPermitSchema } from "@/schema/work-permit";
 import { query } from "@/lib/db";
 import { tempParkingSchema } from "@/schema/temp-parking";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req, { params }) {
   let responseMessage = { message: "Invalid Request" };
+  const { userId } = auth();
   const permit = params.permit;
 
   if (permit === "post-gate-pass") {
@@ -39,6 +41,7 @@ export async function POST(req, { params }) {
         files,
       } = parsedData.data;
       const status = "Pending";
+      const user_id = userId;
 
       const emailsToNotifyArray = emailsToNotify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
@@ -47,9 +50,9 @@ export async function POST(req, { params }) {
       const insertQuery = `
         INSERT INTO gate_pass_submissions (
           type, email, name, service_category, site, floor, carrier_name, 
-          company, date_from, date_to, reason, emails_to_notify, items, files, status
+          company, date_from, date_to, reason, emails_to_notify, items, files, status, user_id
         ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16
         ) RETURNING submission_id;
       `;
 
@@ -69,6 +72,7 @@ export async function POST(req, { params }) {
         formattedItems,
         files,
         status,
+        user_id,
       ];
 
       const result = await query(insertQuery, values);
@@ -132,6 +136,7 @@ export async function POST(req, { params }) {
         files,
       } = parsedData.data;
       const status = "Pending";
+      const user_id = userId;
 
       const emailsToNotifyArray = emailsToNotify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
@@ -142,9 +147,9 @@ export async function POST(req, { params }) {
         INSERT INTO work_permit_submissions (
           type, email, name, work_area, site, floor, tenant, contractor, 
           person_in_charge, number, date_from, date_to, work_types, other_work_types, work_requirements, other_work_requirements, 
-          emails_to_notify, scope, workers, items, files, status
+          emails_to_notify, scope, workers, items, files, status, user_id
         ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23
         ) RETURNING submission_id;
       `;
 
@@ -171,6 +176,7 @@ export async function POST(req, { params }) {
         formattedItems,
         files,
         status,
+        user_id
       ];
 
       const result = await query(insertQuery, values);
@@ -227,14 +233,15 @@ export async function POST(req, { params }) {
         files,
       } = parsedData.data;
       const status = "Pending";
+      const user_id = userId;
 
       const insertQuery = `
         INSERT INTO temp_parking_submissions (
           type, email, name, site, floor, driver_name, vehicle_model,
           vehicle_color, vehicle_number, parking_number, date_from, date_to,
-          manager_email, files, status
+          manager_email, files, status, user_id
         ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16
         ) RETURNING submission_id;
       `;
 
@@ -254,6 +261,7 @@ export async function POST(req, { params }) {
         managerEmail,
         files,
         status,
+        user_id
       ];
 
       const result = await query(insertQuery, values);
@@ -404,7 +412,7 @@ export async function GET(req, { params }) {
         status: 500,
       });
     }
-  } 
+  }
   // will soon add get-gate-pass-unique, get-work-permit-unique, and get-temp-parking-unique
   else {
     responseMessage = { message: "Invalid permit" };

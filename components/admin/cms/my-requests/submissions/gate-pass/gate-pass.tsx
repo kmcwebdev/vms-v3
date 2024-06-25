@@ -66,7 +66,7 @@ const GatePassSubmissions = () => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(`/api/delete-gate-pass/${submissionId}`, {
+        const response = await fetch(`/api/permits/delete-gate-pass/${submissionId}`, {
           method: "DELETE",
         });
 

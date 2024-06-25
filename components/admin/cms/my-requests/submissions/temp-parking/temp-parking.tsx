@@ -53,7 +53,7 @@ const TempParkingSubmissions = () => {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          `/api/delete-temp-parking/${submissionId}`,
+          `/api/permits/delete-temp-parking/${submissionId}`,
           {
             method: "DELETE",
           },

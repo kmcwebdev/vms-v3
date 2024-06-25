@@ -103,7 +103,7 @@ const WorkPermitSubmissions = () => {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          `/api/delete-work-permit/${submissionId}`,
+          `/api/permits/delete-work-permit/${submissionId}`,
           {
             method: "DELETE",
           },
