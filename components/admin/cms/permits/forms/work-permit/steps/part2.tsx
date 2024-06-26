@@ -103,7 +103,7 @@ export default function Part2({ formControl }: { formControl: any }) {
                       >
                         {selectedWorkTypes.length > 0
                           ? selectedWorkTypes.join(", ")
-                          : "Select Work Types"}
+                          : "Select Types"}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -142,11 +142,11 @@ export default function Part2({ formControl }: { formControl: any }) {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col">
-                <FormLabel>Others</FormLabel>
+                <FormLabel>Other Types</FormLabel>
                 <FormControl>
                   <Textarea
                     className="block h-16 w-full rounded-md border border-gray-300"
-                    placeholder="Input Other Work Type"
+                    placeholder="Input Other"
                     onChange={(e) => {
                       setSelectedOtherWorkTypes(e.target.value);
                       field.onChange(e.target.value);
@@ -164,7 +164,7 @@ export default function Part2({ formControl }: { formControl: any }) {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col">
-                <FormLabel>Work Requirements</FormLabel>
+                <FormLabel>Work Reqs.</FormLabel>
                 <FormControl>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -174,7 +174,7 @@ export default function Part2({ formControl }: { formControl: any }) {
                       >
                         {selectedWorkRequirements.length > 0
                           ? selectedWorkRequirements.join(", ")
-                          : "Select Work Requirements"}
+                          : "Select Reqs."}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -213,11 +213,11 @@ export default function Part2({ formControl }: { formControl: any }) {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col">
-                <FormLabel>Others</FormLabel>
+                <FormLabel>Other Reqs.</FormLabel>
                 <FormControl>
                   <Textarea
                     className="block h-16 w-full rounded-md border border-gray-300"
-                    placeholder="Input Other Work Requirements"
+                    placeholder="Input Other"
                     onChange={(e) => {
                       setSelectedOtherWorkRequirements(e.target.value);
                       field.onChange(e.target.value);
