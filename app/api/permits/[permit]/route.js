@@ -298,16 +298,27 @@ export async function GET(req, { params }) {
   const { userId } = auth();
   const permit = params.permit;
 
-  if (permit === "get-gate-pass") {
-    try {
-      let selectQuery = `
-        SELECT 
-          *
-        FROM 
-          gate_pass_submissions
-      `;
-      const result = await query(selectQuery);
+  if (
+    ["get-gate-pass", "get-work-permit", "get-temp-parking"].includes(permit)
+  ) {
+    let selectQuery;
+    let tableName;
 
+    switch (permit) {
+      case "get-gate-pass":
+        tableName = "gate_pass_submissions";
+        break;
+      case "get-work-permit":
+        tableName = "work_permit_submissions";
+        break;
+      case "get-temp-parking":
+        tableName = "temp_parking_submissions";
+        break;
+    }
+
+    try {
+      selectQuery = `SELECT * FROM ${tableName}`;
+      const result = await query(selectQuery);
       if (result.rows.length === 0) {
         responseMessage = { message: "No records found" };
         return new Response(JSON.stringify(responseMessage), {
@@ -333,88 +344,29 @@ export async function GET(req, { params }) {
         status: 500,
       });
     }
-  } else if (permit === "get-work-permit") {
-    try {
-      let selectQuery = `
-        SELECT
-          *
-        FROM
-          work_permit_submissions
-      `;
+  } else if (
+    [
+      "get-gate-pass-unique",
+      "get-work-permit-unique",
+      "get-temp-parking-unique",
+    ].includes(permit)
+  ) {
+    let selectQuery;
+    let tableName;
 
-      const result = await query(selectQuery);
-
-      if (result.rows.length === 0) {
-        responseMessage = { message: "No records found" };
-        return new Response(JSON.stringify(responseMessage), {
-          headers: { "Content-Type": "application/json" },
-          status: 404,
-        });
-      }
-      responseMessage = {
-        message: "Records retrieved successfully",
-        data: result.rows,
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
-    } catch (error) {
-      console.error("Error processing request:", error);
-      responseMessage = {
-        message: "An error occurred while processing the request",
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 500,
-      });
+    switch (permit) {
+      case "get-gate-pass-unique":
+        tableName = "gate_pass_submissions";
+        break;
+      case "get-work-permit-unique":
+        tableName = "work_permit_submissions";
+        break;
+      case "get-temp-parking-unique":
+        tableName = "temp_parking_submissions";
+        break;
     }
-  } else if (permit === "get-temp-parking") {
     try {
-      let selectQuery = `
-      SELECT 
-        *
-      FROM
-        temp_parking_submissions
-    `;
-
-      const result = await query(selectQuery);
-
-      if (result.rows.length === 0) {
-        responseMessage = { message: "No records found" };
-        return new Response(JSON.stringify(responseMessage), {
-          headers: { "Content-Type": "application/json" },
-          status: 404,
-        });
-      }
-      responseMessage = {
-        message: "Records retrieved successfully",
-        data: result.rows,
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
-    } catch (error) {
-      console.error("Error processing request:", error);
-      responseMessage = {
-        message: "An error occurred while processing the request",
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 500,
-      });
-    }
-  } else if (permit === "get-gate-pass-unique") {
-    try {
-      let selectQuery = `
-        SELECT 
-         *  
-        FROM 
-          gate_pass_submissions
-        WHERE 
-          user_id = $1;
-      `;
+      selectQuery = `SELECT * FROM ${tableName} WHERE user_id = $1;`;
       const result = await query(selectQuery, [userId]);
 
       if (result.rows.length === 0) {
@@ -442,82 +394,7 @@ export async function GET(req, { params }) {
         status: 500,
       });
     }
-  } else if (permit === "get-work-permit-unique") {
-    try {
-      let selectQuery = `
-        SELECT 
-         *  
-        FROM 
-          work_permit_submissions
-        WHERE 
-          user_id = $1;
-      `;
-      const result = await query(selectQuery, [userId]);
-
-      if (result.rows.length === 0) {
-        responseMessage = { message: "No records found" };
-        return new Response(JSON.stringify(responseMessage), {
-          headers: { "Content-Type": "application/json" },
-          status: 404,
-        });
-      }
-      responseMessage = {
-        message: "Records retrieved successfully",
-        data: result.rows,
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
-    } catch (error) {
-      console.error("Error processing request:", error);
-      responseMessage = {
-        message: "An error occurred while processing the request",
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 500,
-      });
-    }
-  } else if (permit === "get-temp-parking-unique") {
-    try {
-      let selectQuery = `
-        SELECT 
-         *  
-        FROM 
-          temp_parking_submissions
-        WHERE 
-          user_id = $1;
-      `;
-      const result = await query(selectQuery, [userId]);
-
-      if (result.rows.length === 0) {
-        responseMessage = { message: "No records found" };
-        return new Response(JSON.stringify(responseMessage), {
-          headers: { "Content-Type": "application/json" },
-          status: 404,
-        });
-      }
-      responseMessage = {
-        message: "Records retrieved successfully",
-        data: result.rows,
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
-    } catch (error) {
-      console.error("Error processing request:", error);
-      responseMessage = {
-        message: "An error occurred while processing the request",
-      };
-      return new Response(JSON.stringify(responseMessage), {
-        headers: { "Content-Type": "application/json" },
-        status: 500,
-      });
-    }
-  }
-  else {
+  } else {
     responseMessage = { message: "Invalid permit" };
     return new Response(JSON.stringify(responseMessage), {
       headers: { "Content-Type": "application/json" },

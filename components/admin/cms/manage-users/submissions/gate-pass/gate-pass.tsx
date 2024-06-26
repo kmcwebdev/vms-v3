@@ -35,7 +35,6 @@ const GatePassSubmissions = () => {
   const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-
   const form = useForm();
 
   useEffect(() => {

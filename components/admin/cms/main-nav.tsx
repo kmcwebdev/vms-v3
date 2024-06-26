@@ -85,13 +85,13 @@ const MainNav = ({
           </Link>
         )}
       </div>
-      <Form
+      {/* <Form
         name="search"
         useFormReturn={searchForm}
         onSubmit={() => console.log("search")}
       >
         <Form.Input name="search" placeholder="Search" type="text" />
-      </Form>
+      </Form> */}
     </div>
   );
 };
