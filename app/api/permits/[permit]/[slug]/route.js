@@ -142,9 +142,11 @@ export async function PUT(req, { params }) {
   // will soon add update-gate-pass-submission, update-work-permit-submission, and update-temp-parking-submission
   // this is for a complete edit of the form from the admin management panel or the user updating his submission while it is still pending
   if (
-    !["update-gate-pass-status", "update-work-permit-status", "update-temp-parking-status"].includes(
-      permit,
-    )
+    ![
+      "update-gate-pass-status",
+      "update-work-permit-status",
+      "update-temp-parking-status",
+    ].includes(permit)
   ) {
     responseMessage = { message: "Invalid permit" };
     return new Response(JSON.stringify(responseMessage), {
@@ -153,7 +155,7 @@ export async function PUT(req, { params }) {
     });
   }
 
-  const submissionId = params.slug
+  const submissionId = params.slug;
   const { status: newStatus } = await req.json();
 
   if (!submissionId || !newStatus) {
@@ -212,4 +214,3 @@ export async function PUT(req, { params }) {
     });
   }
 }
-

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { Button } from "@/components/ui/button";
 import {
   EyeOpenIcon,
@@ -7,10 +7,10 @@ import {
 } from "@radix-ui/react-icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import ViewTempParkingApplication from "./view-details/view-details";
+import ViewWorkPermitApplication from "./view-details.tsx/view-details";
 
-const TempParkingSubmissions = () => {
-  const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
+const WorkPermitSubmissions = () => {
+  const [workPermitSubmissions, setWorkPermitSubmissions] = useState([]);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,12 +21,12 @@ const TempParkingSubmissions = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/permits/get-temp-parking");
+        const response = await fetch("/api/permits/get-work-permit-unique");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        setTempParkingSubmissions(data.data);
+        setWorkPermitSubmissions(data.data);
         //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -53,7 +53,7 @@ const TempParkingSubmissions = () => {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          `/api/permits/delete-temp-parking/${submissionId}`,
+          `/api/permits/delete-work-permit/${submissionId}`,
           {
             method: "DELETE",
           },
@@ -63,7 +63,7 @@ const TempParkingSubmissions = () => {
           throw new Error("Failed to delete submission");
         }
 
-        setTempParkingSubmissions((prevSubmissions: any) =>
+        setWorkPermitSubmissions((prevSubmissions: any) =>
           prevSubmissions.filter(
             (submission: any) => submission.submission_id !== submissionId,
           ),
@@ -78,7 +78,6 @@ const TempParkingSubmissions = () => {
 
   return (
     <>
-
       <div className="mt-5 px-4 sm:px-6 lg:px-8">
         <div className="flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -120,9 +119,9 @@ const TempParkingSubmissions = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {Array.isArray(tempParkingSubmissions) &&
-                  tempParkingSubmissions.length > 0 ? (
-                    tempParkingSubmissions.map((submission: any) => (
+                  {Array.isArray(workPermitSubmissions) &&
+                  workPermitSubmissions.length > 0 ? (
+                    workPermitSubmissions.map((submission: any) => (
                       <tr key={submission.submission_id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -202,7 +201,7 @@ const TempParkingSubmissions = () => {
         </div>
       </div>
       <Separator className="mt-2" />
-      <ViewTempParkingApplication
+      <ViewWorkPermitApplication
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         submission={selectedSubmission}
@@ -211,7 +210,7 @@ const TempParkingSubmissions = () => {
   );
 };
 
-export default TempParkingSubmissions;
+export default WorkPermitSubmissions;
 
 const SkeletonLoaderForSubmissions = () => {
   return (

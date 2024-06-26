@@ -1,4 +1,4 @@
-import MyRequests from "@/components/admin/cms/my-requests/my-requests";
+import MyRequests from "@/components/admin/cms/my-applications/my-applications";
 import React from "react";
 
 const page = () => {

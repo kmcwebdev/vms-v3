@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 export async function POST(req, { params }) {
   let responseMessage = { message: "Invalid Request" };
   const { userId } = auth();
+  const user_id = userId;
   const permit = params.permit;
 
   if (permit === "post-gate-pass") {
@@ -41,7 +42,6 @@ export async function POST(req, { params }) {
         files,
       } = parsedData.data;
       const status = "Pending";
-      const user_id = userId;
 
       const emailsToNotifyArray = emailsToNotify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
@@ -136,7 +136,6 @@ export async function POST(req, { params }) {
         files,
       } = parsedData.data;
       const status = "Pending";
-      const user_id = userId;
 
       const emailsToNotifyArray = emailsToNotify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
@@ -176,7 +175,7 @@ export async function POST(req, { params }) {
         formattedItems,
         files,
         status,
-        user_id
+        user_id,
       ];
 
       const result = await query(insertQuery, values);
@@ -233,7 +232,6 @@ export async function POST(req, { params }) {
         files,
       } = parsedData.data;
       const status = "Pending";
-      const user_id = userId;
 
       const insertQuery = `
         INSERT INTO temp_parking_submissions (
@@ -261,7 +259,7 @@ export async function POST(req, { params }) {
         managerEmail,
         files,
         status,
-        user_id
+        user_id,
       ];
 
       const result = await query(insertQuery, values);
@@ -297,14 +295,14 @@ export async function POST(req, { params }) {
 
 export async function GET(req, { params }) {
   let responseMessage = { message: "Invalid Request" };
+  const { userId } = auth();
   const permit = params.permit;
 
   if (permit === "get-gate-pass") {
     try {
       let selectQuery = `
         SELECT 
-          submission_id, type, email, name, service_category, site, floor, carrier_name, 
-          company, date_from, date_to, reason, emails_to_notify, items, files, status
+          *
         FROM 
           gate_pass_submissions
       `;
@@ -339,10 +337,7 @@ export async function GET(req, { params }) {
     try {
       let selectQuery = `
         SELECT
-          submission_id, type, email, name, work_area, site, floor, tenant,
-          contractor, person_in_charge, number, date_from, date_to, work_types,
-          other_work_types, work_requirements, other_work_requirements,
-          emails_to_notify, scope, workers, items, files, status
+          *
         FROM
           work_permit_submissions
       `;
@@ -378,9 +373,7 @@ export async function GET(req, { params }) {
     try {
       let selectQuery = `
       SELECT 
-        submission_id, type, email, name, site, floor, driver_name, vehicle_model,
-        vehicle_color, vehicle_number, parking_number, date_from, date_to,
-        manager_email, files, status
+        *
       FROM
         temp_parking_submissions
     `;
@@ -412,8 +405,118 @@ export async function GET(req, { params }) {
         status: 500,
       });
     }
+  } else if (permit === "get-gate-pass-unique") {
+    try {
+      let selectQuery = `
+        SELECT 
+         *  
+        FROM 
+          gate_pass_submissions
+        WHERE 
+          user_id = $1;
+      `;
+      const result = await query(selectQuery, [userId]);
+
+      if (result.rows.length === 0) {
+        responseMessage = { message: "No records found" };
+        return new Response(JSON.stringify(responseMessage), {
+          headers: { "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      responseMessage = {
+        message: "Records retrieved successfully",
+        data: result.rows,
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      responseMessage = {
+        message: "An error occurred while processing the request",
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+  } else if (permit === "get-work-permit-unique") {
+    try {
+      let selectQuery = `
+        SELECT 
+         *  
+        FROM 
+          work_permit_submissions
+        WHERE 
+          user_id = $1;
+      `;
+      const result = await query(selectQuery, [userId]);
+
+      if (result.rows.length === 0) {
+        responseMessage = { message: "No records found" };
+        return new Response(JSON.stringify(responseMessage), {
+          headers: { "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      responseMessage = {
+        message: "Records retrieved successfully",
+        data: result.rows,
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      responseMessage = {
+        message: "An error occurred while processing the request",
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+  } else if (permit === "get-temp-parking-unique") {
+    try {
+      let selectQuery = `
+        SELECT 
+         *  
+        FROM 
+          temp_parking_submissions
+        WHERE 
+          user_id = $1;
+      `;
+      const result = await query(selectQuery, [userId]);
+
+      if (result.rows.length === 0) {
+        responseMessage = { message: "No records found" };
+        return new Response(JSON.stringify(responseMessage), {
+          headers: { "Content-Type": "application/json" },
+          status: 404,
+        });
+      }
+      responseMessage = {
+        message: "Records retrieved successfully",
+        data: result.rows,
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } catch (error) {
+      console.error("Error processing request:", error);
+      responseMessage = {
+        message: "An error occurred while processing the request",
+      };
+      return new Response(JSON.stringify(responseMessage), {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
   }
-  // will soon add get-gate-pass-unique, get-work-permit-unique, and get-temp-parking-unique
   else {
     responseMessage = { message: "Invalid permit" };
     return new Response(JSON.stringify(responseMessage), {

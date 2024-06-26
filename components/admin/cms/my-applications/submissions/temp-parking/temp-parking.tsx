@@ -7,30 +7,26 @@ import {
 } from "@radix-ui/react-icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import ViewGatePassApplication from "./view-details/view-details";
-import EditGatePassApplication from "./edit-details/edit-details";
+import ViewTempParkingApplication from "./view-details/view-details";
 
-
-const GatePassSubmissions = () => {
-  const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
-  const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const TempParkingSubmissions = () => {
+  const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    //console.log(isViewModalOpen);
-  }, [isViewModalOpen, isEditModalOpen]);
+    //console.log(isModalOpen);
+  }, [isModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/permits/get-gate-pass");
+        const response = await fetch("/api/permits/get-temp-parking-unique");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        setGatePassSubmissions(data.data);
+        setTempParkingSubmissions(data.data);
         //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -40,24 +36,14 @@ const GatePassSubmissions = () => {
   }, []);
 
   const handleViewClick = (submission: any) => {
-    setSelectedViewSubmission(submission);
-    setIsViewModalOpen(true);
+    setSelectedSubmission(submission);
+    setIsModalOpen(true);
   };
 
-  const handleCloseViewModal = () => {
-    setIsViewModalOpen(false);
-    setSelectedViewSubmission(null);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedSubmission(null);
   };
-
-  const handleEditClick = (submission: any) => {
-    setSelectedEditSubmission(submission);
-    setIsEditModalOpen(true);
-  }
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedEditSubmission(null);
-  }
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -66,15 +52,18 @@ const GatePassSubmissions = () => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(`/api/permits/delete-gate-pass/${submissionId}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `/api/permits/delete-temp-parking/${submissionId}`,
+          {
+            method: "DELETE",
+          },
+        );
 
         if (!response.ok) {
           throw new Error("Failed to delete submission");
         }
 
-        setGatePassSubmissions((prevSubmissions: any) =>
+        setTempParkingSubmissions((prevSubmissions: any) =>
           prevSubmissions.filter(
             (submission: any) => submission.submission_id !== submissionId,
           ),
@@ -89,7 +78,7 @@ const GatePassSubmissions = () => {
 
   return (
     <>
-      
+
       <div className="mt-5 px-4 sm:px-6 lg:px-8">
         <div className="flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -131,9 +120,9 @@ const GatePassSubmissions = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {Array.isArray(gatePassSubmissions) &&
-                  gatePassSubmissions.length > 0 ? (
-                    gatePassSubmissions.map((submission: any) => (
+                  {Array.isArray(tempParkingSubmissions) &&
+                  tempParkingSubmissions.length > 0 ? (
+                    tempParkingSubmissions.map((submission: any) => (
                       <tr key={submission.submission_id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -170,7 +159,7 @@ const GatePassSubmissions = () => {
                             />
                           </Button>
                           <Button
-                            onClick={() => handleEditClick(submission)}
+                            onClick={() => {}}
                             className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
                           >
                             <Pencil1Icon
@@ -212,24 +201,17 @@ const GatePassSubmissions = () => {
           </div>
         </div>
       </div>
-
       <Separator className="mt-2" />
-
-      <ViewGatePassApplication
-        isOpen={isViewModalOpen}
-        onClose={handleCloseViewModal}
-        submission={selectedViewSubmission}
-      />
-      <EditGatePassApplication
-        isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
-        submission={selectedEditSubmission}
+      <ViewTempParkingApplication
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        submission={selectedSubmission}
       />
     </>
   );
 };
 
-export default GatePassSubmissions;
+export default TempParkingSubmissions;
 
 const SkeletonLoaderForSubmissions = () => {
   return (

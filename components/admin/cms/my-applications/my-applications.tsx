@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect} from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -15,7 +15,7 @@ import GatePassSubmissions from "./submissions/gate-pass/gate-pass";
 import WorkPermitSubmissions from "./submissions/work-permit/work-permit";
 import TempParkingSubmissions from "./submissions/temp-parking/temp-parking";
 
-export default function MyRequests() {
+export default function MyApplications() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -41,7 +41,7 @@ export default function MyRequests() {
     <>
       <Card className="shadow-none">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">My Requests</CardTitle>
+          <CardTitle className="text-xl font-bold">My Permit Applications</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue={searchParams.get("tab") || "gate-pass"}>

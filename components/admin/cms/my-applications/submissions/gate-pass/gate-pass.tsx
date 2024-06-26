@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   EyeOpenIcon,
@@ -7,26 +7,30 @@ import {
 } from "@radix-ui/react-icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import ViewWorkPermitApplication from "./view-details.tsx/view-details";
+import ViewGatePassApplication from "./view-details/view-details";
+import EditGatePassApplication from "./edit-details/edit-details";
 
-const WorkPermitSubmissions = () => {
-  const [workPermitSubmissions, setWorkPermitSubmissions] = useState([]);
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+const GatePassSubmissions = () => {
+  const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
+  const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
-    //console.log(isModalOpen);
-  }, [isModalOpen]);
+    //console.log(isViewModalOpen);
+  }, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/permits/get-work-permit");
+        const response = await fetch("/api/permits/get-gate-pass-unique");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        setWorkPermitSubmissions(data.data);
+        setGatePassSubmissions(data.data);
         //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -36,14 +40,24 @@ const WorkPermitSubmissions = () => {
   }, []);
 
   const handleViewClick = (submission: any) => {
-    setSelectedSubmission(submission);
-    setIsModalOpen(true);
+    setSelectedViewSubmission(submission);
+    setIsViewModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedSubmission(null);
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setSelectedViewSubmission(null);
   };
+
+  const handleEditClick = (submission: any) => {
+    setSelectedEditSubmission(submission);
+    setIsEditModalOpen(true);
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedEditSubmission(null);
+  }
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -52,18 +66,15 @@ const WorkPermitSubmissions = () => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(
-          `/api/permits/delete-work-permit/${submissionId}`,
-          {
-            method: "DELETE",
-          },
-        );
+        const response = await fetch(`/api/permits/delete-gate-pass/${submissionId}`, {
+          method: "DELETE",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to delete submission");
         }
 
-        setWorkPermitSubmissions((prevSubmissions: any) =>
+        setGatePassSubmissions((prevSubmissions: any) =>
           prevSubmissions.filter(
             (submission: any) => submission.submission_id !== submissionId,
           ),
@@ -78,6 +89,7 @@ const WorkPermitSubmissions = () => {
 
   return (
     <>
+      
       <div className="mt-5 px-4 sm:px-6 lg:px-8">
         <div className="flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -119,9 +131,9 @@ const WorkPermitSubmissions = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {Array.isArray(workPermitSubmissions) &&
-                  workPermitSubmissions.length > 0 ? (
-                    workPermitSubmissions.map((submission: any) => (
+                  {Array.isArray(gatePassSubmissions) &&
+                  gatePassSubmissions.length > 0 ? (
+                    gatePassSubmissions.map((submission: any) => (
                       <tr key={submission.submission_id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                           <div className="flex items-center">
@@ -158,7 +170,7 @@ const WorkPermitSubmissions = () => {
                             />
                           </Button>
                           <Button
-                            onClick={() => {}}
+                            onClick={() => handleEditClick(submission)}
                             className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
                           >
                             <Pencil1Icon
@@ -200,17 +212,24 @@ const WorkPermitSubmissions = () => {
           </div>
         </div>
       </div>
+
       <Separator className="mt-2" />
-      <ViewWorkPermitApplication
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        submission={selectedSubmission}
+
+      <ViewGatePassApplication
+        isOpen={isViewModalOpen}
+        onClose={handleCloseViewModal}
+        submission={selectedViewSubmission}
+      />
+      <EditGatePassApplication
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        submission={selectedEditSubmission}
       />
     </>
   );
 };
 
-export default WorkPermitSubmissions;
+export default GatePassSubmissions;
 
 const SkeletonLoaderForSubmissions = () => {
   return (

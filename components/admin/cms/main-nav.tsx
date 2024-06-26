@@ -64,6 +64,15 @@ const MainNav = ({
         >
           Permits
         </Link>
+        <Link
+          href="/cms/my-applications"
+          className={cn(
+            "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+            pathName === "/cms/my-applications" && "text-black",
+          )}
+        >
+          My Applications
+        </Link>
         {userRole === "admin" && (
           <Link
             href="/cms/manage-users"
@@ -72,18 +81,7 @@ const MainNav = ({
               pathName === "/cms/manage-users" && "text-black",
             )}
           >
-            Manage Users
-          </Link>
-        )}
-        {userRole !== "admin" && (
-          <Link
-            href="/cms/my-requests"
-            className={cn(
-              "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-              pathName === "/cms/my-requests" && "text-black",
-            )}
-          >
-            My Requests
+            Manage Users (Admin)
           </Link>
         )}
       </div>
