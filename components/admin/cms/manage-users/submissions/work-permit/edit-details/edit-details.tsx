@@ -17,9 +17,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { buildings } from "@/components/global/sites";
 import { Item } from "@/types/global/item";
+import { Worker } from "@/types/global/worker";
 import { XIcon, PlusIcon } from "lucide-react";
+import { workTypes, workRequirements } from "@/components/global/workdata";
 
-export default function EditGatePassApplication({
+export default function EditWorkPermitApplication({
   isOpen,
   onClose,
   submission,
@@ -30,22 +32,32 @@ export default function EditGatePassApplication({
   submission: any;
   onUpdate: any;
 }) {
-  // State for editable fields
   const [status, setStatus] = useState(submission?.status || "");
   const [type, setType] = useState(submission?.type || "");
   const [name, setName] = useState(submission?.name || "");
   const [email, setEmail] = useState(submission?.email || "");
-  const [service_category, setServiceCategory] = useState(
-    submission?.service_category || "",
+  const [work_area, setWorkArea] = useState(submission?.work_area || "");
+  const [tenant, setTenant] = useState(submission?.tenant || "");
+  const [contractor, setContractor] = useState(submission?.contractor || "");
+  const [person_in_charge, setPersonInCharge] = useState(
+    submission?.person_in_charge || "",
   );
-  const [carrier_name, setCarrierName] = useState(
-    submission?.carrier_name || "",
-  );
-  const [company, setCompany] = useState(submission?.company || "");
+  const [number, setNumber] = useState(submission?.number || "");
   const [site, setSite] = useState(submission?.site || "");
   const [floor, setFloor] = useState(submission?.floor || "");
   const [availableFloors, setAvailableFloors] = React.useState<number[]>([]);
-  const [reason, setReason] = React.useState(submission?.reason || "");
+  const [work_types, setWorkTypes] = useState(submission?.work_types || []);
+  const [other_work_types, setOtherWorkTypes] = useState(
+    submission?.other_work_types || "",
+  );
+  const [work_requirements, setWorkRequirements] = useState(
+    submission?.work_requirements || [],
+  );
+  const [other_work_requirements, setOtherWorkRequirements] = useState(
+    submission?.other_work_requirements || "",
+  );
+  const [scope, setScope] = useState(submission?.scope || "");
+  const [workers, setWorkers] = useState(submission?.workers || []);
   const [items, setItems] = useState(submission?.items || []);
 
   React.useEffect(() => {
@@ -58,24 +70,29 @@ export default function EditGatePassApplication({
     }
   }, [site]);
 
-  // Effect to update state when submission changes
   useEffect(() => {
     if (submission) {
       setStatus(submission.status);
       setType(submission.type);
       setName(submission.name);
       setEmail(submission.email);
-      setServiceCategory(submission.service_category);
-      setCarrierName(submission.carrier_name);
-      setCompany(submission.company);
+      setWorkArea(submission.work_area);
+      setTenant(submission.tenant);
+      setContractor(submission.contractor);
+      setPersonInCharge(submission.person_in_charge);
+      setNumber(submission.number);
       setSite(submission.site);
       setFloor(submission.floor);
-      setReason(submission.reason);
+      setWorkTypes(submission.work_types || []);
+      setOtherWorkTypes(submission.other_work_types);
+      setWorkRequirements(submission.work_requirements || []);
+      setOtherWorkRequirements(submission.other_work_requirements);
+      setScope(submission.scope);
+      setWorkers(submission.workers || []);
       setItems(submission.items || []);
     }
   }, [submission]);
 
-  // Function to handle saving changes
   const handleSave = () => {
     const updatedSubmission = {
       ...submission,
@@ -83,16 +100,21 @@ export default function EditGatePassApplication({
       type,
       name,
       email,
-      service_category,
-      carrier_name,
-      company,
+      work_area,
+      tenant,
+      contractor,
+      person_in_charge,
+      number,
       site,
       floor,
-      reason,
+      work_types: [...work_types],
+      other_work_types,
+      work_requirements: [...work_requirements],
+      other_work_requirements,
+      scope,
       items: [...items],
+      workers: [...workers],
     };
-
-    // Call the onUpdate function passed via props to update the parent component
     if (onUpdate) {
       onUpdate(updatedSubmission);
     }
@@ -119,6 +141,27 @@ export default function EditGatePassApplication({
     const newItems = [...items];
     newItems.splice(index, 1);
     setItems(newItems);
+  };
+
+  const handleWorkerChange = (
+    index: number,
+    field: keyof Worker,
+    value: any,
+  ) => {
+    const newWorkers = [...workers];
+    newWorkers[index][field] = value;
+    setWorkers(newWorkers);
+  };
+
+  const handleAddWorker = () => {
+    const newWorkers = [...workers, { name: "", company: "", description: "" }];
+    setWorkers(newWorkers);
+  };
+
+  const handleRemoveWorker = (index: number) => {
+    const newWorkers = [...workers];
+    newWorkers.splice(index, 1);
+    setWorkers(newWorkers);
   };
 
   return (
@@ -257,64 +300,51 @@ export default function EditGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Service Category
-                              </dt>
-                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button className="block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                                      {service_category || "Select Category"}
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent
-                                    sideOffset={5}
-                                    className="max-h-60 w-40 overflow-y-auto text-sm"
-                                  >
-                                    {[
-                                      "Delivery",
-                                      "Pull-Out",
-                                      "Transfer Between Floors",
-                                    ].map((category) => (
-                                      <DropdownMenuItem
-                                        key={category}
-                                        onSelect={() => {
-                                          setServiceCategory(category);
-                                          console.log(
-                                            `Service Category selected: ${category}`,
-                                          );
-                                        }}
-                                      >
-                                        {category}
-                                      </DropdownMenuItem>
-                                    ))}
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Carrier Name
+                                Job Scope
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 <Input
                                   type="text"
-                                  value={carrier_name}
-                                  onChange={(e) =>
-                                    setCarrierName(e.target.value)
-                                  }
+                                  value={work_area}
+                                  onChange={(e) => setWorkArea(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                                <Input
+                                  type="text"
+                                  value={tenant}
+                                  onChange={(e) => setTenant(e.target.value)}
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Company
+                                Contractor Name / POC
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 <Input
                                   type="text"
-                                  value={company}
-                                  onChange={(e) => setCompany(e.target.value)}
+                                  value={contractor}
+                                  placeholder="Contractor Name"
+                                  onChange={(e) =>
+                                    setContractor(e.target.value)
+                                  }
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                                <Input
+                                  type="text"
+                                  value={person_in_charge}
+                                  placeholder="Person in Charge (POC)"
+                                  onChange={(e) =>
+                                    setPersonInCharge(e.target.value)
+                                  }
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                                <Input
+                                  type="text"
+                                  value={number}
+                                  placeholder="POC number"
+                                  onChange={(e) => setNumber(e.target.value)}
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>
@@ -373,15 +403,117 @@ export default function EditGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Reason
+                                Work Types
+                              </dt>
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {/* Add dropdown with preselected work types here */}
+                                <Input
+                                  type="text"
+                                  value={other_work_types}
+                                  placeholder="Other Work Types"
+                                  onChange={(e) => setOtherWorkTypes(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Work Requirements
+                              </dt>
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {/* Add dropdown with preselected work reqs here */}
+                                <Input
+                                  type="text"
+                                  value={other_work_types}
+                                  placeholder="Other Work Requirements"
+                                  onChange={(e) => setOtherWorkRequirements(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Other Info
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 <Input
                                   type="text"
-                                  value={reason}
-                                  onChange={(e) => setReason(e.target.value)}
+                                  value={scope}
+                                  onChange={(e) => setScope(e.target.value)}
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
+                              </dd>
+                            </div>
+
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Workers
+                              </dt>
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {workers.map((worker: any, index: any) => (
+                                  <div
+                                    key={index}
+                                    className="mt-2 flex items-center gap-4"
+                                  >
+                                    <Input
+                                      type="text"
+                                      value={worker.name}
+                                      onChange={(e) =>
+                                        handleWorkerChange(
+                                          index,
+                                          "name",
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Name"
+                                    />
+                                    <Input
+                                      type="number"
+                                      value={worker.company}
+                                      onChange={(e) =>
+                                        handleWorkerChange(
+                                          index,
+                                          "company",
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Company"
+                                    />
+                                    <Input
+                                      type="text"
+                                      value={worker.description}
+                                      onChange={(e) =>
+                                        handleWorkerChange(
+                                          index,
+                                          "description",
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Desc"
+                                    />
+                                    
+                                    <Button
+                                      onClick={() => handleRemoveWorker(index)}
+                                      className="rounded-md bg-red-500 px-2 py-1 text-white hover:bg-red-600"
+                                    >
+                                      <XIcon className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                ))}
+                                <div className="mt-5 flex justify-end">
+                                  <Button
+                                    onClick={handleAddWorker}
+                                    className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                                  >
+                                    <div className="flex items-center">
+                                      <PlusIcon className="mr-2 h-4 w-4" />
+                                      Add Worker
+                                    </div>
+                                  </Button>
+                                </div>
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -467,6 +599,7 @@ export default function EditGatePassApplication({
                                 </div>
                               </dd>
                             </div>
+                            
 
                             {/* Additional fields can be added here in the same manner */}
                           </dl>

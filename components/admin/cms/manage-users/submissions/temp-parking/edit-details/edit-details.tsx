@@ -19,7 +19,7 @@ import { buildings } from "@/components/global/sites";
 import { Item } from "@/types/global/item";
 import { XIcon, PlusIcon } from "lucide-react";
 
-export default function EditGatePassApplication({
+export default function EditTempParkingApplication({
   isOpen,
   onClose,
   submission,
@@ -30,23 +30,28 @@ export default function EditGatePassApplication({
   submission: any;
   onUpdate: any;
 }) {
-  // State for editable fields
   const [status, setStatus] = useState(submission?.status || "");
   const [type, setType] = useState(submission?.type || "");
   const [name, setName] = useState(submission?.name || "");
   const [email, setEmail] = useState(submission?.email || "");
-  const [service_category, setServiceCategory] = useState(
-    submission?.service_category || "",
-  );
-  const [carrier_name, setCarrierName] = useState(
-    submission?.carrier_name || "",
-  );
-  const [company, setCompany] = useState(submission?.company || "");
   const [site, setSite] = useState(submission?.site || "");
   const [floor, setFloor] = useState(submission?.floor || "");
   const [availableFloors, setAvailableFloors] = React.useState<number[]>([]);
-  const [reason, setReason] = React.useState(submission?.reason || "");
-  const [items, setItems] = useState(submission?.items || []);
+  const [vehicle_model, setVehicleModel] = useState(
+    submission?.vehicle_model || "",
+  );
+  const [vehicle_color, setVehicleColor] = useState(
+    submission?.vehicle_color || "",
+  );
+  const [vehicle_number, setVehicleNumber] = useState(
+    submission?.vehicle_number || "",
+  );
+  const [parking_number, setParkingNumber] = useState(
+    submission?.parking_number || "",
+  );
+  const [manager_email, setManagerEmail] = React.useState(
+    submission?.manager_email || "",
+  );
 
   React.useEffect(() => {
     const selectedSite = buildings.find((b) => b.name === site);
@@ -58,24 +63,22 @@ export default function EditGatePassApplication({
     }
   }, [site]);
 
-  // Effect to update state when submission changes
   useEffect(() => {
     if (submission) {
       setStatus(submission.status);
       setType(submission.type);
       setName(submission.name);
       setEmail(submission.email);
-      setServiceCategory(submission.service_category);
-      setCarrierName(submission.carrier_name);
-      setCompany(submission.company);
       setSite(submission.site);
       setFloor(submission.floor);
-      setReason(submission.reason);
-      setItems(submission.items || []);
+      setVehicleModel(submission.vehicle_model);
+      setVehicleColor(submission.vehicle_color);
+      setVehicleNumber(submission.vehicle_number);
+      setParkingNumber(submission.parking_number);
+      setManagerEmail(submission.manager_email);
     }
   }, [submission]);
 
-  // Function to handle saving changes
   const handleSave = () => {
     const updatedSubmission = {
       ...submission,
@@ -83,42 +86,20 @@ export default function EditGatePassApplication({
       type,
       name,
       email,
-      service_category,
-      carrier_name,
-      company,
       site,
       floor,
-      reason,
-      items: [...items],
+      vehicle_model,
+      vehicle_color,
+      vehicle_number,
+      parking_number,
+      manager_email,
     };
-
-    // Call the onUpdate function passed via props to update the parent component
     if (onUpdate) {
       onUpdate(updatedSubmission);
     }
 
     // Close the modal
     onClose();
-  };
-
-  const handleItemChange = (index: number, field: keyof Item, value: any) => {
-    const newItems = [...items];
-    newItems[index][field] = value;
-    setItems(newItems);
-  };
-
-  const handleAddItem = () => {
-    const newItems = [
-      ...items,
-      { description: "", qty: "", unit: "", remarks: "" },
-    ];
-    setItems(newItems);
-  };
-
-  const handleRemoveItem = (index: number) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-    setItems(newItems);
   };
 
   return (
@@ -257,70 +238,6 @@ export default function EditGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Service Category
-                              </dt>
-                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button className="block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                                      {service_category || "Select Category"}
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent
-                                    sideOffset={5}
-                                    className="max-h-60 w-40 overflow-y-auto text-sm"
-                                  >
-                                    {[
-                                      "Delivery",
-                                      "Pull-Out",
-                                      "Transfer Between Floors",
-                                    ].map((category) => (
-                                      <DropdownMenuItem
-                                        key={category}
-                                        onSelect={() => {
-                                          setServiceCategory(category);
-                                          console.log(
-                                            `Service Category selected: ${category}`,
-                                          );
-                                        }}
-                                      >
-                                        {category}
-                                      </DropdownMenuItem>
-                                    ))}
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Carrier Name
-                              </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                <Input
-                                  type="text"
-                                  value={carrier_name}
-                                  onChange={(e) =>
-                                    setCarrierName(e.target.value)
-                                  }
-                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
-                                />
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Company
-                              </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                <Input
-                                  type="text"
-                                  value={company}
-                                  onChange={(e) => setCompany(e.target.value)}
-                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
-                                />
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Location
                               </dt>
                               <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
@@ -373,98 +290,46 @@ export default function EditGatePassApplication({
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Reason
+                                Vehicle Details
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 <Input
                                   type="text"
-                                  value={reason}
-                                  onChange={(e) => setReason(e.target.value)}
+                                  value={vehicle_model}
+                                  onChange={(e) => setVehicleModel(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                                 <Input
+                                  type="text"
+                                  value={vehicle_color}
+                                  onChange={(e) => setVehicleColor(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                                 <Input
+                                  type="text"
+                                  value={vehicle_number}
+                                  onChange={(e) => setVehicleNumber(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                                 <Input
+                                  type="text"
+                                  value={parking_number}
+                                  onChange={(e) => setParkingNumber(e.target.value)}
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Items
+                                Manager Email
                               </dt>
-                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {items.map((item: any, index: any) => (
-                                  <div
-                                    key={index}
-                                    className="mt-2 flex items-center gap-4"
-                                  >
-                                    <Input
-                                      type="text"
-                                      value={item.description}
-                                      onChange={(e) =>
-                                        handleItemChange(
-                                          index,
-                                          "description",
-                                          e.target.value,
-                                        )
-                                      }
-                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
-                                      placeholder="Desc"
-                                    />
-                                    <Input
-                                      type="number"
-                                      value={item.qty}
-                                      onChange={(e) =>
-                                        handleItemChange(
-                                          index,
-                                          "qty",
-                                          e.target.value.toString(),
-                                        )
-                                      }
-                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
-                                      placeholder="Qty"
-                                    />
-                                    <Input
-                                      type="text"
-                                      value={item.unit}
-                                      onChange={(e) =>
-                                        handleItemChange(
-                                          index,
-                                          "unit",
-                                          e.target.value,
-                                        )
-                                      }
-                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
-                                      placeholder="Unit"
-                                    />
-                                    <Input
-                                      type=""
-                                      value={item.remarks}
-                                      onChange={(e) =>
-                                        handleItemChange(
-                                          index,
-                                          "remarks",
-                                          e.target.value,
-                                        )
-                                      }
-                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
-                                      placeholder="Remarks"
-                                    />
-                                    <Button
-                                      onClick={() => handleRemoveItem(index)}
-                                      className="rounded-md bg-red-500 px-2 py-1 text-white hover:bg-red-600"
-                                    >
-                                      <XIcon className="h-4 w-4" />
-                                    </Button>
-                                  </div>
-                                ))}
-                                <div className="mt-5 flex justify-end">
-                                  <Button
-                                    onClick={handleAddItem}
-                                    className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-                                  >
-                                    <div className="flex items-center">
-                                      <PlusIcon className="mr-2 h-4 w-4" />
-                                      Add Item
-                                    </div>
-                                  </Button>
-                                </div>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <Input
+                                  type="email"
+                                  value={manager_email}
+                                  onChange={(e) => setManagerEmail(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
                               </dd>
                             </div>
 

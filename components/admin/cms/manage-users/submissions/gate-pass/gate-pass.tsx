@@ -171,6 +171,18 @@ const GatePassSubmissions = () => {
     filterSubmissions();
   };
 
+  const handleUpdateSubmission = (updatedSubmission:any) => {
+    setGatePassSubmissions((prevSubmissions:any) =>
+      prevSubmissions.map((submission:any) =>
+        submission.submission_id === updatedSubmission.submission_id
+          ? updatedSubmission
+          : submission
+      )
+    );
+    filterSubmissions();
+  };
+  
+
   return (
     <>
       <Form
@@ -391,6 +403,7 @@ const GatePassSubmissions = () => {
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         submission={selectedEditSubmission}
+        onUpdate={handleUpdateSubmission}
       />
     </>
   );
