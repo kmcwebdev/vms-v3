@@ -181,7 +181,6 @@ const GatePassSubmissions = () => {
     );
     filterSubmissions();
   };
-  
 
   return (
     <>

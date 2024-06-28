@@ -294,25 +294,33 @@ export default function EditTempParkingApplication({
                                 <Input
                                   type="text"
                                   value={vehicle_model}
-                                  onChange={(e) => setVehicleModel(e.target.value)}
+                                  onChange={(e) =>
+                                    setVehicleModel(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
-                                 <Input
+                                <Input
                                   type="text"
                                   value={vehicle_color}
-                                  onChange={(e) => setVehicleColor(e.target.value)}
+                                  onChange={(e) =>
+                                    setVehicleColor(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
-                                 <Input
+                                <Input
                                   type="text"
                                   value={vehicle_number}
-                                  onChange={(e) => setVehicleNumber(e.target.value)}
+                                  onChange={(e) =>
+                                    setVehicleNumber(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
-                                 <Input
+                                <Input
                                   type="text"
                                   value={parking_number}
-                                  onChange={(e) => setParkingNumber(e.target.value)}
+                                  onChange={(e) =>
+                                    setParkingNumber(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>
@@ -325,7 +333,9 @@ export default function EditTempParkingApplication({
                                 <Input
                                   type="email"
                                   value={manager_email}
-                                  onChange={(e) => setManagerEmail(e.target.value)}
+                                  onChange={(e) =>
+                                    setManagerEmail(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>

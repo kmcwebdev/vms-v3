@@ -8,15 +8,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import ViewTempParkingApplication from "./view-details/view-details";
+import EditTempParkingApplication from "./edit-details/edit-details";
 
 const TempParkingSubmissions = () => {
   const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
-    //console.log(isModalOpen);
-  }, [isModalOpen]);
+    //console.log(isViewModalOpen);
+  }, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -36,14 +39,24 @@ const TempParkingSubmissions = () => {
   }, []);
 
   const handleViewClick = (submission: any) => {
-    setSelectedSubmission(submission);
-    setIsModalOpen(true);
+    setSelectedViewSubmission(submission);
+    setIsViewModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedSubmission(null);
+    setIsViewModalOpen(false);
+    setSelectedViewSubmission(null);
   };
+
+  const handleEditClick = (submission: any) => {
+    setSelectedEditSubmission(submission);
+    setIsEditModalOpen(true);
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedEditSubmission(null);
+  }
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -74,6 +87,20 @@ const TempParkingSubmissions = () => {
         console.error("Error deleting submission:", error);
       }
     }
+  };
+
+  const handleUpdateSubmission = (updatedSubmission:any) => {
+    setTempParkingSubmissions((prevSubmissions:any) =>
+      prevSubmissions.map((submission:any) =>
+        submission.submission_id === updatedSubmission.submission_id
+          ? updatedSubmission
+          : submission
+      )
+    );
+  };
+
+  const isEditable = (status: string) => {
+    return status === "Pending";
   };
 
   return (
@@ -159,8 +186,9 @@ const TempParkingSubmissions = () => {
                             />
                           </Button>
                           <Button
-                            onClick={() => {}}
-                            className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
+                            onClick={() => handleEditClick(submission)}
+                            className={`bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900 ${isEditable(submission.status) ? "" : "cursor-not-allowed opacity-50"}`}
+                            disabled={!isEditable(submission.status)}
                           >
                             <Pencil1Icon
                               className="inline h-5 w-5"
@@ -203,9 +231,15 @@ const TempParkingSubmissions = () => {
       </div>
       <Separator className="mt-2" />
       <ViewTempParkingApplication
-        isOpen={isModalOpen}
+        isOpen={isViewModalOpen}
         onClose={handleCloseModal}
-        submission={selectedSubmission}
+        submission={selectedViewSubmission}
+      />
+      <EditTempParkingApplication
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        submission={selectedEditSubmission}
+        onUpdate={handleUpdateSubmission}
       />
     </>
   );

@@ -87,6 +87,20 @@ const GatePassSubmissions = () => {
     }
   };
 
+  const handleUpdateSubmission = (updatedSubmission:any) => {
+    setGatePassSubmissions((prevSubmissions:any) =>
+      prevSubmissions.map((submission:any) =>
+        submission.submission_id === updatedSubmission.submission_id
+          ? updatedSubmission
+          : submission
+      )
+    );
+  };
+
+  const isEditable = (status: string) => {
+    return status === "Pending";
+  };
+
   return (
     <>
       
@@ -171,7 +185,8 @@ const GatePassSubmissions = () => {
                           </Button>
                           <Button
                             onClick={() => handleEditClick(submission)}
-                            className="bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900"
+                            className={`bg-transparent text-indigo-600 hover:bg-gray-50 hover:text-indigo-900 ${isEditable(submission.status) ? "" : "cursor-not-allowed opacity-50"}`}
+                            disabled={!isEditable(submission.status)}
                           >
                             <Pencil1Icon
                               className="inline h-5 w-5"
@@ -224,6 +239,8 @@ const GatePassSubmissions = () => {
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         submission={selectedEditSubmission}
+        onUpdate={handleUpdateSubmission}
+
       />
     </>
   );

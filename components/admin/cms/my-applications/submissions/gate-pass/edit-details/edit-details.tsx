@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -6,17 +6,121 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { XMarkIcon, PaperClipIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { buildings } from "@/components/global/sites";
+import { Item } from "@/types/global/item";
+import { XIcon, PlusIcon } from "lucide-react";
 
 export default function EditGatePassApplication({
   isOpen,
   onClose,
   submission,
+  onUpdate, // New prop for updating the parent component
 }: {
   isOpen: boolean;
   onClose: any;
   submission: any;
+  onUpdate: any;
 }) {
+  // State for editable fields
+  const [status, setStatus] = useState(submission?.status || "");
+  const [type, setType] = useState(submission?.type || "");
+  const [name, setName] = useState(submission?.name || "");
+  const [email, setEmail] = useState(submission?.email || "");
+  const [service_category, setServiceCategory] = useState(
+    submission?.service_category || "",
+  );
+  const [carrier_name, setCarrierName] = useState(
+    submission?.carrier_name || "",
+  );
+  const [company, setCompany] = useState(submission?.company || "");
+  const [site, setSite] = useState(submission?.site || "");
+  const [floor, setFloor] = useState(submission?.floor || "");
+  const [availableFloors, setAvailableFloors] = React.useState<number[]>([]);
+  const [reason, setReason] = React.useState(submission?.reason || "");
+  const [items, setItems] = useState(submission?.items || []);
+
+  React.useEffect(() => {
+    const selectedSite = buildings.find((b) => b.name === site);
+    if (selectedSite) {
+      setAvailableFloors(selectedSite.floors);
+      setFloor("");
+    } else {
+      setAvailableFloors([]);
+    }
+  }, [site]);
+
+  // Effect to update state when submission changes
+  useEffect(() => {
+    if (submission) {
+      setStatus(submission.status);
+      setType(submission.type);
+      setName(submission.name);
+      setEmail(submission.email);
+      setServiceCategory(submission.service_category);
+      setCarrierName(submission.carrier_name);
+      setCompany(submission.company);
+      setSite(submission.site);
+      setFloor(submission.floor);
+      setReason(submission.reason);
+      setItems(submission.items || []);
+    }
+  }, [submission]);
+
+  // Function to handle saving changes
+  const handleSave = () => {
+    const updatedSubmission = {
+      ...submission,
+      status,
+      type,
+      name,
+      email,
+      service_category,
+      carrier_name,
+      company,
+      site,
+      floor,
+      reason,
+      items: [...items],
+    };
+
+    // Call the onUpdate function passed via props to update the parent component
+    if (onUpdate) {
+      onUpdate(updatedSubmission);
+    }
+
+    // Close the modal
+    onClose();
+  };
+
+  const handleItemChange = (index: number, field: keyof Item, value: any) => {
+    const newItems = [...items];
+    newItems[index][field] = value;
+    setItems(newItems);
+  };
+
+  const handleAddItem = () => {
+    const newItems = [
+      ...items,
+      { description: "", qty: "", unit: "", remarks: "" },
+    ];
+    setItems(newItems);
+  };
+
+  const handleRemoveItem = (index: number) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
+  };
+
   return (
     <Transition show={isOpen}>
       <Dialog className="relative z-10" onClose={onClose}>
@@ -62,14 +166,80 @@ export default function EditGatePassApplication({
                             Personal details and application
                           </p>
                         </div>
+
                         <div className="mt-6 border-t border-gray-100">
                           <dl className="divide-y divide-gray-100">
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Personal Details
+                                Status
+                              </dt>
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button className="block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
+                                      {status}
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    sideOffset={5}
+                                    className="max-h-60 w-40 overflow-y-auto text-sm"
+                                    defaultValue={status}
+                                  >
+                                    {["Pending", "Approved", "Declined"].map(
+                                      (status) => (
+                                        <DropdownMenuItem
+                                          key={status}
+                                          onSelect={() => setStatus(status)}
+                                        >
+                                          {status}
+                                        </DropdownMenuItem>
+                                      ),
+                                    )}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Type
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.name} ({submission?.type})
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
+                                      {type}
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    sideOffset={5}
+                                    className="max-h-60 w-40 overflow-y-auto text-sm"
+                                    defaultValue={type}
+                                  >
+                                    {["Client", "Internal", "Vendor"].map(
+                                      (type) => (
+                                        <DropdownMenuItem
+                                          key={type}
+                                          onSelect={() => setType(type)}
+                                        >
+                                          {type}
+                                        </DropdownMenuItem>
+                                      ),
+                                    )}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Name
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <Input
+                                  type="text"
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -77,41 +247,128 @@ export default function EditGatePassApplication({
                                 Email Address
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.email}
+                                <Input
+                                  type="email"
+                                  value={email}
+                                  onChange={(e) => setEmail(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Service Category
                               </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.service_category}
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button className="block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
+                                      {service_category || "Select Category"}
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    sideOffset={5}
+                                    className="max-h-60 w-40 overflow-y-auto text-sm"
+                                  >
+                                    {[
+                                      "Delivery",
+                                      "Pull-Out",
+                                      "Transfer Between Floors",
+                                    ].map((category) => (
+                                      <DropdownMenuItem
+                                        key={category}
+                                        onSelect={() => {
+                                          setServiceCategory(category);
+                                          console.log(
+                                            `Service Category selected: ${category}`,
+                                          );
+                                        }}
+                                      >
+                                        {category}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Carrier Name / Company
+                                Carrier Name
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.carrier_name} /{" "}
-                                {submission?.company}
+                                <Input
+                                  type="text"
+                                  value={carrier_name}
+                                  onChange={(e) =>
+                                    setCarrierName(e.target.value)
+                                  }
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
+                              </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                              <dt className="text-sm font-medium leading-6 text-gray-900">
+                                Company
+                              </dt>
+                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <Input
+                                  type="text"
+                                  value={company}
+                                  onChange={(e) => setCompany(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Location
                               </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.site} (Level {submission?.floor})
-                              </dd>
-                            </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Date Range (Y-M-D)
-                              </dt>
-                              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.date_from.split("T")[0]} to{" "}
-                                {submission?.date_to.split("T")[0]}
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
+                                      {site || "Select Site"}
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    sideOffset={5}
+                                    className="max-h-60 w-40 overflow-y-auto text-sm"
+                                  >
+                                    {buildings.map((building) => (
+                                      <DropdownMenuItem
+                                        key={building.name}
+                                        onSelect={() => {
+                                          setSite(building.name);
+                                        }}
+                                      >
+                                        {building.name}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button className="mt-1 block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
+                                      {floor || "Select Floor"}
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    sideOffset={5}
+                                    className="max-h-60 w-40 overflow-y-auto text-sm"
+                                  >
+                                    {availableFloors.map((floor) => (
+                                      <DropdownMenuItem
+                                        key={floor}
+                                        onSelect={() => {
+                                          setFloor(floor.toString());
+                                        }}
+                                        disabled={!availableFloors.length}
+                                      >
+                                        {floor}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -119,82 +376,111 @@ export default function EditGatePassApplication({
                                 Reason
                               </dt>
                               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {submission?.reason}
+                                <Input
+                                  type="text"
+                                  value={reason}
+                                  onChange={(e) => setReason(e.target.value)}
+                                  className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
+                                />
                               </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Items
                               </dt>
-                              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                                {submission?.items?.map(
-                                  (item: any, index: number) => (
-                                    <div key={index} className="mb-2">
-                                      <strong>Item {index + 1}</strong>
-                                      <div>
-                                        <i>Description:</i> {item.description}
-                                      </div>
-                                      <div>
-                                        <i>Quantity:</i> {item.qty}
-                                      </div>
-                                      <div>
-                                        <i>Unit:</i> {item.unit}
-                                      </div>
-                                      <div>
-                                        <i>Remarks:</i> {item.remarks}
-                                      </div>
-                                      <br></br>
+                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                {items.map((item: any, index: any) => (
+                                  <div
+                                    key={index}
+                                    className="mt-2 flex items-center gap-4"
+                                  >
+                                    <Input
+                                      type="text"
+                                      value={item.description}
+                                      onChange={(e) =>
+                                        handleItemChange(
+                                          index,
+                                          "description",
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Desc"
+                                    />
+                                    <Input
+                                      type="number"
+                                      value={item.qty}
+                                      onChange={(e) =>
+                                        handleItemChange(
+                                          index,
+                                          "qty",
+                                          e.target.value.toString(),
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Qty"
+                                    />
+                                    <Input
+                                      type="text"
+                                      value={item.unit}
+                                      onChange={(e) =>
+                                        handleItemChange(
+                                          index,
+                                          "unit",
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Unit"
+                                    />
+                                    <Input
+                                      type=""
+                                      value={item.remarks}
+                                      onChange={(e) =>
+                                        handleItemChange(
+                                          index,
+                                          "remarks",
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="w-full rounded-md border border-gray-300 p-2 text-sm"
+                                      placeholder="Remarks"
+                                    />
+                                    <Button
+                                      onClick={() => handleRemoveItem(index)}
+                                      className="rounded-md bg-red-500 px-2 py-1 text-white hover:bg-red-600"
+                                    >
+                                      <XIcon className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                ))}
+                                <div className="mt-5 flex justify-end">
+                                  <Button
+                                    onClick={handleAddItem}
+                                    className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                                  >
+                                    <div className="flex items-center">
+                                      <PlusIcon className="mr-2 h-4 w-4" />
+                                      Add Item
                                     </div>
-                                  ),
-                                )}
+                                  </Button>
+                                </div>
                               </dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Attachments
-                              </dt>
-                              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                                <ul
-                                  role="list"
-                                  className="mb-2 divide-y divide-gray-100 rounded-md border border-gray-200"
-                                >
-                                  {submission?.files?.map(
-                                    (file: any, index: number) => (
-                                      <li
-                                        key={index}
-                                        className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6"
-                                      >
-                                        <div className="flex w-0 flex-1 items-center">
-                                          <PaperClipIcon
-                                            className="h-5 w-5 flex-shrink-0 text-gray-400"
-                                            aria-hidden="true"
-                                          />
-                                          <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                                            <span className="truncate font-light text-gray-900">
-                                              {file}
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div className="ml-4 flex-shrink-0">
-                                          <a
-                                            href={file}
-                                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                                            download
-                                          >
-                                            Download
-                                          </a>
-                                        </div>
-                                      </li>
-                                    ),
-                                  )}
-                                </ul>
-                              </dd>
-                            </div>
+
+                            {/* Additional fields can be added here in the same manner */}
                           </dl>
                         </div>
-
-                        {/* Add more details as needed */}
                       </div>
+                    </div>
+                    <div className="px-4 sm:px-6">
+                      <button
+                        type="button"
+                        className="mt-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onClick={handleSave}
+                      >
+                        Save Changes
+                      </button>
                     </div>
                   </div>
                 </DialogPanel>
