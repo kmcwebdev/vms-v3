@@ -1,5 +1,4 @@
 import DateRangePicker from "@/components/global/date-range-picker";
-import { TimeRangeSelector } from "@/components/ui/time-range-selector";
 import React from "react";
 import {
   DropdownMenu,
@@ -21,10 +20,6 @@ import {
 import { useFormContext } from "react-hook-form";
 
 export default function Part2({ formControl }: { formControl: any }) {
-  const [selectedTimeRange, setSelectedTimeRange] = React.useState({
-    start: "08:00",
-    end: "17:00",
-  });
   const [selectedWorkTypes, setSelectedWorkTypes] = React.useState<string[]>(
     [],
   );
@@ -33,7 +28,6 @@ export default function Part2({ formControl }: { formControl: any }) {
     React.useState<string[]>([]);
   const [emails, setEmails] = React.useState<string[]>([]);
   const [emailInput, setEmailInput] = React.useState("");
-  const [selectedDateRange, setSelectedDateRange] = React.useState("");
   const [selectedOtherWorkTypes, setSelectedOtherWorkTypes] =
     React.useState("");
   const [selectedOtherWorkRequirements, setSelectedOtherWorkRequirements] =
@@ -73,7 +67,7 @@ export default function Part2({ formControl }: { formControl: any }) {
       const newEmails = [...emails, emailInput.trim()];
       setEmails(newEmails);
       setEmailInput("");
-      setValue("emailsToNotify", newEmails); // Update form value
+      setValue("emailsToNotify", newEmails);
       e.preventDefault();
     }
   };
@@ -81,55 +75,15 @@ export default function Part2({ formControl }: { formControl: any }) {
   const handleRemoveEmail = (index: number) => {
     const newEmails = emails.filter((_, i) => i !== index);
     setEmails(newEmails);
-    setValue("emailsToNotify", newEmails); // Update form value
+    setValue("emailsToNotify", newEmails); 
   };
 
   return (
     <>
-      {/* Date and Time */}
-      {/* <div className="flex flex-row justify-start gap-5 p-2">
-        <FormField
-          control={formControl.control}
-          name="dateRange"
-          render={({ field }) => {
-            return (
-              <FormItem className="flex w-full flex-col">
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <DateRangePicker
-                    {...field}
-                    className="border-gray-300"
-                    name="dateRange"
-                    onChange={(e) => {
-                      setSelectedDateRange(e.target.toString())
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        /> 
-         <FormField
-          control={formControl.control}
-          name="time"
-          render={({ field }) => {
-            return (
-              <FormItem className="flex w-full flex-col">
-                <FormLabel>Time</FormLabel>
-                <FormControl>
-                  <TimeRangeSelector
-                    {...field}
-                    value={selectedTimeRange}
-                    onChange={setSelectedTimeRange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        /> 
-      </div> */}
+      <div className="flex flex-col justify-start p-2">
+        <p className="font-medium">Date</p>
+        <DateRangePicker name="dateRange" className="mt-1"/>
+      </div>
 
       {/* Type of Work and Work Requirements */}
       <div className="flex flex-row justify-evenly gap-5 p-2">
@@ -149,7 +103,7 @@ export default function Part2({ formControl }: { formControl: any }) {
                       >
                         {selectedWorkTypes.length > 0
                           ? selectedWorkTypes.join(", ")
-                          : "Select Work Types"}
+                          : "Select Types"}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -188,11 +142,11 @@ export default function Part2({ formControl }: { formControl: any }) {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col">
-                <FormLabel>Others</FormLabel>
+                <FormLabel>Other Types</FormLabel>
                 <FormControl>
                   <Textarea
                     className="block h-16 w-full rounded-md border border-gray-300"
-                    placeholder="Input Other Work Type"
+                    placeholder="Input Other"
                     onChange={(e) => {
                       setSelectedOtherWorkTypes(e.target.value);
                       field.onChange(e.target.value);
@@ -210,7 +164,7 @@ export default function Part2({ formControl }: { formControl: any }) {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col">
-                <FormLabel>Work Requirements</FormLabel>
+                <FormLabel>Work Reqs.</FormLabel>
                 <FormControl>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -220,7 +174,7 @@ export default function Part2({ formControl }: { formControl: any }) {
                       >
                         {selectedWorkRequirements.length > 0
                           ? selectedWorkRequirements.join(", ")
-                          : "Select Work Requirements"}
+                          : "Select Reqs."}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -259,11 +213,11 @@ export default function Part2({ formControl }: { formControl: any }) {
           render={({ field }) => {
             return (
               <FormItem className="flex w-full flex-col">
-                <FormLabel>Others</FormLabel>
+                <FormLabel>Other Reqs.</FormLabel>
                 <FormControl>
                   <Textarea
                     className="block h-16 w-full rounded-md border border-gray-300"
-                    placeholder="Input Other Work Requirements"
+                    placeholder="Input Other"
                     onChange={(e) => {
                       setSelectedOtherWorkRequirements(e.target.value);
                       field.onChange(e.target.value);
@@ -284,7 +238,7 @@ export default function Part2({ formControl }: { formControl: any }) {
           name="emailsToNotify"
           render={() => {
             return (
-              <FormItem className="flex flex-col p-2 w-full">
+              <FormItem className="flex w-full flex-col p-2">
                 <FormLabel>Emails to Notify</FormLabel>
                 <FormControl>
                   <Input
@@ -321,9 +275,10 @@ export default function Part2({ formControl }: { formControl: any }) {
         <FormField
           control={formControl.control}
           name="scope"
+          defaultValue={"Not Specified"}
           render={({ field }) => {
             return (
-              <FormItem className="flex flex-col p-2 w-full">
+              <FormItem className="flex w-full flex-col p-2">
                 <FormLabel>Scope</FormLabel>
                 <FormControl>
                   <Input

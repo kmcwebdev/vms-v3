@@ -7,7 +7,7 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import GatePassForm from "./forms/gate-pass/gate-pass";
 import WorkPermitForm from "./forms/work-permit/work-permit";
 import TempParkingForm from "./forms/temp-parking/temp-parking";
@@ -17,6 +17,7 @@ import React from "react";
 
 const Permits = () => {
   const router = useRouter();
+  
 
   const searchParams = useSearchParams();
 
@@ -44,7 +45,7 @@ const Permits = () => {
         <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue={searchParams.get("tab") || "default"}>
+        <Tabs defaultValue={searchParams.get("tab") || "gate-pass"}>
           <TabsList>
             <TabsTrigger
               value="gate-pass"
@@ -72,13 +73,19 @@ const Permits = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="gate-pass">
-            <GatePassForm />
+            <Suspense fallback="Loading...">
+              <GatePassForm />
+            </Suspense>
           </TabsContent>
           <TabsContent value="work-permit">
-            <WorkPermitForm />
+            <Suspense fallback="Loading...">
+              <WorkPermitForm />
+            </Suspense>
           </TabsContent>
           <TabsContent value="temp-parking">
-            <TempParkingForm />
+            <Suspense fallback="Loading...">
+              <TempParkingForm />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </CardContent>

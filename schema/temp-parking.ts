@@ -11,10 +11,12 @@ const tempParkingSchema = z.object({
   vehicleColor: z.string(),
   vehicleNumber: z.string(),
   parkingNumber: z.string(),
-  // dateRange: z.string(),
-  // timeRange: z.string(),
+  dateRange: z.object({
+    from: z.string(),
+    to: z.string()
+  }),
   managerEmail: z.string().email(),
-  files: z.array(z.instanceof(File)).optional(),
+  files: z.array(z.string()).optional(),
 });
 
 export { tempParkingSchema };

@@ -27,20 +27,20 @@ export default function Part3({ formControl }: { formControl: any }) {
     e.preventDefault();
     const newItems = [...items, { description: "", qty: "", unit: "", remarks: "" }];
     setItems(newItems);
-    setValue("items", newItems); // Update form value
+    setValue("items", newItems); 
   };
 
   const handleRemoveItem = (index: number) => {
     const newItems = items.filter((_, i) => i !== index);
     setItems(newItems);
-    setValue("items", newItems); // Update form value
+    setValue("items", newItems); 
   };
 
   const handleItemChange = (index: number, field: keyof Item, value: any) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
-    setValue("items", newItems); // Update form value
+    setValue("items", newItems); 
   };
 
   const handleAddWorker = (e:any) => {

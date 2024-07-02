@@ -7,6 +7,7 @@ const itemSchema = z.object({
   remarks: z.string().optional(),
 });
 
+
 const gatePassSchema = z.object({
   type: z.string(),
   email: z.string().email(),
@@ -16,14 +17,16 @@ const gatePassSchema = z.object({
   floor: z.string(),
   carrierName: z.string(),
   company: z.string(),
-  // dateRange: z.string()
-  // timeRange: z.string(),
+  dateRange: z.object({
+    from: z.string(),
+    to: z.string()
+  }),
   reason: z.string().optional(),
   emailsToNotify: z
     .array(z.string().email("This is not a valid email."))
     .optional(),
   items: z.array(itemSchema).optional(),
-  files: z.array(z.instanceof(File)).optional(),
+  files: z.array(z.string()).optional(),
 });
 
 export { gatePassSchema };

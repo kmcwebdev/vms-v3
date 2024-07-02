@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { XIcon } from "lucide-react";
 import {
   FormControl,
@@ -8,67 +8,86 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
+import { PickerOverlay } from "filestack-react";
 import { Button } from "@/components/ui/button";
 
 export default function FileUpload({ formControl }: { formControl: any }) {
   const { setValue, watch } = useFormContext();
-  const [fileError, setFileError] = React.useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const attachedFiles = watch("files") || [];
+  const [fileDetails, setFileDetails] = useState<any[]>([]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files) return;
 
-    let newFiles = Array.from(files);
-    let totalSize = newFiles.reduce((acc, file) => acc + file.size, 0);
+  const handleUploadButtonClick = () => {
+    setPickerVisible(true);
+  };
 
-    if (newFiles.length > 3) {
-      setFileError("You can only attach up to 3 files.");
-      return;
-    }
+  const onFileUploadSuccess = (result: any) => {
+    setPickerVisible(false);
 
-    if (totalSize > 15 * 1024 * 1024) {
-      setFileError("Total file size exceeds 15MB.");
-      return;
-    }
+    const newFileDetails = result.filesUploaded.map((file: any) => ({
+      url: file.url,
+      filename: file.filename,
+      size: file.size
+    }));
 
-    setFileError(null);
-    setValue("files", newFiles);
+    // Store only URLs in the `files` field
+    const newFileUrls = newFileDetails.map((file: any) => file.url);
+    setValue("files", [...attachedFiles, ...newFileUrls]);
+
+    // Store file details separately
+    setFileDetails((prevDetails) => [...prevDetails, ...newFileDetails]);
   };
 
   const handleRemoveFile = (index: number) => {
-    const files = watch("files") || [];
-    const updatedFiles = files.filter((_: File, i: number) => i !== index);
+    const updatedFiles = attachedFiles.filter((_: any, i: number) => i !== index);
+    const updatedFileDetails = fileDetails.filter((_: any, i: number) => i !== index);
     setValue("files", updatedFiles);
+    setFileDetails(updatedFileDetails);
   };
-
-  const attachedFiles = watch("files") || [];
 
   return (
     <FormField
       control={formControl.control}
       name="files"
       render={() => (
-        <FormItem className="flex flex-col p-2">
+        <FormItem className="flex flex-col">
           <FormLabel>Attach Files</FormLabel>
           <FormControl>
             <div>
-              <input
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                className="mt-1 block w-full"
-              />
+              <Button
+                type="button"
+                onClick={handleUploadButtonClick}
+                className="block w-full bg-gray-100 text-black rounded"
+              >
+                Upload Files
+              </Button>
+              {pickerVisible && (
+                <PickerOverlay
+                  apikey="AOMmf7sLbQgWsPbc5fOarz" 
+                  onSuccess={onFileUploadSuccess}
+                  onError={(error) => {
+                    console.error("File upload error:", error);
+                    setPickerVisible(false);
+                  }}
+                  pickerOptions={{
+                    maxFiles: 3 - attachedFiles.length, // limit to 3 files
+                    maxSize: 15 * 1024 * 1024, // 15MB size limit
+                  }}
+                />
+              )}
               {fileError && (
                 <p className="mt-2 text-sm text-red-600">{fileError}</p>
               )}
               <ul className="mt-2">
-                {attachedFiles.map((file: File, index: number) => (
+                {fileDetails.map((file: any, index: number) => (
                   <li
                     key={index}
                     className="flex items-center justify-between"
                   >
                     <span>
-                      {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      {file.filename} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                     </span>
                     <button
                       type="button"

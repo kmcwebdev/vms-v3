@@ -31,7 +31,7 @@ export default function Part3({ formControl }: { formControl: any }) {
       const newEmails = [...emails, emailInput.trim()];
       setEmails(newEmails);
       setEmailInput("");
-      setValue("emailsToNotify", newEmails); // Update form value
+      setValue("emailsToNotify", newEmails); 
       e.preventDefault();
     }
   };
@@ -39,27 +39,27 @@ export default function Part3({ formControl }: { formControl: any }) {
   const handleRemoveEmail = (index: number) => {
     const newEmails = emails.filter((_, i) => i !== index);
     setEmails(newEmails);
-    setValue("emailsToNotify", newEmails); // Update form value
+    setValue("emailsToNotify", newEmails); 
   };
 
   const handleAddItem = (e:any) => {
     e.preventDefault();
     const newItems = [...items, { description: "", qty: "", unit: "", remarks: "" }];
     setItems(newItems);
-    setValue("items", newItems); // Update form value
+    setValue("items", newItems); 
   };
 
   const handleRemoveItem = (index: number) => {
     const newItems = items.filter((_, i) => i !== index);
     setItems(newItems);
-    setValue("items", newItems); // Update form value
+    setValue("items", newItems);
   };
 
   const handleItemChange = (index: number, field: keyof Item, value: any) => {
     const newItems = [...items];
     newItems[index][field] = value;
     setItems(newItems);
-    setValue("items", newItems); // Update form value
+    setValue("items", newItems);
   };
 
   return (
@@ -109,6 +109,7 @@ export default function Part3({ formControl }: { formControl: any }) {
       <FormField
         control={formControl.control}
         name="items"
+        defaultValue={"No Items Indicated"}
         render={() => {
           return (
             <FormItem className="flex flex-col p-2">

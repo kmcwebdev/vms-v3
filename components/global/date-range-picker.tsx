@@ -18,8 +18,10 @@ interface IDateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2024, 0, 1),
-    to: addDays(new Date(2024, 0, 30), 30),
+    // from: new Date(2024, 0, 1),
+    // to: addDays(new Date(2024, 0, 30), 30),
+    from: undefined,
+    to: undefined
   });
 
   const { control } = useFormContext();
@@ -32,7 +34,7 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
             id="date"
             variant={"outline"}
             className={cn(
-              "justify-start text-left font-light border-gray-300",
+              "justify-start border-gray-300 text-left font-light",
               !date && "text-muted-foreground",
             )}
           >
@@ -40,14 +42,13 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd")} -{" "}
-                  {format(date.to, "LLL dd")}
+                  {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
                 </>
               ) : (
                 format(date.from, "LLL dd, y")
               )
             ) : (
-              <span>Pick a date</span>
+              <span className="font-light text-gray-500">Select Dates</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -61,10 +62,34 @@ const DateRangePicker = ({ className, name }: IDateRangePickerProps) => {
                 mode="range"
                 defaultMonth={date?.from}
                 selected={date}
+
+                // return as zod string in format YYYY-MM-DD
                 onSelect={(e) => {
                   setDate(e);
-                  field.onChange(e);
+                  // Format the selected dates to YYYY-MM-DD before updating the field
+                  const formattedDateRange = {
+                    from: e?.from ? format(e.from, "yyyy-MM-dd") : null,
+                    to: e?.to ? format(e.to, "yyyy-MM-dd") : null,
+                  };
+                  field.onChange(formattedDateRange);
                 }}
+
+                // return as zod date with format YYYY-MM-DD
+                // onSelect={(e) => {
+                //   setDate(e);
+                //   // Format and convert the selected dates to Date objects in YYYY-MM-DD format
+                //   const formattedDateRange = {
+                //     from: e?.from ? parseDateString(format(e.from, "yyyy-MM-dd")) : null,
+                //     to: e?.to ? parseDateString(format(e.to, "yyyy-MM-dd")) : null,
+                //   };
+                //   // Ensure the dates are ZodDate compatible
+                //   const zodFormattedDateRange = {
+                //     from: formattedDateRange.from ? z.date().parse(formattedDateRange.from) : null,
+                //     to: formattedDateRange.to ? z.date().parse(formattedDateRange.to) : null,
+                //   };
+                //   field.onChange(zodFormattedDateRange);
+                // }}
+
                 numberOfMonths={2}
               />
             )}

@@ -1,12 +1,8 @@
 import React from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import ManageUsers from "@/components/admin/cms/manage-users/manage-users";
 
 const page = () => {
-  return (
-    <Card className="text-center opacity-50 shadow-none">
-      <CardHeader>Page under construction</CardHeader>
-    </Card>
-  );
+  return <ManageUsers />;
 };
 
 export default page;

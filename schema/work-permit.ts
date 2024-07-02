@@ -24,8 +24,10 @@ const workPermitSchema = z.object({
   contractor: z.string(),
   personInCharge: z.string(),
   number: z.string(),
-  // dateRange: z.string(),
-  // timeRange: z.string(),
+  dateRange: z.object({
+    from: z.string(),
+    to: z.string(),
+  }),
   workTypes: z.array(z.string()),
   otherWorkTypes: z.string().optional(),
   workRequirements: z.array(z.string()),
@@ -36,7 +38,7 @@ const workPermitSchema = z.object({
   scope: z.string().optional(),
   workers: z.array(workerSchema).optional(),
   items: z.array(itemSchema).optional(),
-  files: z.array(z.instanceof(File)).optional(),
+  files: z.array(z.string()).optional(),
 });
 
 export { workPermitSchema };

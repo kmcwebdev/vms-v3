@@ -30,7 +30,7 @@ const WelcomePage = () => {
           <Image
             src={kmc}
             width={100}
-            height={80}
+            height={100}
             alt="kmc visitor management logo"
           />
           <p className="text-sm">Visitor Management System</p>
