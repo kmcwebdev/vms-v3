@@ -21,7 +21,7 @@ export default function EditTempParkingApplication({
   isOpen,
   onClose,
   submission,
-  onUpdate, // New prop for updating the parent component
+  onUpdate, 
 }: {
   isOpen: boolean;
   onClose: any;
@@ -98,8 +98,8 @@ export default function EditTempParkingApplication({
 
       const data = await response.json();
       console.log("Update successful:", data);
-      onUpdate(updatedSubmission.submission_id, updatedSubmission); // Notify parent component of the update
-      return data; // Return the updated data for further handling if needed
+      onUpdate(updatedSubmission.submission_id, updatedSubmission); 
+      return data; 
     } catch (error) {
       console.error("Error updating submission:", error);
       return { message: "An error occurred while updating the submission" };
@@ -125,10 +125,9 @@ export default function EditTempParkingApplication({
     try {
       const updatedData = await updateSubmission(updatedSubmission);
       console.log("Updated data:", updatedData);
-      onClose(); // Close the modal after successful update
+      onClose(); 
     } catch (error) {
       console.error("Error while updating submission:", error);
-      // Handle error cases here
     }
   };
 
@@ -372,8 +371,6 @@ export default function EditTempParkingApplication({
                                 />
                               </dd>
                             </div>
-
-                            {/* Additional fields can be added here in the same manner */}
                           </dl>
                         </div>
                       </div>

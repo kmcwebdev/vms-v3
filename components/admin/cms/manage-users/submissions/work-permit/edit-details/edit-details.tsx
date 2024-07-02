@@ -25,7 +25,7 @@ export default function EditWorkPermitApplication({
   isOpen,
   onClose,
   submission,
-  onUpdate, // New prop for updating the parent component
+  onUpdate,
 }: {
   isOpen: boolean;
   onClose: any;
@@ -509,7 +509,6 @@ export default function EditWorkPermitApplication({
                                 Work Requirements
                               </dt>
                               <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {/* Add dropdown with preselected work reqs here */}
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
                                     <Button
@@ -727,8 +726,6 @@ export default function EditWorkPermitApplication({
                                 </div>
                               </dd>
                             </div>
-
-                            {/* Additional fields can be added here in the same manner */}
                           </dl>
                         </div>
                       </div>

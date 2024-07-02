@@ -248,8 +248,6 @@ export default function ViewWorkPermitApplication({
                             </div>
                           </dl>
                         </div>
-
-                        {/* Add more details as needed */}
                       </div>
                     </div>
                   </div>

@@ -2,11 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  EyeOpenIcon,
-  Pencil1Icon,
-  Cross1Icon,
-} from "@radix-ui/react-icons";
+import { EyeOpenIcon, Pencil1Icon, Cross1Icon } from "@radix-ui/react-icons";
 import DateRangePicker from "@/components/global/date-range-picker";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,9 +31,7 @@ const WorkPermitSubmissions = () => {
 
   const form = useForm();
 
-  useEffect(() => {
-    //console.log(isViewModalOpen);
-  }, [isViewModalOpen, isEditModalOpen]);
+  useEffect(() => {}, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -48,7 +42,6 @@ const WorkPermitSubmissions = () => {
         }
         const data = await response.json();
         setWorkPermitSubmissions(data.data);
-        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

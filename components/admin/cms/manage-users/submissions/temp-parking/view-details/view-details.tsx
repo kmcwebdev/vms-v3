@@ -234,8 +234,6 @@ export default function ViewTempParkingApplication({
                             </div>
                           </dl>
                         </div>
-
-                        {/* Add more details as needed */}
                       </div>
                     </div>
                   </div>

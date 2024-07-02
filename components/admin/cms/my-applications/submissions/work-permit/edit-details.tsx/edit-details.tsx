@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -25,7 +25,7 @@ export default function EditWorkPermitApplication({
   isOpen,
   onClose,
   submission,
-  onUpdate, // New prop for updating the parent component
+  onUpdate, 
 }: {
   isOpen: boolean;
   onClose: any;
@@ -475,7 +475,6 @@ export default function EditWorkPermitApplication({
                                 Work Requirements
                               </dt>
                               <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {/* Add dropdown with preselected work reqs here */}
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
                                     <Button className="mt-1 flex h-16 w-full items-start justify-start overflow-scroll whitespace-pre-line rounded-md border border-gray-300 bg-transparent p-2 font-light text-muted-foreground shadow-none hover:bg-transparent">
@@ -691,8 +690,6 @@ export default function EditWorkPermitApplication({
                                 </div>
                               </dd>
                             </div>
-
-                            {/* Additional fields can be added here in the same manner */}
                           </dl>
                         </div>
                       </div>

@@ -1,5 +1,3 @@
-import { gatePassSchema } from "@/schema/gate-pass";
-import { workPermitSchema } from "@/schema/work-permit";
 import { query } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 

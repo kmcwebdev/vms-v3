@@ -19,7 +19,6 @@ export default function ManageUsers() {
   const searchParams = useSearchParams();
   const { isLoaded, user } = useUser();
 
-  // Handle role-based access control
   useEffect(() => {
     if (isLoaded) {
       const userRole = user?.publicMetadata?.role;
@@ -34,10 +33,9 @@ export default function ManageUsers() {
   }
 
   if (user?.publicMetadata?.role !== "admin") {
-    return null; // Return null or a message indicating no access if the user is not an admin
+    return null; 
   }
 
-  // Determine the active tab from URL parameters
   const tab = searchParams.get("tab") || "gate-pass";
 
   return (

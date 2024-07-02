@@ -3,7 +3,6 @@ import { workPermitSchema } from "@/schema/work-permit";
 import { query } from "@/lib/db";
 import { tempParkingSchema } from "@/schema/temp-parking";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 
 export async function POST(req, { params }) {
   let responseMessage = { message: "Invalid Request" };

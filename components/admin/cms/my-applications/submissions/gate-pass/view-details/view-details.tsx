@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Dialog,
   DialogPanel,
@@ -7,13 +7,6 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon, PaperClipIcon } from "@heroicons/react/24/outline";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 
 export default function ViewGatePassApplication({
   isOpen,
@@ -199,8 +192,6 @@ export default function ViewGatePassApplication({
                             </div>
                           </dl>
                         </div>
-
-                        {/* Add more details as needed */}
                       </div>
                     </div>
                   </div>

@@ -18,7 +18,6 @@ const TempParkingSubmissions = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
-    //console.log(isViewModalOpen);
   }, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
@@ -30,7 +29,6 @@ const TempParkingSubmissions = () => {
         }
         const data = await response.json();
         setTempParkingSubmissions(data.data);
-        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

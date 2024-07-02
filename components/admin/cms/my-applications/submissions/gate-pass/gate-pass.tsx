@@ -19,7 +19,6 @@ const GatePassSubmissions = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
-    //console.log(isViewModalOpen);
   }, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
@@ -31,7 +30,6 @@ const GatePassSubmissions = () => {
         }
         const data = await response.json();
         setGatePassSubmissions(data.data);
-        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

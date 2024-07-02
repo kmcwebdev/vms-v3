@@ -21,7 +21,7 @@ export default function EditTempParkingApplication({
   isOpen,
   onClose,
   submission,
-  onUpdate, // New prop for updating the parent component
+  onUpdate,
 }: {
   isOpen: boolean;
   onClose: any;
@@ -341,8 +341,6 @@ export default function EditTempParkingApplication({
                                 />
                               </dd>
                             </div>
-
-                            {/* Additional fields can be added here in the same manner */}
                           </dl>
                         </div>
                       </div>

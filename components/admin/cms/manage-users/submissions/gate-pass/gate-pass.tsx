@@ -2,12 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  MagnifyingGlassIcon,
-  EyeOpenIcon,
-  Pencil1Icon,
-  Cross1Icon,
-} from "@radix-ui/react-icons";
+import { EyeOpenIcon, Pencil1Icon, Cross1Icon } from "@radix-ui/react-icons";
 import DateRangePicker from "@/components/global/date-range-picker";
 import { Input } from "@/components/ui/input";
 import {
@@ -36,9 +31,7 @@ const GatePassSubmissions = () => {
 
   const form = useForm();
 
-  useEffect(() => {
-    //console.log(isViewModalOpen);
-  }, [isViewModalOpen, isEditModalOpen]);
+  useEffect(() => {}, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
     async function fetchData() {
@@ -49,7 +42,6 @@ const GatePassSubmissions = () => {
         }
         const data = await response.json();
         setGatePassSubmissions(data.data);
-        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -157,10 +149,6 @@ const GatePassSubmissions = () => {
     setSelectedSite("");
     setFilteredSubmissions([...gatePassSubmissions]);
   };
-
-  // Add functionality here to update submissions
-  // if the status is changed from the view panel
-  // or if there are wholesale changes from edit.
 
   const updateSubmissionStatus = (submissionId: any, newStatus: any) => {
     setGatePassSubmissions((prevSubmissions: any) =>

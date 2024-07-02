@@ -23,14 +23,13 @@ export default function EditGatePassApplication({
   isOpen,
   onClose,
   submission,
-  onUpdate, // New prop for updating the parent component
+  onUpdate, 
 }: {
   isOpen: boolean;
   onClose: any;
   submission: any;
   onUpdate: any;
 }) {
-  // State for editable fields
   const [status, setStatus] = useState(submission?.status || "");
   const [type, setType] = useState(submission?.type || "");
   const [name, setName] = useState(submission?.name || "");
@@ -60,7 +59,6 @@ export default function EditGatePassApplication({
     }
   }, [site]);
 
-  // Effect to update state when submission changes
   useEffect(() => {
     if (submission) {
       setStatus(submission.status);
@@ -105,7 +103,6 @@ export default function EditGatePassApplication({
     }
   };
 
-  // Function to handle saving changes
   const handleSave = async () => {
     const updatedSubmission = {
       ...submission,
@@ -497,8 +494,6 @@ export default function EditGatePassApplication({
                                 </div>
                               </dd>
                             </div>
-
-                            {/* Additional fields can be added here in the same manner */}
                           </dl>
                         </div>
                       </div>

@@ -3,7 +3,6 @@ import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
-  MagnifyingGlassIcon,
   EyeOpenIcon,
   Pencil1Icon,
   Cross1Icon,
@@ -39,7 +38,6 @@ const TempParkingSubmissions = () => {
   const form = useForm();
 
   useEffect(() => {
-    //console.log(isViewModalOpen);
   }, [isViewModalOpen, isEditModalOpen]);
 
   useEffect(() => {
@@ -51,7 +49,6 @@ const TempParkingSubmissions = () => {
         }
         const data = await response.json();
         setTempParkingSubmissions(data.data);
-        //console.log("Data from API:", data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
