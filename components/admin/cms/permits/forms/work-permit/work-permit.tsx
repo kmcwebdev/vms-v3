@@ -26,35 +26,10 @@ const accordionData = [
   { id: 3, title: "Part 3 (Additional Information)", Component: Part3 },
 ]
 
-export async function FormSubmit(
-  prevState: any,
-  values: z.infer<typeof workPermitSchema>,
-) {
-  console.log("PERMIT VALUES", { values });
-  try {
-    const res = await fetch("/api/permits/post-work-permit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Server error: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Submission error:", error);
-  }
-}
-
 const WorkPermitForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-  const [state, handleSubmit] = useFormState(FormSubmit, "");
+  const { push } = useRouter();
   const { pending } = useFormStatus();
 
   const form = useForm<z.infer<typeof workPermitSchema>>({
@@ -65,12 +40,35 @@ const WorkPermitForm = () => {
     console.log("Validation errors:", errors);
   };
 
+  const handleSubmit = async (values: z.infer<typeof workPermitSchema>) => {
+    console.log("PERMIT VALUES", { values });
+    try {
+      const res = await fetch("/api/permits/post-work-permit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      console.log("Submission successful:", data);
+      push("./my-applications");
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
+  };
+
   return (
     <div className="rounded-md p-4">
       <h2 className="mb-4 text-lg font-bold">Work Permit Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          <div className="text/md text-green-500">{state.message}</div>
+          {/* <div className="text/md text-green-500">{state.message}</div> */}
           {accordionData.map(({ id, title, Component }) => (
             <Accordion
               key={id}
@@ -93,65 +91,6 @@ const WorkPermitForm = () => {
               </AccordionBody>
             </Accordion>
           ))}
-          {/* <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 1}
-          >
-            <AccordionHeader
-              placeholder={null}
-              onPointerEnterCapture
-              onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(1)}
-            >
-              Part 1 (Personal Information)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part1 formControl={form} />
-            </AccordionBody>
-          </Accordion>
-
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 2}
-          >
-            <AccordionHeader
-              placeholder={null}
-              onPointerEnterCapture
-              onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(2)}
-            >
-              Part 2 (Work Details)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part2 formControl={form} />
-            </AccordionBody>
-          </Accordion>
-
-          <Accordion
-            placeholder={null}
-            onPointerEnterCapture
-            onPointerLeaveCapture
-            open={open === 3}
-          >
-            <AccordionHeader
-              placeholder={null}
-              onPointerEnterCapture
-              onPointerLeaveCapture
-              className="text-sm font-medium"
-              onClick={() => handleOpen(3)}
-            >
-              Part 3 (Further Information)
-            </AccordionHeader>
-            <AccordionBody>
-              <Part3 formControl={form} />
-            </AccordionBody>
-          </Accordion> */}
 
           {/* Attach File and Submit Buttons */}
           <div className="mt-5 flex flex-row justify-between">

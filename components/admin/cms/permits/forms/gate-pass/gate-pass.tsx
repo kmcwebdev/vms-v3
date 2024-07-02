@@ -16,9 +16,8 @@ import FileUpload from "@/components/ui/file-upload";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { gatePassSchema } from "@/schema/gate-pass";
-import { useFormState, useFormStatus } from "react-dom";
-import { redirect } from 'next/navigation'
-import { useRouter } from "next/router";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 const accordionData = [
   { id: 1, title: "Part 1 (Personal Information)", Component: Part1 },
@@ -26,35 +25,10 @@ const accordionData = [
   { id: 3, title: "Part 3 (Additional Information)", Component: Part3 },
 ];
 
-export async function FormSubmit(
-  prevState: any,
-  values: z.infer<typeof gatePassSchema>,
-) {
-  console.log("PERMIT VALUES", { values });
-  try {
-    const res = await fetch("/api/permits/post-gate-pass", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Server error: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Submission error:", error);
-  }
-}
-
 const GatePassForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-  const [state, handleSubmit] = useFormState(FormSubmit, "");
+  const { push } = useRouter();
   const { pending } = useFormStatus();
 
   const form = useForm<z.infer<typeof gatePassSchema>>({
@@ -63,6 +37,29 @@ const GatePassForm = () => {
 
   const handleError = (errors: any) => {
     console.log("Validation errors:", errors);
+  };
+
+  const handleSubmit = async (values: z.infer<typeof gatePassSchema>) => {
+    console.log("PERMIT VALUES", { values });
+    try {
+      const res = await fetch("/api/permits/post-gate-pass", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      console.log("Submission successful:", data);
+      push("./my-applications");
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
   };
 
   return (
@@ -80,10 +77,10 @@ const GatePassForm = () => {
               open={open === id}
             >
               <AccordionHeader
+                className="text-sm font-medium"
                 placeholder={null}
                 onPointerEnterCapture
                 onPointerLeaveCapture
-                className="text-sm font-medium"
                 onClick={() => handleOpen(id)}
               >
                 {title}
@@ -98,7 +95,7 @@ const GatePassForm = () => {
             <Button
               aria-disabled={pending}
               type="submit"
-              className="mt-4 max-h-11 self-center rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500  "
+              className="mt-4 max-h-11 self-center rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-orange-500"
             >
               Submit
             </Button>
@@ -110,3 +107,4 @@ const GatePassForm = () => {
 };
 
 export default GatePassForm;
+

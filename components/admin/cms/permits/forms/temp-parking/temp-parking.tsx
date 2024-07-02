@@ -1,8 +1,9 @@
+"use client";
+
 import { Form } from "@/components/ui/form";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { redirect, useRouter } from "next/navigation";
 import {
   Accordion,
   AccordionHeader,
@@ -14,42 +15,18 @@ import FileUpload from "@/components/ui/file-upload";
 import { tempParkingSchema } from "@/schema/temp-parking";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 const accordionData = [
-  {id: 1, title: "Part 1 (Personal Information)", Component: Part1},
-  {id: 2, title: "Part 2 (Vehicle Information)", Component: Part2}
-]
-
-export async function FormSubmit(
-  prevState: any,
-  values: z.infer<typeof tempParkingSchema>,
-) {
-  console.log("PERMIT VALUES", { values });
-  try {
-    const res = await fetch("/api/permits/post-temp-parking", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Server error: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Submission error:", error);
-  }
-}
+  { id: 1, title: "Part 1 (Personal Information)", Component: Part1 },
+  { id: 2, title: "Part 2 (Vehicle Information)", Component: Part2 },
+];
 
 const TempParkingForm = () => {
   const [open, setOpen] = React.useState(1);
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
-  const [state, handleSubmit] = useFormState(FormSubmit, "");
+  const { push } = useRouter();
   const { pending } = useFormStatus();
 
   const form = useForm<z.infer<typeof tempParkingSchema>>({
@@ -57,7 +34,30 @@ const TempParkingForm = () => {
   });
 
   const handleError = (errors: any) => {
-    console.log("Validation errors:", errors); 
+    console.log("Validation errors:", errors);
+  };
+
+  const handleSubmit = async (values: z.infer<typeof tempParkingSchema>) => {
+    console.log("PERMIT VALUES", {values});
+    try {
+      const res = await fetch("/api/permits/post-temp-parking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      console.log("Submission successful:", data);
+
+      push("./my-applications");
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
   };
 
   return (
@@ -65,14 +65,14 @@ const TempParkingForm = () => {
       <h2 className="mb-4 text-lg font-bold">Temporary Parking Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-        <div className="text/md text-green-500">{state.message}</div>
-          {accordionData.map(({id, title, Component}) => (
+          {/* <div className="text/md text-green-500">{state.message}</div> */}
+          {accordionData.map(({ id, title, Component }) => (
             <Accordion
               key={id}
               placeholder={null}
               onPointerEnterCapture
               onPointerLeaveCapture
-              open={open===id}
+              open={open === id}
             >
               <AccordionHeader
                 placeholder={null}
