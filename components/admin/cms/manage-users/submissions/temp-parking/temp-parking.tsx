@@ -23,8 +23,10 @@ import ViewTempParkingApplication from "./view-details/view-details";
 import EditTempParkingApplication from "./edit-details/edit-details";
 
 const TempParkingSubmissions = () => {
-  const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
-  const [filteredSubmissions, setFilteredSubmissions] = useState([]);
+  const [tempParkingSubmissions, setTempParkingSubmissions] = useState<any[]>(
+    [],
+  );
+  const [filteredSubmissions, setFilteredSubmissions] = useState<any[]>([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [selectedSite, setSelectedSite] = React.useState("");
   const [selectedName, setSelectedName] = useState("");
@@ -62,20 +64,20 @@ const TempParkingSubmissions = () => {
 
     if (selectedStatus) {
       filtered = filtered.filter(
-        (submission:any) => submission.status === selectedStatus
+        (submission: any) => submission.status === selectedStatus,
       );
     }
 
     if (selectedSite) {
       filtered = filtered.filter(
-        (submission:any) => submission.site === selectedSite
+        (submission: any) => submission.site === selectedSite,
       );
     }
 
     if (selectedName) {
       const lowerCaseName = selectedName.toLowerCase();
-      filtered = filtered.filter((submission:any) =>
-        submission.name.toLowerCase().includes(lowerCaseName)
+      filtered = filtered.filter((submission: any) =>
+        submission.name.toLowerCase().includes(lowerCaseName),
       );
     }
 
@@ -101,12 +103,12 @@ const TempParkingSubmissions = () => {
   const handleEditClick = (submission: any) => {
     setSelectedEditSubmission(submission);
     setIsEditModalOpen(true);
-  }
+  };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedEditSubmission(null);
-  }
+  };
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -158,26 +160,24 @@ const TempParkingSubmissions = () => {
     setFilteredSubmissions([...tempParkingSubmissions]);
   };
 
-  const updateSubmissionStatus = (submissionId:any, newStatus:any) => {
-    setTempParkingSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
+  const updateSubmissionStatus = (submissionId: any, newStatus: any) => {
+    setTempParkingSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
         submission.submission_id === submissionId
           ? { ...submission, status: newStatus }
-          : submission
-      )
+          : submission,
+      ),
     );
     filterSubmissions();
   };
 
-  const handleUpdateSubmission = (updatedSubmission:any) => {
-    setTempParkingSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
-        submission.submission_id === updatedSubmission.submission_id
-          ? updatedSubmission
-          : submission
-      )
+  const handleUpdateSubmission = (updatedSubmission: any) => {
+    const updatedSubmissions = tempParkingSubmissions.map((submission: any) =>
+      submission.submission_id === updatedSubmission.submission_id
+        ? updatedSubmission
+        : submission,
     );
-    filterSubmissions();
+    setTempParkingSubmissions(updatedSubmissions);
   };
 
   return (
@@ -400,7 +400,6 @@ const TempParkingSubmissions = () => {
         submission={selectedEditSubmission}
         onUpdate={handleUpdateSubmission}
       />
-      
     </>
   );
 };

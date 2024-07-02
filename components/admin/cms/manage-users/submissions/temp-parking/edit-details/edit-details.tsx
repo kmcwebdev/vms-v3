@@ -50,6 +50,7 @@ export default function EditTempParkingApplication({
   const [manager_email, setManagerEmail] = React.useState(
     submission?.manager_email || "",
   );
+  const [selectedSubmission, setSelectedSubmission] = useState(submission);
 
   React.useEffect(() => {
     const selectedSite = buildings.find((b) => b.name === site);
@@ -77,7 +78,35 @@ export default function EditTempParkingApplication({
     }
   }, [submission]);
 
-  const handleSave = () => {
+  const updateSubmission = async (updatedSubmission: any) => {
+    setSelectedSubmission(updatedSubmission);
+    try {
+      const response = await fetch(
+        `/api/permits/post-temp-parking/${updatedSubmission.submission_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedSubmission),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+      onUpdate(updatedSubmission); // Notify parent component of the update
+      return data; // Return the updated data for further handling if needed
+    } catch (error) {
+      console.error("Error updating submission:", error);
+      return { message: "An error occurred while updating the submission" };
+    }
+  };
+
+  const handleSave = async () => {
     const updatedSubmission = {
       ...submission,
       status,
@@ -92,12 +121,15 @@ export default function EditTempParkingApplication({
       parking_number,
       manager_email,
     };
-    if (onUpdate) {
-      onUpdate(updatedSubmission);
-    }
 
-    // Close the modal
-    onClose();
+    try {
+      const updatedData = await updateSubmission(updatedSubmission);
+      console.log("Updated data:", updatedData);
+      onClose(); // Close the modal after successful update
+    } catch (error) {
+      console.error("Error while updating submission:", error);
+      // Handle error cases here
+    }
   };
 
   return (
@@ -294,25 +326,33 @@ export default function EditTempParkingApplication({
                                 <Input
                                   type="text"
                                   value={vehicle_model}
-                                  onChange={(e) => setVehicleModel(e.target.value)}
+                                  onChange={(e) =>
+                                    setVehicleModel(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
-                                 <Input
+                                <Input
                                   type="text"
                                   value={vehicle_color}
-                                  onChange={(e) => setVehicleColor(e.target.value)}
+                                  onChange={(e) =>
+                                    setVehicleColor(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
-                                 <Input
+                                <Input
                                   type="text"
                                   value={vehicle_number}
-                                  onChange={(e) => setVehicleNumber(e.target.value)}
+                                  onChange={(e) =>
+                                    setVehicleNumber(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
-                                 <Input
+                                <Input
                                   type="text"
                                   value={parking_number}
-                                  onChange={(e) => setParkingNumber(e.target.value)}
+                                  onChange={(e) =>
+                                    setParkingNumber(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>
@@ -325,7 +365,9 @@ export default function EditTempParkingApplication({
                                 <Input
                                   type="email"
                                   value={manager_email}
-                                  onChange={(e) => setManagerEmail(e.target.value)}
+                                  onChange={(e) =>
+                                    setManagerEmail(e.target.value)
+                                  }
                                   className="mt-1 block w-full rounded-md border border-gray-300 p-2 font-light"
                                 />
                               </dd>
