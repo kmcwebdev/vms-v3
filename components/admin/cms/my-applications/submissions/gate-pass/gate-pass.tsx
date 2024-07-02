@@ -12,7 +12,7 @@ import EditGatePassApplication from "./edit-details/edit-details";
 
 
 const GatePassSubmissions = () => {
-  const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
+  const [gatePassSubmissions, setGatePassSubmissions] = useState<any[]>([]);
   const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
@@ -87,13 +87,16 @@ const GatePassSubmissions = () => {
     }
   };
 
-  const handleUpdateSubmission = (updatedSubmission:any) => {
-    setGatePassSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
-        submission.submission_id === updatedSubmission.submission_id
+  const handleUpdateSubmission = (
+    submissionId: any,
+    updatedSubmission: any,
+  ) => {
+    setGatePassSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
           ? updatedSubmission
-          : submission
-      )
+          : submission,
+      ),
     );
   };
 

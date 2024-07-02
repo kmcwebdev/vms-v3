@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -60,6 +60,8 @@ export default function EditWorkPermitApplication({
   const [workers, setWorkers] = useState(submission?.workers || []);
   const [items, setItems] = useState(submission?.items || []);
 
+  const [selectedSubmission, setSelectedSubmission] = useState(submission);
+
   React.useEffect(() => {
     const selectedSite = buildings.find((b) => b.name === site);
     if (selectedSite) {
@@ -93,7 +95,35 @@ export default function EditWorkPermitApplication({
     }
   }, [submission]);
 
-  const handleSave = () => {
+  const updateSubmission = async (updatedSubmission: any) => {
+    setSelectedSubmission(updatedSubmission);
+    try {
+      const response = await fetch(
+        `/api/permits/post-work-permit/${updatedSubmission.submission_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedSubmission),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+      onUpdate(updatedSubmission.submission_id, updatedSubmission);
+      return data;
+    } catch (error) {
+      console.error("Error updating submission:", error);
+      return { message: "An error occurred while updating the submission" };
+    }
+  };
+
+  const handleSave = async () => {
     const updatedSubmission = {
       ...submission,
       status,
@@ -115,12 +145,13 @@ export default function EditWorkPermitApplication({
       items: [...items],
       workers: [...workers],
     };
-    if (onUpdate) {
-      onUpdate(updatedSubmission);
+    try {
+      const updatedData = await updateSubmission(updatedSubmission);
+      console.log("Updated data:", updatedData);
+      onClose();
+    } catch (error) {
+      console.error("Error while updating submission:", error);
     }
-
-    // Close the modal
-    onClose();
   };
 
   const handleWorkTypesSelect = (type: string) => {
@@ -230,36 +261,6 @@ export default function EditWorkPermitApplication({
 
                         <div className="mt-6 border-t border-gray-100">
                           <dl className="divide-y divide-gray-100">
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Status
-                              </dt>
-                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button className="block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                                      {status}
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent
-                                    sideOffset={5}
-                                    className="max-h-60 w-40 overflow-y-auto text-sm"
-                                    defaultValue={status}
-                                  >
-                                    {["Pending", "Approved", "Declined"].map(
-                                      (status) => (
-                                        <DropdownMenuItem
-                                          key={status}
-                                          onSelect={() => setStatus(status)}
-                                        >
-                                          {status}
-                                        </DropdownMenuItem>
-                                      ),
-                                    )}
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </dd>
-                            </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Type
@@ -426,9 +427,7 @@ export default function EditWorkPermitApplication({
                               <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button
-                                      className="mt-1 flex h-16 w-full items-start justify-start overflow-scroll whitespace-pre-line rounded-md border border-gray-300 bg-transparent p-2 font-light text-muted-foreground shadow-none hover:bg-transparent"
-                                    >
+                                    <Button className="mt-1 flex h-16 w-full items-start justify-start overflow-scroll whitespace-pre-line rounded-md border border-gray-300 bg-transparent p-2 font-light text-muted-foreground shadow-none hover:bg-transparent">
                                       {work_types.length > 0
                                         ? work_types.join(", ")
                                         : "Select Types"}
@@ -448,9 +447,7 @@ export default function EditWorkPermitApplication({
                                         <label className="flex items-center space-x-2">
                                           <input
                                             type="checkbox"
-                                            checked={work_types.includes(
-                                              type,
-                                            )}
+                                            checked={work_types.includes(type)}
                                             readOnly
                                             className="form-checkbox h-4 w-4 text-indigo-500 shadow-none"
                                           />
@@ -481,9 +478,7 @@ export default function EditWorkPermitApplication({
                                 {/* Add dropdown with preselected work reqs here */}
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button
-                                      className="mt-1 flex h-16 w-full items-start justify-start overflow-scroll whitespace-pre-line rounded-md border border-gray-300 bg-transparent p-2 font-light text-muted-foreground shadow-none hover:bg-transparent"
-                                    >
+                                    <Button className="mt-1 flex h-16 w-full items-start justify-start overflow-scroll whitespace-pre-line rounded-md border border-gray-300 bg-transparent p-2 font-light text-muted-foreground shadow-none hover:bg-transparent">
                                       {work_requirements.length > 0
                                         ? work_requirements.join(", ")
                                         : "Select Requirements"}
@@ -566,7 +561,7 @@ export default function EditWorkPermitApplication({
                                       placeholder="Name"
                                     />
                                     <Input
-                                      type="number"
+                                      type="text"
                                       value={worker.company}
                                       onChange={(e) =>
                                         handleWorkerChange(

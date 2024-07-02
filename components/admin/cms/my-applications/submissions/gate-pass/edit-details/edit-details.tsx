@@ -48,6 +48,8 @@ export default function EditGatePassApplication({
   const [reason, setReason] = React.useState(submission?.reason || "");
   const [items, setItems] = useState(submission?.items || []);
 
+  const [selectedSubmission, setSelectedSubmission] = useState(submission);
+
   React.useEffect(() => {
     const selectedSite = buildings.find((b) => b.name === site);
     if (selectedSite) {
@@ -75,8 +77,36 @@ export default function EditGatePassApplication({
     }
   }, [submission]);
 
+  const updateSubmission = async (updatedSubmission: any) => {
+    setSelectedSubmission(updatedSubmission);
+    try {
+      const response = await fetch(
+        `/api/permits/post-gate-pass/${updatedSubmission.submission_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedSubmission),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+      onUpdate(updatedSubmission.submission_id, updatedSubmission);
+      return data;
+    } catch (error) {
+      console.error("Error updating submission:", error);
+      return {message: "An error occurred while updating the submission"};
+    }
+  };
+
   // Function to handle saving changes
-  const handleSave = () => {
+  const handleSave = async () => {
     const updatedSubmission = {
       ...submission,
       status,
@@ -92,13 +122,13 @@ export default function EditGatePassApplication({
       items: [...items],
     };
 
-    // Call the onUpdate function passed via props to update the parent component
-    if (onUpdate) {
-      onUpdate(updatedSubmission);
+    try {
+      const updatedData = await updateSubmission(updatedSubmission);
+      console.log("Updated data:", updatedData);
+      onClose(); 
+    } catch (error) {
+      console.error("Error while updating submission:", error);
     }
-
-    // Close the modal
-    onClose();
   };
 
   const handleItemChange = (index: number, field: keyof Item, value: any) => {
@@ -169,36 +199,6 @@ export default function EditGatePassApplication({
 
                         <div className="mt-6 border-t border-gray-100">
                           <dl className="divide-y divide-gray-100">
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                              <dt className="text-sm font-medium leading-6 text-gray-900">
-                                Status
-                              </dt>
-                              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button className="block w-full rounded-md border border-gray-300 bg-transparent p-2 text-left font-light text-muted-foreground shadow-none hover:bg-transparent">
-                                      {status}
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent
-                                    sideOffset={5}
-                                    className="max-h-60 w-40 overflow-y-auto text-sm"
-                                    defaultValue={status}
-                                  >
-                                    {["Pending", "Approved", "Declined"].map(
-                                      (status) => (
-                                        <DropdownMenuItem
-                                          key={status}
-                                          onSelect={() => setStatus(status)}
-                                        >
-                                          {status}
-                                        </DropdownMenuItem>
-                                      ),
-                                    )}
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </dd>
-                            </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                               <dt className="text-sm font-medium leading-6 text-gray-900">
                                 Type

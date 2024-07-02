@@ -11,7 +11,7 @@ import ViewWorkPermitApplication from "./view-details.tsx/view-details";
 import EditWorkPermitApplication from "./edit-details.tsx/edit-details";
 
 const WorkPermitSubmissions = () => {
-  const [workPermitSubmissions, setWorkPermitSubmissions] = useState([]);
+  const [workPermitSubmissions, setWorkPermitSubmissions] = useState<any[]>([]);
   const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
@@ -89,13 +89,16 @@ const WorkPermitSubmissions = () => {
     }
   };
 
-  const handleUpdateSubmission = (updatedSubmission:any) => {
-    setWorkPermitSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
-        submission.submission_id === updatedSubmission.submission_id
+  const handleUpdateSubmission = (
+    submissionId: any,
+    updatedSubmission: any,
+  ) => {
+    setWorkPermitSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
           ? updatedSubmission
-          : submission
-      )
+          : submission,
+      ),
     );
   };
 

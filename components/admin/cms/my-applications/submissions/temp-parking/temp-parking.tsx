@@ -11,7 +11,7 @@ import ViewTempParkingApplication from "./view-details/view-details";
 import EditTempParkingApplication from "./edit-details/edit-details";
 
 const TempParkingSubmissions = () => {
-  const [tempParkingSubmissions, setTempParkingSubmissions] = useState([]);
+  const [tempParkingSubmissions, setTempParkingSubmissions] = useState<any[]>([]);
   const [selectedViewSubmission, setSelectedViewSubmission] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEditSubmission, setSelectedEditSubmission] = useState(null);
@@ -89,13 +89,16 @@ const TempParkingSubmissions = () => {
     }
   };
 
-  const handleUpdateSubmission = (updatedSubmission:any) => {
-    setTempParkingSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
-        submission.submission_id === updatedSubmission.submission_id
+  const handleUpdateSubmission = (
+    submissionId: any,
+    updatedSubmission: any,
+  ) => {
+    setTempParkingSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
           ? updatedSubmission
-          : submission
-      )
+          : submission,
+      ),
     );
   };
 

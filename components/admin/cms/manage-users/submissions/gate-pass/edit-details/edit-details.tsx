@@ -101,7 +101,7 @@ export default function EditGatePassApplication({
       return data;
     } catch (error) {
       console.error("Error updating submission:", error);
-      return {message: "An erorr occurred while updating the submission"};
+      return {message: "An error occurred while updating the submission"};
     }
   };
 
