@@ -171,13 +171,15 @@ const TempParkingSubmissions = () => {
     filterSubmissions();
   };
 
-  const handleUpdateSubmission = (updatedSubmission: any) => {
-    const updatedSubmissions = tempParkingSubmissions.map((submission: any) =>
-      submission.submission_id === updatedSubmission.submission_id
+  const handleUpdateSubmission = (submissionId: any, updatedSubmission: any) => {
+    setTempParkingSubmissions((prevSubmissions: any) => 
+      prevSubmissions.map((submission:any) => 
+        submission.submission_id === submissionId
         ? updatedSubmission
         : submission,
+      ),
     );
-    setTempParkingSubmissions(updatedSubmissions);
+    filterSubmissions();
   };
 
   return (

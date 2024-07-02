@@ -48,6 +48,8 @@ export default function EditGatePassApplication({
   const [reason, setReason] = React.useState(submission?.reason || "");
   const [items, setItems] = useState(submission?.items || []);
 
+  const [selectedSubmission, setSelectedSubmission] = useState(submission);
+
   React.useEffect(() => {
     const selectedSite = buildings.find((b) => b.name === site);
     if (selectedSite) {
@@ -74,9 +76,37 @@ export default function EditGatePassApplication({
       setItems(submission.items || []);
     }
   }, [submission]);
+  
+  const updateSubmission = async (updatedSubmission: any) => {
+    setSelectedSubmission(updatedSubmission);
+    try {
+      const response = await fetch(
+        `/api/permits/post-gate-pass/${updatedSubmission.submission_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedSubmission),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+      onUpdate(updatedSubmission.submission_id, updatedSubmission);
+      return data;
+    } catch (error) {
+      console.error("Error updating submission:", error);
+      return {message: "An erorr occurred while updating the submission"};
+    }
+  };
 
   // Function to handle saving changes
-  const handleSave = () => {
+  const handleSave = async () => {
     const updatedSubmission = {
       ...submission,
       status,
@@ -92,13 +122,13 @@ export default function EditGatePassApplication({
       items: [...items],
     };
 
-    // Call the onUpdate function passed via props to update the parent component
-    if (onUpdate) {
-      onUpdate(updatedSubmission);
+    try {
+      const updatedData = await updateSubmission(updatedSubmission);
+      console.log("Updated data:", updatedData);
+      onClose(); 
+    } catch (error) {
+      console.error("Error while updating submission:", error);
     }
-
-    // Close the modal
-    onClose();
   };
 
   const handleItemChange = (index: number, field: keyof Item, value: any) => {

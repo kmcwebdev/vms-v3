@@ -60,6 +60,8 @@ export default function EditWorkPermitApplication({
   const [workers, setWorkers] = useState(submission?.workers || []);
   const [items, setItems] = useState(submission?.items || []);
 
+  const [selectedSubmission, setSelectedSubmission] = useState(submission);
+
   React.useEffect(() => {
     const selectedSite = buildings.find((b) => b.name === site);
     if (selectedSite) {
@@ -93,7 +95,35 @@ export default function EditWorkPermitApplication({
     }
   }, [submission]);
 
-  const handleSave = () => {
+  const updateSubmission = async (updatedSubmission: any) => {
+    setSelectedSubmission(updatedSubmission);
+    try {
+      const response = await fetch(
+        `/api/permits/post-work-permit/${updatedSubmission.submission_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedSubmission),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+      onUpdate(updatedSubmission.submission_id, updatedSubmission);
+      return data;
+    } catch (error) {
+      console.error("Error updating submission:", error);
+      return {message: "An erorr occurred while updating the submission"};
+    }
+  };
+
+
+  const handleSave = async () => {
     const updatedSubmission = {
       ...submission,
       status,
@@ -115,12 +145,13 @@ export default function EditWorkPermitApplication({
       items: [...items],
       workers: [...workers],
     };
-    if (onUpdate) {
-      onUpdate(updatedSubmission);
-    }
-
-    // Close the modal
-    onClose();
+    try {
+      const updatedData = await updateSubmission(updatedSubmission);
+      console.log("Updated data:", updatedData);
+      onClose(); 
+    } catch (error) {
+      console.error("Error while updating submission:", error);
+    } 
   };
 
   const handleWorkTypesSelect = (type: string) => {
@@ -566,7 +597,7 @@ export default function EditWorkPermitApplication({
                                       placeholder="Name"
                                     />
                                     <Input
-                                      type="number"
+                                      type="text"
                                       value={worker.company}
                                       onChange={(e) =>
                                         handleWorkerChange(

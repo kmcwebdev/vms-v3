@@ -98,7 +98,7 @@ export default function EditTempParkingApplication({
 
       const data = await response.json();
       console.log("Update successful:", data);
-      onUpdate(updatedSubmission); // Notify parent component of the update
+      onUpdate(updatedSubmission.submission_id, updatedSubmission); // Notify parent component of the update
       return data; // Return the updated data for further handling if needed
     } catch (error) {
       console.error("Error updating submission:", error);

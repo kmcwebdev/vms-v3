@@ -1,7 +1,6 @@
 import { gatePassSchema } from "@/schema/gate-pass";
 import { workPermitSchema } from "@/schema/work-permit";
 import { query } from "@/lib/db";
-import { tempParkingSchema } from "@/schema/temp-parking";
 import { auth } from "@clerk/nextjs/server";
 
 export async function PUT(req, { params }) {
@@ -80,71 +79,63 @@ export async function PUT(req, { params }) {
   } else if (permit === "post-gate-pass") {
     try {
       const data = await req.json();
-      const parsedData = gatePassSchema.safeParse(data);
-
-      if (!parsedData.success) {
-        responseMessage = {
-          message: "Validation errors",
-          errors: parsedData.error.errors,
-        };
-        return new Response(JSON.stringify(responseMessage), {
-          headers: { "Content-Type": "application/json" },
-          status: 400,
-        });
-      }
+      console.log(data);
 
       const {
+        submission_id,
         type,
         email,
         name,
-        serviceCategory,
+        service_category,
         site,
         floor,
-        carrierName,
+        carrier_name,
         company,
-        dateRange,
+        date_from,
+        date_to,
         reason,
-        emailsToNotify,
+        emails_to_notify,
         items,
         files,
         status,
-      } = parsedData.data;
+        user_id
+      } = data;
 
-      const emailsToNotifyArray = emailsToNotify || [];
+      const emailsToNotifyArray = emails_to_notify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
       const formattedItems = JSON.stringify(items);
 
       const updateQuery = `
         UPDATE gate_pass_submissions SET
-          type = $1, email = $2, name = $3, service_category = $4, site = $5, floor = $6,
-          carrier_name = $7, company = $8, date_from = $9, date_to = $10, reason = $11, 
-          emails_to_notify = $12, items = $13, files = $14, status = $15, user_id = $16
-        WHERE submission_id = $17;
+          type = $2, email = $3, name = $4, service_category = $5, site = $6, floor = $7,
+          carrier_name = $8, company = $9, date_from = $10, date_to = $11, reason = $12, 
+          emails_to_notify = $13, items = $14, files = $15, status = $16, user_id = $17
+        WHERE submission_id = $1
+        RETURNING submission_id;
       `;
 
       const values = [
+        submission_id,
         type,
         email,
         name,
-        serviceCategory,
+        service_category,
         site,
         floor,
-        carrierName,
+        carrier_name,
         company,
-        dateRange.from,
-        dateRange.to,
+        date_from,
+        date_to,
         reason,
         formattedEmailsToNotify,
         formattedItems,
         files,
         status,
-        user_id,
-        submissionId,
+        user_id
       ];
 
       await query(updateQuery, values);
-
-      responseMessage = { message: "Updated Successfully", id: submissionId };
+      responseMessage = { message: "Updated Successfully", id: submission_id };
 
       return new Response(JSON.stringify(responseMessage), {
         headers: { "Content-Type": "application/json" },
@@ -164,74 +155,67 @@ export async function PUT(req, { params }) {
   } else if (permit === "post-work-permit") {
     try {
       const data = await req.json();
-      const parsedData = workPermitSchema.safeParse(data);
-
-      if (!parsedData.success) {
-        responseMessage = {
-          message: "Validation errors",
-          errors: parsedData.error.errors,
-        };
-        return new Response(JSON.stringify(responseMessage), {
-          headers: { "Content-Type": "application/json" },
-          status: 400,
-        });
-      }
+      console.log(data);
 
       const {
+        submission_id,
         type,
         email,
         name,
-        workArea,
+        work_area,
         site,
         floor,
         tenant,
         contractor,
-        personInCharge,
+        person_in_charge,
         number,
-        dateRange,
-        workTypes,
-        otherWorkTypes,
-        workRequirements,
-        otherWorkRequirements,
-        emailsToNotify,
+        date_from,
+        date_to,
+        work_types,
+        other_work_types,
+        work_requirements,
+        other_work_requirements,
+        emails_to_notify,
         scope,
         workers,
         items,
         files,
         status
-      } = parsedData.data;
+      } = data;
 
-      const emailsToNotifyArray = emailsToNotify || [];
+      const emailsToNotifyArray = emails_to_notify || [];
       const formattedEmailsToNotify = `{${emailsToNotifyArray.map((e) => `"${e}"`).join(",")}}`;
       const formattedItems = JSON.stringify(items);
       const formattedWorkers = JSON.stringify(workers);
 
       const updateQuery = `
         UPDATE work_permit_submissions SET
-          type = $1, email = $2, name = $3, work_area = $4, site = $5, floor = $6, tenant = $7, 
-          contractor = $8, person_in_charge = $9, number = $10, date_from = $11, date_to = $12, 
-          work_types = $13, other_work_types = $14, work_requirements = $15, other_work_requirements = $16, 
-          emails_to_notify = $17, scope = $18, workers = $19, items = $20, files = $21, status = $22, user_id = $23
-        WHERE submission_id = $24;
+          type = $2, email = $3, name = $4, work_area = $5, site = $6, floor = $7, tenant = $8, 
+          contractor = $9, person_in_charge = $10, number = $11, date_from = $12, date_to = $13, 
+          work_types = $14, other_work_types = $15, work_requirements = $16, other_work_requirements = $17, 
+          emails_to_notify = $18, scope = $19, workers = $20, items = $21, files = $22, status = $23, user_id = $24
+        WHERE submission_id = $1
+        RETURNING submission_id
       `;
 
       const values = [
+        submission_id,
         type,
         email,
         name,
-        workArea,
+        work_area,
         site,
         floor,
         tenant,
         contractor,
-        personInCharge,
+        person_in_charge,
         number,
-        dateRange.from,
-        dateRange.to,
-        workTypes,
-        otherWorkTypes,
-        workRequirements,
-        otherWorkRequirements,
+        date_from,
+        date_to,
+        work_types,
+        other_work_types,
+        work_requirements,
+        other_work_requirements,
         formattedEmailsToNotify,
         scope,
         formattedWorkers,
@@ -239,12 +223,11 @@ export async function PUT(req, { params }) {
         files,
         status,
         user_id,
-        submissionId,
       ];
 
       await query(updateQuery, values);
 
-      responseMessage = { message: "Updated Successfully", id: submissionId };
+      responseMessage = { message: "Updated Successfully", id: submission_id };
 
       return new Response(JSON.stringify(responseMessage), {
         headers: { "Content-Type": "application/json" },
@@ -273,25 +256,26 @@ export async function PUT(req, { params }) {
         name,
         site,
         floor,
-        driverName,
-        vehicleModel,
-        vehicleColor,
-        vehicleNumber,
-        parkingNumber,
+        driver_name,
+        vehicle_model,
+        vehicle_color,
+        vehicle_number,
+        parking_number,
         date_from,
         date_to,
-        managerEmail,
+        manager_email,
         files,
         status,
-        userId
+        user_id
       } = data;
 
       const updateQuery = `
         UPDATE temp_parking_submissions SET
-          type = $1, email = $2, name = $3, site = $4, floor = $5, driver_name = $6, 
-          vehicle_model = $7, vehicle_color = $8, vehicle_number = $9, parking_number = $10, 
-          date_from = $11, date_to = $12, manager_email = $13, files = $14, status=$15, user_id = $16
-        WHERE submission_id = $17;
+          type = $2, email = $3, name = $4, site = $5, floor = $6, driver_name = $7, 
+          vehicle_model = $8, vehicle_color = $9, vehicle_number = $10, parking_number = $11, 
+          date_from = $12, date_to = $13, manager_email = $14, files = $15, status=$16, user_id = $17
+        WHERE submission_id = $1
+        RETURNING submission_id;
       `;
 
       const values = [
@@ -301,22 +285,22 @@ export async function PUT(req, { params }) {
         name,
         site,
         floor,
-        driverName,
-        vehicleModel,
-        vehicleColor,
-        vehicleNumber,
-        parkingNumber,
+        driver_name,
+        vehicle_model,
+        vehicle_color,
+        vehicle_number,
+        parking_number,
         date_from,
         date_to,
-        managerEmail,
+        manager_email,
         files,
         status,
-        userId
+        user_id
       ];
 
       await query(updateQuery, values);
 
-      responseMessage = { message: "Updated Successfully", id: submissionId };
+      responseMessage = { message: "Updated Successfully", id: submission_id };
 
       return new Response(JSON.stringify(responseMessage), {
         headers: { "Content-Type": "application/json" },
@@ -412,3 +396,4 @@ export async function DELETE(req, { params }) {
     });
   }
 }
+

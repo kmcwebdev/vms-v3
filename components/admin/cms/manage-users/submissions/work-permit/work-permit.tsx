@@ -3,7 +3,6 @@ import Form from "@/components/global/form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
-  MagnifyingGlassIcon,
   EyeOpenIcon,
   Pencil1Icon,
   Cross1Icon,
@@ -23,8 +22,8 @@ import ViewWorkPermitApplication from "./view-details.tsx/view-details";
 import EditWorkPermitApplication from "./edit-details/edit-details";
 
 const WorkPermitSubmissions = () => {
-  const [workPermitSubmissions, setWorkPermitSubmissions] = useState([]);
-  const [filteredSubmissions, setFilteredSubmissions] = useState([]);
+  const [workPermitSubmissions, setWorkPermitSubmissions] = useState<any[]>([]);
+  const [filteredSubmissions, setFilteredSubmissions] = useState<any[]>([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [selectedSite, setSelectedSite] = React.useState("");
   const [selectedName, setSelectedName] = useState("");
@@ -62,20 +61,20 @@ const WorkPermitSubmissions = () => {
 
     if (selectedStatus) {
       filtered = filtered.filter(
-        (submission:any) => submission.status === selectedStatus
+        (submission: any) => submission.status === selectedStatus,
       );
     }
 
     if (selectedSite) {
       filtered = filtered.filter(
-        (submission:any) => submission.site === selectedSite
+        (submission: any) => submission.site === selectedSite,
       );
     }
 
     if (selectedName) {
       const lowerCaseName = selectedName.toLowerCase();
-      filtered = filtered.filter((submission:any) =>
-        submission.name.toLowerCase().includes(lowerCaseName)
+      filtered = filtered.filter((submission: any) =>
+        submission.name.toLowerCase().includes(lowerCaseName),
       );
     }
 
@@ -101,12 +100,12 @@ const WorkPermitSubmissions = () => {
   const handleEditClick = (submission: any) => {
     setSelectedEditSubmission(submission);
     setIsEditModalOpen(true);
-  }
+  };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedEditSubmission(null);
-  }
+  };
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -158,24 +157,27 @@ const WorkPermitSubmissions = () => {
     setFilteredSubmissions([...workPermitSubmissions]);
   };
 
-  const updateSubmissionStatus = (submissionId:any, newStatus:any) => {
-      setWorkPermitSubmissions((prevSubmissions:any) =>
-        prevSubmissions.map((submission:any) =>
-          submission.submission_id === submissionId
-          ? {...submission, status: newStatus}
-          : submission
-        )
-      );
-      filterSubmissions();
-  }
+  const updateSubmissionStatus = (submissionId: any, newStatus: any) => {
+    setWorkPermitSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
+          ? { ...submission, status: newStatus }
+          : submission,
+      ),
+    );
+    filterSubmissions();
+  };
 
-  const handleUpdateSubmission = (updatedSubmission:any) => {
-    setWorkPermitSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
-        submission.submission_id === updatedSubmission.submission_id
+  const handleUpdateSubmission = (
+    submissionId: any,
+    updatedSubmission: any,
+  ) => {
+    setWorkPermitSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
           ? updatedSubmission
-          : submission
-      )
+          : submission,
+      ),
     );
     filterSubmissions();
   };

@@ -22,10 +22,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ViewGatePassApplication from "./view-details/view-details";
 import EditGatePassApplication from "./edit-details/edit-details";
 
-
 const GatePassSubmissions = () => {
-  const [gatePassSubmissions, setGatePassSubmissions] = useState([]);
-  const [filteredSubmissions, setFilteredSubmissions] = useState([]);
+  const [gatePassSubmissions, setGatePassSubmissions] = useState<any[]>([]);
+  const [filteredSubmissions, setFilteredSubmissions] = useState<any[]>([]);
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [selectedSite, setSelectedSite] = React.useState("");
   const [selectedName, setSelectedName] = useState("");
@@ -102,12 +101,12 @@ const GatePassSubmissions = () => {
   const handleEditClick = (submission: any) => {
     setSelectedEditSubmission(submission);
     setIsEditModalOpen(true);
-  }
+  };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedEditSubmission(null);
-  }
+  };
 
   const handleDelete = async (submissionId: any) => {
     const confirmDelete = window.confirm(
@@ -116,9 +115,12 @@ const GatePassSubmissions = () => {
 
     if (confirmDelete) {
       try {
-        const response = await fetch(`/api/permits/delete-gate-pass/${submissionId}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `/api/permits/delete-gate-pass/${submissionId}`,
+          {
+            method: "DELETE",
+          },
+        );
 
         if (!response.ok) {
           throw new Error("Failed to delete submission");
@@ -171,13 +173,16 @@ const GatePassSubmissions = () => {
     filterSubmissions();
   };
 
-  const handleUpdateSubmission = (updatedSubmission:any) => {
-    setGatePassSubmissions((prevSubmissions:any) =>
-      prevSubmissions.map((submission:any) =>
-        submission.submission_id === updatedSubmission.submission_id
+  const handleUpdateSubmission = (
+    submissionId: any,
+    updatedSubmission: any,
+  ) => {
+    setGatePassSubmissions((prevSubmissions: any) =>
+      prevSubmissions.map((submission: any) =>
+        submission.submission_id === submissionId
           ? updatedSubmission
-          : submission
-      )
+          : submission,
+      ),
     );
     filterSubmissions();
   };
