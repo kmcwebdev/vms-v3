@@ -81,7 +81,7 @@ export default function EditGatePassApplication({
     setSelectedSubmission(updatedSubmission);
     try {
       const response = await fetch(
-        `/api/permits/post-gate-pass/${updatedSubmission.submission_id}`,
+        `/api/permits/put-gate-pass/${updatedSubmission.submission_id}`,
         {
           method: "PUT",
           headers: {

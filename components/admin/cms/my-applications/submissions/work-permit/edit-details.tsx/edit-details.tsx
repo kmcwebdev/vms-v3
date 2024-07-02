@@ -99,7 +99,7 @@ export default function EditWorkPermitApplication({
     setSelectedSubmission(updatedSubmission);
     try {
       const response = await fetch(
-        `/api/permits/post-work-permit/${updatedSubmission.submission_id}`,
+        `/api/permits/put-work-permit/${updatedSubmission.submission_id}`,
         {
           method: "PUT",
           headers: {

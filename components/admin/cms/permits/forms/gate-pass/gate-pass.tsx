@@ -17,6 +17,8 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { gatePassSchema } from "@/schema/gate-pass";
 import { useFormState, useFormStatus } from "react-dom";
+import { redirect } from 'next/navigation'
+import { useRouter } from "next/router";
 
 const accordionData = [
   { id: 1, title: "Part 1 (Personal Information)", Component: Part1 },
@@ -68,7 +70,7 @@ const GatePassForm = () => {
       <h2 className="mb-4 text-lg font-bold">Gate Pass Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-          <div className="text/md text-green-500">{state.message}</div>
+          {/* <div className="text/md text-green-500">{state.message}</div> */}
           {accordionData.map(({ id, title, Component }) => (
             <Accordion
               key={id}

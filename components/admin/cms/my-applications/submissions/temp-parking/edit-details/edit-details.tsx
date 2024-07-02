@@ -83,7 +83,7 @@ export default function EditTempParkingApplication({
     setSelectedSubmission(updatedSubmission);
     try {
       const response = await fetch(
-        `/api/permits/post-temp-parking/${updatedSubmission.submission_id}`,
+        `/api/permits/put-temp-parking/${updatedSubmission.submission_id}`,
         {
           method: "PUT",
           headers: {

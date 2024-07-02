@@ -76,7 +76,7 @@ export async function PUT(req, { params }) {
         status: 500,
       });
     }
-  } else if (permit === "post-gate-pass") {
+  } else if (permit === "put-gate-pass") {
     try {
       const data = await req.json();
       console.log(data);
@@ -152,7 +152,7 @@ export async function PUT(req, { params }) {
         status: 500,
       });
     }
-  } else if (permit === "post-work-permit") {
+  } else if (permit === "put-work-permit") {
     try {
       const data = await req.json();
       console.log(data);
@@ -244,7 +244,7 @@ export async function PUT(req, { params }) {
         status: 500,
       });
     }
-  } else if (permit === "post-temp-parking") {
+  } else if (permit === "put-temp-parking") {
     try {
       const data = await req.json();
       console.log(data);
